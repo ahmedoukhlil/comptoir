@@ -1,0 +1,28 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Space Mono', ui-monospace, monospace;
+    --font-arabic: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+
+    --color-ink: #123A66;
+    --color-ink-soft: #5C7CA3;
+    --color-sand: #FBFCFF;
+    --color-sand-deep: #E4EDF8;
+    --color-gold: #2F6FB0;
+    --color-gold-deep: #1F4D80;
+    --color-rust: #A8452C;
+    --color-rust-deep: #8A3620;
+    --color-green: #2E6B4E;
+    --color-green-deep: #1F5138;
+    --color-paper: #FDFEFF;
+    --color-line: #D7E3F0;
+}
+
+[dir="rtl"] {
+    font-family: var(--font-arabic);
+}
