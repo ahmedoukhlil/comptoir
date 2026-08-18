@@ -7,10 +7,15 @@
                     <span class="block font-[family-name:var(--font-heading)] font-bold text-base">{{ __('admin.titre') }}</span>
                     <span class="text-xs text-[#9AA6C0]">{{ __('admin.tenants_titre') }}</span>
                 </div>
-                <button
-                    onclick="document.getElementById('logout-form').submit()"
-                    class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)]"
-                >{{ __('admin.deconnexion') }}</button>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)]">
+                        {{ __('admin.mon_mot_de_passe') }}
+                    </a>
+                    <button
+                        onclick="document.getElementById('logout-form').submit()"
+                        class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)]"
+                    >{{ __('admin.deconnexion') }}</button>
+                </div>
                 <form id="logout-form" method="POST" action="{{ route('deconnexion') }}" class="hidden">
                     @csrf
                 </form>

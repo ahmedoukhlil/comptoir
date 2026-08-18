@@ -119,4 +119,13 @@ return [
     'agents_aucun' => 'لا يوجد وكيل حتى الآن.',
     'erreur_point_invalide' => 'اختر نقطة صالحة.',
     'creer' => 'إنشاء',
+    'mon_mot_de_passe' => 'كلمة سري',
+    'changer_mot_de_passe_titre' => 'تغيير كلمة السر',
+    'mot_de_passe_actuel_label' => 'كلمة السر الحالية',
+    'nouveau_mot_de_passe_label' => 'كلمة السر الجديدة',
+    'nouveau_mot_de_passe_confirmation_label' => 'تأكيد كلمة السر الجديدة',
+    'changer_mot_de_passe_confirmer' => 'تغيير كلمة السر',
+    'mot_de_passe_change_avec_succes' => 'تم تغيير كلمة السر بنجاح.',
+    'erreur_mot_de_passe_actuel' => 'كلمة السر الحالية غير صحيحة.',
+    'retour' => 'رجوع',
 ];

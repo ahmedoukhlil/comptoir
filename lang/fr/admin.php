@@ -55,4 +55,14 @@ return [
     'ajouter_un_autre_agent' => 'Ajouter un autre agent',
     'retour_au_tenant' => 'Retour au tenant',
     'agents_de_ce_point' => 'agent(s) sur ce point',
+
+    'mon_mot_de_passe' => 'Mon mot de passe',
+    'changer_mot_de_passe_titre' => 'Changer mon mot de passe',
+    'mot_de_passe_actuel_label' => 'Mot de passe actuel',
+    'nouveau_mot_de_passe_label' => 'Nouveau mot de passe',
+    'nouveau_mot_de_passe_confirmation_label' => 'Confirmer le nouveau mot de passe',
+    'changer_mot_de_passe_confirmer' => 'Changer le mot de passe',
+    'mot_de_passe_change_avec_succes' => 'Mot de passe changé avec succès.',
+    'erreur_mot_de_passe_actuel' => 'Le mot de passe actuel est incorrect.',
+    'retour' => 'Retour',
 ];

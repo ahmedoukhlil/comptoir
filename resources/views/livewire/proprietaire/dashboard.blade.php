@@ -11,6 +11,9 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <x-selecteur-langue />
+                        <a href="{{ route('compte.changer-mot-de-passe') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
+                            {{ __('caisse.mon_mot_de_passe') }}
+                        </a>
                         <button
                             onclick="document.getElementById('logout-form').submit()"
                             class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"
