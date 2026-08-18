@@ -27,6 +27,11 @@
                         <a href="{{ route('caisse.cloture') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
                             {{ __('caisse.cloture_lien') }}
                         </a>
+                        @if (auth()->user()->estProprietaire())
+                            <a href="{{ route('proprietaire.agents') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
+                                {{ __('caisse.dashboard_gerer_agents') }}
+                            </a>
+                        @endif
                         <button
                             onclick="document.getElementById('logout-form').submit()"
                             class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"

@@ -53,6 +53,9 @@
                     <a href="{{ route('proprietaire.rapport') }}" class="text-xs font-semibold px-4 py-2.5 rounded-lg border-[1.5px] border-[color:var(--color-line)] text-[color:var(--color-ink)]">
                         {{ __('caisse.dashboard_rapport') }}
                     </a>
+                    <a href="{{ route('proprietaire.agents') }}" class="text-xs font-semibold px-4 py-2.5 rounded-lg border-[1.5px] border-[color:var(--color-line)] text-[color:var(--color-ink)]">
+                        {{ __('caisse.dashboard_gerer_agents') }}
+                    </a>
                 </div>
 
                 {{-- Détail par point --}}

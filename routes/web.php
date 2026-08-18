@@ -12,6 +12,7 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Caisse\Cloture;
 use App\Livewire\Caisse\Historique;
 use App\Livewire\Caisse\Saisie;
+use App\Livewire\Proprietaire\Agents as ProprietaireAgents;
 use App\Livewire\Proprietaire\Alimentation;
 use App\Livewire\Proprietaire\Dashboard;
 use App\Livewire\Proprietaire\Rapport;
@@ -84,6 +85,10 @@ Route::get('/tableau-de-bord/rapport/export/pdf', [RapportExportController::clas
 Route::get('/tableau-de-bord/transfert', Transfert::class)
     ->middleware(['auth', 'proprietaire', 'plan.multi-points'])
     ->name('proprietaire.transfert');
+
+Route::get('/tableau-de-bord/agents', ProprietaireAgents::class)
+    ->middleware(['auth', 'proprietaire'])
+    ->name('proprietaire.agents');
 
 Route::post('/api/operations/sync', [SyncController::class, 'synchroniser'])
     ->middleware('auth')
