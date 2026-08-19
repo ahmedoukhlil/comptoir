@@ -153,10 +153,57 @@
                                     <span>⏰</span> {{ __('caisse.dashboard_alerte_pas_cloture') }}
                                 </div>
                             @endif
+
+                            @if ($ligne->cloture)
+                                <div class="mx-4 mb-3.5 flex items-center justify-between gap-2 flex-wrap text-[11px] font-semibold text-[color:var(--color-green-deep)] bg-[color:var(--color-green)]/10 rounded-lg px-2.5 py-1.5">
+                                    <span class="flex items-center gap-1.5">✓ {{ __('caisse.dashboard_journee_cloturee') }}</span>
+                                    <button
+                                        type="button"
+                                        wire:click="ouvrirConfirmationReouverture({{ $ligne->point->id }})"
+                                        class="text-[color:var(--color-ink-soft)] underline hover:text-[color:var(--color-ink)]"
+                                    >{{ __('caisse.dashboard_reouvrir_journee') }}</button>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
             </div>
         </div>
     </div>
+
+    @if ($pointAReouvrirId)
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" wire:click="fermerConfirmationReouverture"></div>
+
+            <div class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+                <div class="p-6">
+                    <div class="flex items-center justify-center w-11 h-11 rounded-full bg-[color:var(--color-rust-deep)]/10 mb-4">
+                        <svg class="w-5 h-5 text-[color:var(--color-rust-deep)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                        {{ __('caisse.dashboard_reouvrir_journee') }}
+                    </div>
+                    <p class="text-sm text-[color:var(--color-ink-soft)]">
+                        {{ __('caisse.dashboard_confirmer_reouverture') }}
+                    </p>
+                </div>
+
+                <div class="flex border-t border-[color:var(--color-line)]">
+                    <button
+                        type="button"
+                        wire:click="fermerConfirmationReouverture"
+                        class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                    >{{ __('caisse.annuler') }}</button>
+                    <button
+                        type="button"
+                        wire:click="reouvrirCloture"
+                        wire:loading.attr="disabled"
+                        class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-rust-deep)] hover:opacity-90 border-s border-[color:var(--color-line)]"
+                    >{{ __('caisse.dashboard_confirmer_reouverture_bouton') }}</button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
