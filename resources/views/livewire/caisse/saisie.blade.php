@@ -16,6 +16,7 @@
                 <div class="min-w-0">
                     <span class="block text-[11px] text-[color:var(--color-ink-soft)]">{{ __('caisse.point') }}</span>
                     <strong class="block text-sm font-semibold text-[color:var(--color-ink)] truncate">{{ $this->point->nom }}</strong>
+                    <span class="block text-[11px] text-[color:var(--color-ink-soft)] mt-0.5">{{ now()->translatedFormat('l d F Y') }}</span>
                 </div>
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <x-selecteur-langue-claire />
