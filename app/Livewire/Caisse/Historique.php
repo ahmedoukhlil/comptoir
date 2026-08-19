@@ -41,7 +41,7 @@ class Historique extends Component
     #[Computed]
     public function operateurs()
     {
-        return Operateur::query()->orderBy('id')->get();
+        return Operateur::query()->duTenant($this->point->tenant_id)->orderBy('id')->get();
     }
 
     #[Computed]

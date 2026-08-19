@@ -27,7 +27,7 @@ class Saisie extends Component
     #[Computed]
     public function operateurs()
     {
-        return Operateur::query()->mobileMoney()->orderBy('id')->get();
+        return Operateur::query()->duTenant($this->point->tenant_id)->mobileMoney()->actif()->orderBy('id')->get();
     }
 
     #[Computed]

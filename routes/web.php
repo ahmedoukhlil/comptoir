@@ -14,6 +14,7 @@ use App\Livewire\Caisse\Historique;
 use App\Livewire\Caisse\Saisie;
 use App\Livewire\Compte\ChangerMotDePasse;
 use App\Livewire\Proprietaire\Agents as ProprietaireAgents;
+use App\Livewire\Proprietaire\Operateurs as ProprietaireOperateurs;
 use App\Livewire\Proprietaire\Alimentation;
 use App\Livewire\Proprietaire\Dashboard;
 use App\Livewire\Proprietaire\Rapport;
@@ -90,6 +91,10 @@ Route::get('/tableau-de-bord/transfert', Transfert::class)
 Route::get('/tableau-de-bord/agents', ProprietaireAgents::class)
     ->middleware(['auth', 'proprietaire'])
     ->name('proprietaire.agents');
+
+Route::get('/tableau-de-bord/operateurs', ProprietaireOperateurs::class)
+    ->middleware(['auth', 'proprietaire'])
+    ->name('proprietaire.operateurs');
 
 Route::get('/mon-mot-de-passe', ChangerMotDePasse::class)
     ->middleware('auth')

@@ -8,15 +8,18 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class SyncController extends Controller
 {
     public function synchroniser(Request $request): JsonResponse
     {
+        $tenantId = Auth::user()->point->tenant_id;
+
         $data = $request->validate([
             'operations' => ['required', 'array'],
             'operations.*.uuid_client' => ['required', 'uuid'],
-            'operations.*.operateur_id' => ['required', 'integer', 'exists:operateurs,id'],
+            'operations.*.operateur_id' => ['required', 'integer', Rule::exists('operateurs', 'id')->where('tenant_id', $tenantId)],
             'operations.*.type' => ['required', 'in:depot,retrait'],
             'operations.*.montant' => ['required', 'integer', 'min:1'],
             'operations.*.client_nom' => ['nullable', 'string'],

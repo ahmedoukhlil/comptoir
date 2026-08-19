@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['nom', 'bareme_commission', 'est_cash'])]
+#[Fillable(['tenant_id', 'nom', 'bareme_commission', 'est_cash', 'actif'])]
 class Operateur extends Model
 {
     /** @use HasFactory<OperateurFactory> */
@@ -25,6 +25,16 @@ class Operateur extends Model
     public function scopeMobileMoney($query)
     {
         return $query->where('est_cash', false);
+    }
+
+    public function scopeActif($query)
+    {
+        return $query->where('actif', true);
+    }
+
+    public function scopeDuTenant($query, int $tenantId)
+    {
+        return $query->where('tenant_id', $tenantId);
     }
 
     public function operations(): HasMany

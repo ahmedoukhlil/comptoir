@@ -77,7 +77,7 @@ class Cloture extends Component
             return null;
         }
 
-        $operateurIds = Operateur::query()->pluck('id');
+        $operateurIds = Operateur::query()->where('tenant_id', $this->point->tenant_id)->pluck('id');
 
         foreach ($operateurIds as $operateurId) {
             if (! isset($soldesComptes[$operateurId]) || $soldesComptes[$operateurId] < 0) {
