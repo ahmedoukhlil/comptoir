@@ -169,6 +169,7 @@ return [
     'operateur_tranche_max' => 'Max',
     'operateur_tranche_frais' => 'Frais MRU',
     'operateur_ajouter_tranche' => 'Ajouter une fourchette',
+    'operateur_retirer_tranche' => 'Retirer cette fourchette',
     'operateur_tranches_compte' => 'fourchette(s)',
     'operateur_partage_label' => 'Part du point de vente',
     'operateur_partage_aide' => 'Pourcentage du frais fixe de chaque fourchette qui revient au point de vente — le reste revient à la banque/opérateur.',

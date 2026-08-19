@@ -14,23 +14,25 @@
 
                 <form wire:submit="creer" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_nom_label') }}</label>
-                        <input type="text" wire:model="nom" placeholder="{{ __('caisse.operateur_nom_placeholder') }}" class="w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-paper)] px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-ink)]">
+                        <label for="operateur-nom" class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_nom_label') }}</label>
+                        <input id="operateur-nom" type="text" wire:model="nom" placeholder="{{ __('caisse.operateur_nom_placeholder') }}" class="w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-paper)] px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]">
                         @error('nom') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_type_label') }}</label>
-                        <div class="flex gap-1.5">
+                        <span class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_type_label') }}</span>
+                        <div class="flex gap-1.5" role="group" aria-label="{{ __('caisse.operateur_type_label') }}">
                             <button
                                 type="button"
                                 wire:click="$set('estCash', false)"
-                                class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] {{ ! $estCash ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
+                                aria-pressed="{{ $estCash ? 'false' : 'true' }}"
+                                class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] {{ ! $estCash ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
                             >📱 {{ __('caisse.operateur_type_mobile') }}</button>
                             <button
                                 type="button"
                                 wire:click="$set('estCash', true)"
-                                class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] {{ $estCash ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
+                                aria-pressed="{{ $estCash ? 'true' : 'false' }}"
+                                class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] {{ $estCash ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
                             >💵 {{ __('caisse.operateur_type_cash') }}</button>
                         </div>
                     </div>
@@ -39,18 +41,18 @@
                         <x-proprietaire.tranches-operateur :tranches="$tranches" />
 
                         <div>
-                            <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>
-                            <p class="text-[11px] text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_partage_aide') }}</p>
+                            <label for="operateur-partage" class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>
+                            <p id="operateur-partage-aide" class="text-[11px] text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_partage_aide') }}</p>
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-lg px-3.5 py-2.5">
-                                <input type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" wire:model="pourcentagePartagePoint" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)]">
+                                <input id="operateur-partage" type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" aria-describedby="operateur-partage-aide" wire:model="pourcentagePartagePoint" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]">
                                 <span class="text-sm text-[color:var(--color-ink-soft)]">%</span>
                             </div>
                             @error('pourcentagePartagePoint') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <label class="flex items-start gap-2.5 cursor-pointer">
-                            <input type="checkbox" wire:model="commissionVerseeDansSolde" class="mt-0.5 w-4 h-4 rounded border-[color:var(--color-line)] text-[color:var(--color-ink)]">
-                            <span class="text-xs text-[color:var(--color-ink-soft)]">{{ __('caisse.operateur_versee_dans_solde_aide') }}</span>
+                            <input type="checkbox" wire:model="commissionVerseeDansSolde" aria-describedby="operateur-versee-aide" class="mt-0.5 w-4 h-4 rounded border-[color:var(--color-line)] text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]">
+                            <span id="operateur-versee-aide" class="text-xs text-[color:var(--color-ink-soft)]">{{ __('caisse.operateur_versee_dans_solde_aide') }}</span>
                         </label>
                     @endunless
 
@@ -59,7 +61,7 @@
                     <button
                         type="submit"
                         wire:loading.attr="disabled"
-                        class="w-full rounded-xl bg-[color:var(--color-ink)] text-white font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold py-3 mt-2"
+                        class="w-full rounded-xl bg-[color:var(--color-ink)] text-white font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold py-3 mt-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                     >{{ __('caisse.creer') }}</button>
                 </form>
 
@@ -86,13 +88,15 @@
                                     <button
                                         type="button"
                                         wire:click="ouvrirModification({{ $operateur->id }})"
-                                        class="text-[11px] font-semibold px-2.5 py-1.5 min-h-[24px] rounded-md bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink)]"
+                                        aria-label="{{ __('caisse.operateur_modifier') }} {{ $operateur->nom }}"
+                                        class="text-[11px] font-semibold px-2.5 py-1.5 min-h-[24px] rounded-md bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                     >{{ __('caisse.operateur_modifier') }}</button>
                                 @endunless
                                 <button
                                     type="button"
                                     wire:click="basculerActif({{ $operateur->id }})"
-                                    class="text-[11px] font-semibold px-2.5 py-1.5 min-h-[24px] rounded-md {{ $operateur->actif ? 'bg-[color:var(--color-rust)]/10 text-[color:var(--color-rust-deep)]' : 'bg-[color:var(--color-green)]/10 text-[color:var(--color-green-deep)]' }}"
+                                    aria-label="{{ ($operateur->actif ? __('caisse.operateur_desactiver') : __('caisse.operateur_activer')) . ' ' . $operateur->nom }}"
+                                    class="text-[11px] font-semibold px-2.5 py-1.5 min-h-[24px] rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 {{ $operateur->actif ? 'bg-[color:var(--color-rust)]/10 text-[color:var(--color-rust-deep)] focus-visible:outline-[color:var(--color-rust-deep)]' : 'bg-[color:var(--color-green)]/10 text-[color:var(--color-green-deep)] focus-visible:outline-[color:var(--color-green-deep)]' }}"
                                 >{{ $operateur->actif ? __('caisse.operateur_desactiver') : __('caisse.operateur_activer') }}</button>
                             </div>
                         </div>
@@ -111,30 +115,30 @@
     </div>
 
     @if ($operateurAModifierId)
-        <div class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8" role="dialog" aria-modal="true" aria-labelledby="operateur-modif-titre">
             <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" wire:click="fermerModification"></div>
 
             <div class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden max-h-full flex flex-col {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
                 <form wire:submit="modifier" class="p-6 overflow-y-auto space-y-4">
-                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)]">
+                    <div id="operateur-modif-titre" class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)]">
                         {{ __('caisse.operateur_modifier_titre') }} — {{ $this->operateurAModifier?->nom }}
                     </div>
 
                     <x-proprietaire.tranches-operateur :tranches="$tranches" />
 
                     <div>
-                        <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>
-                        <p class="text-[11px] text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_partage_aide') }}</p>
+                        <label for="operateur-modif-partage" class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>
+                        <p id="operateur-modif-partage-aide" class="text-[11px] text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_partage_aide') }}</p>
                         <div class="flex items-center gap-2.5 bg-[color:var(--color-sand-deep)] border-[1.5px] border-[color:var(--color-line)] rounded-lg px-3.5 py-2.5">
-                            <input type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" wire:model="pourcentagePartagePoint" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)]">
+                            <input id="operateur-modif-partage" type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" aria-describedby="operateur-modif-partage-aide" wire:model="pourcentagePartagePoint" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]">
                             <span class="text-sm text-[color:var(--color-ink-soft)]">%</span>
                         </div>
                         @error('pourcentagePartagePoint') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <label class="flex items-start gap-2.5 cursor-pointer">
-                        <input type="checkbox" wire:model="commissionVerseeDansSolde" class="mt-0.5 w-4 h-4 rounded border-[color:var(--color-line)] text-[color:var(--color-ink)]">
-                        <span class="text-xs text-[color:var(--color-ink-soft)]">{{ __('caisse.operateur_versee_dans_solde_aide') }}</span>
+                        <input type="checkbox" wire:model="commissionVerseeDansSolde" aria-describedby="operateur-modif-versee-aide" class="mt-0.5 w-4 h-4 rounded border-[color:var(--color-line)] text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]">
+                        <span id="operateur-modif-versee-aide" class="text-xs text-[color:var(--color-ink-soft)]">{{ __('caisse.operateur_versee_dans_solde_aide') }}</span>
                     </label>
 
                     @error('lectureSeule') <p class="text-xs text-[color:var(--color-rust-deep)]">{{ $message }}</p> @enderror
@@ -144,13 +148,13 @@
                     <button
                         type="button"
                         wire:click="fermerModification"
-                        class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                        class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                     >{{ __('caisse.annuler') }}</button>
                     <button
                         type="button"
                         wire:click="modifier"
                         wire:loading.attr="disabled"
-                        class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60"
+                        class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white"
                     >{{ __('caisse.enregistrer') }}</button>
                 </div>
             </div>

@@ -169,6 +169,7 @@ return [
     'operateur_tranche_max' => 'إلى',
     'operateur_tranche_frais' => 'الرسم',
     'operateur_ajouter_tranche' => 'إضافة فئة',
+    'operateur_retirer_tranche' => 'حذف هذه الفئة',
     'operateur_tranches_compte' => 'فئة/فئات',
     'operateur_partage_label' => 'حصة نقطة البيع',
     'operateur_partage_aide' => 'النسبة من الرسم الثابت لكل فئة التي تعود لنقطة البيع — الباقي يعود للبنك/المشغل.',
