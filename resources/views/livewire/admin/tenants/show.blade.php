@@ -44,8 +44,7 @@
                 <div class="flex justify-end mb-6">
                     <button
                         type="button"
-                        wire:click="supprimer"
-                        wire:confirm="{{ __('admin.confirmer_suppression_tenant') }}"
+                        wire:click="ouvrirConfirmationSuppression"
                         class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] border-[color:var(--color-rust-deep)] text-[color:var(--color-rust-deep)] hover:bg-[color:var(--color-rust-deep)] hover:text-white"
                     >{{ __('admin.supprimer_tenant') }}</button>
                 </div>
@@ -85,4 +84,40 @@
             </div>
         </div>
     </div>
+
+    @if ($confirmationSuppression)
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" wire:click="fermerConfirmationSuppression"></div>
+
+            <div class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-center w-11 h-11 rounded-full bg-[color:var(--color-rust-deep)]/10 mb-4">
+                        <svg class="w-5 h-5 text-[color:var(--color-rust-deep)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <div class="font-[family-name:var(--font-heading)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                        {{ __('admin.supprimer_tenant') }}
+                    </div>
+                    <p class="text-sm text-[color:var(--color-ink-soft)]">
+                        {{ __('admin.confirmer_suppression_tenant') }}
+                    </p>
+                </div>
+
+                <div class="flex border-t border-[color:var(--color-line)]">
+                    <button
+                        type="button"
+                        wire:click="fermerConfirmationSuppression"
+                        class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                    >{{ __('admin.annuler') }}</button>
+                    <button
+                        type="button"
+                        wire:click="supprimer"
+                        wire:loading.attr="disabled"
+                        class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-rust-deep)] hover:opacity-90 border-s border-[color:var(--color-line)]"
+                    >{{ __('admin.confirmer_suppression') }}</button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

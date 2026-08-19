@@ -13,6 +13,8 @@ class Show extends Component
 
     public int $tenantId;
 
+    public bool $confirmationSuppression = false;
+
     public function mount(int $tenantId): void
     {
         $this->tenantId = $tenantId;
@@ -54,6 +56,16 @@ class Show extends Component
         $tenant->delete();
 
         $this->redirectRoute('admin.tenants.index');
+    }
+
+    public function ouvrirConfirmationSuppression(): void
+    {
+        $this->confirmationSuppression = true;
+    }
+
+    public function fermerConfirmationSuppression(): void
+    {
+        $this->confirmationSuppression = false;
     }
 
     public function render()

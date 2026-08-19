@@ -67,5 +67,7 @@ return [
     'retour' => 'Retour',
 
     'supprimer_tenant' => 'Supprimer ce tenant',
-    'confirmer_suppression_tenant' => 'Supprimer définitivement ce tenant, ses points et ses agents ? Cette action est irréversible.',
+    'confirmer_suppression_tenant' => 'Cette action supprimera définitivement ce tenant, ses points et ses agents. Elle est irréversible.',
+    'annuler' => 'Annuler',
+    'confirmer_suppression' => 'Supprimer',
 ];
