@@ -187,7 +187,7 @@
                         {{-- Confirmer --}}
                         <button
                             type="button"
-                            x-on:click="confirmer()"
+                            x-on:click="ouvrirConfirmation()"
                             :disabled="enConfirmation"
                             class="w-full md:max-w-[340px] mt-4 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white flex items-center justify-center gap-2 transition disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             :class="type === 'depot' ? 'bg-[color:var(--color-green-deep)] shadow-lg shadow-green-900/25' : 'bg-[color:var(--color-rust-deep)] shadow-lg shadow-rust-900/25'"
@@ -262,6 +262,62 @@
                     <div class="text-[10px] tracking-wide font-semibold text-[#8C97B4] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operations_label') }}</div>
                     <div class="font-[family-name:var(--font-mono)] font-bold text-[17px] text-[color:var(--color-sand)] mt-0.5">
                         {{ $this->operationsDuJour->count() }}
+                    </div>
+                </div>
+            </div>
+
+            {{-- Modale de confirmation avant opération --}}
+            <div x-show="confirmationOuverte" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4">
+                <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" x-on:click="fermerConfirmation()"></div>
+
+                <div
+                    x-show="confirmationOuverte"
+                    x-transition:enter="transition ease-out duration-150"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
+                >
+                    <div class="p-6">
+                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                            {{ __('caisse.confirmation_titre') }}
+                        </div>
+                        <p class="text-sm text-[color:var(--color-ink-soft)] mb-4">
+                            {{ __('caisse.confirmation_texte') }}
+                        </p>
+
+                        <div class="divide-y divide-dashed divide-[color:var(--color-line)] border-y border-dashed border-[color:var(--color-line)]">
+                            <div class="flex items-center justify-between py-2.5">
+                                <span class="text-sm text-[color:var(--color-ink-soft)]">{{ __('caisse.confirmation_type') }}</span>
+                                <span class="text-sm font-bold" :class="type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'" x-text="type === 'depot' ? @js(__('caisse.depot')) : @js(__('caisse.retrait'))"></span>
+                            </div>
+                            <div class="flex items-center justify-between py-2.5">
+                                <span class="text-sm text-[color:var(--color-ink-soft)]">{{ __('caisse.confirmation_operateur') }}</span>
+                                <span class="text-sm font-bold text-[color:var(--color-ink)]" x-text="operateurs.find(o => o.id === operateurId)?.nom ?? ''"></span>
+                            </div>
+                            <div class="flex items-center justify-between py-2.5">
+                                <span class="text-sm text-[color:var(--color-ink-soft)]">{{ __('caisse.confirmation_telephone') }}</span>
+                                <span class="text-sm font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="telephone"></span>
+                            </div>
+                            <div class="flex items-center justify-between py-3">
+                                <span class="text-sm font-bold text-[color:var(--color-ink)]">{{ __('caisse.confirmation_montant') }}</span>
+                                <span class="text-lg font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="formaterMontant(montant) + ' ' + @js(__('caisse.devise'))"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex border-t border-[color:var(--color-line)]">
+                        <button
+                            type="button"
+                            x-on:click="fermerConfirmation()"
+                            class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                        >{{ __('caisse.confirmation_annuler') }}</button>
+                        <button
+                            type="button"
+                            x-on:click="confirmer()"
+                            :disabled="enConfirmation"
+                            class="flex-1 text-sm font-semibold py-3.5 text-white hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60"
+                            :class="type === 'depot' ? 'bg-[color:var(--color-green-deep)]' : 'bg-[color:var(--color-rust-deep)]'"
+                        ><span x-show="! enConfirmation">{{ __('caisse.confirmation_valider') }}</span><span x-show="enConfirmation" x-cloak>…</span></button>
                     </div>
                 </div>
             </div>

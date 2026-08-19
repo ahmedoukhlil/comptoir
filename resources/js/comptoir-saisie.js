@@ -30,6 +30,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
         operationsLocalesAffichage: [],
         erreurLocale: '',
         enConfirmation: false,
+        confirmationOuverte: false,
 
         type: 'depot',
         operateurId: operateurs[0]?.id ?? null,
@@ -151,6 +152,24 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
             return null;
         },
 
+        ouvrirConfirmation() {
+            this.erreurLocale = '';
+
+            const erreur = this.validerChamps();
+
+            if (erreur) {
+                this.erreurLocale = erreur;
+
+                return;
+            }
+
+            this.confirmationOuverte = true;
+        },
+
+        fermerConfirmation() {
+            this.confirmationOuverte = false;
+        },
+
         async confirmer() {
             this.erreurLocale = '';
 
@@ -158,6 +177,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
 
             if (erreur) {
                 this.erreurLocale = erreur;
+                this.confirmationOuverte = false;
 
                 return;
             }
@@ -213,6 +233,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
                 this.reinitialiserFormulaire();
             } finally {
                 this.enConfirmation = false;
+                this.confirmationOuverte = false;
             }
         },
     };
