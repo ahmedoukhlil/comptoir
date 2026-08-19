@@ -2,18 +2,18 @@
     <div class="mx-auto max-w-[1100px] py-10 px-6">
         <div class="bg-[color:var(--color-paper)] rounded-2xl border border-[color:var(--color-line)] shadow-sm overflow-hidden">
 
-            <div class="bg-[color:var(--color-ink)] text-white px-6 py-5 flex items-center justify-between">
+            <div class="bg-[color:var(--color-ink)] text-white px-6 py-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <span class="block font-[family-name:var(--font-heading)] font-bold text-base">{{ __('admin.titre') }}</span>
-                    <span class="text-xs text-[#9AA6C0]">{{ __('admin.tenants_titre') }}</span>
+                    <span class="text-xs text-[#C7D2E3]">{{ __('admin.tenants_titre') }}</span>
                 </div>
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)]">
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="text-xs font-semibold text-white bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 font-[family-name:var(--font-heading)]">
                         {{ __('admin.mon_mot_de_passe') }}
                     </a>
                     <button
                         onclick="document.getElementById('logout-form').submit()"
-                        class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)]"
+                        class="text-xs font-semibold text-white bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 font-[family-name:var(--font-heading)]"
                     >{{ __('admin.deconnexion') }}</button>
                 </div>
                 <form id="logout-form" method="POST" action="{{ route('deconnexion') }}" class="hidden">
