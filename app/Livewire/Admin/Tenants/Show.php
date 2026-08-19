@@ -3,6 +3,8 @@
 namespace App\Livewire\Admin\Tenants;
 
 use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -14,6 +16,10 @@ class Show extends Component
     public int $tenantId;
 
     public bool $confirmationSuppression = false;
+
+    public ?int $agentAReinitialiserId = null;
+
+    public ?string $motDePasseGenere = null;
 
     public function mount(int $tenantId): void
     {
@@ -66,6 +72,45 @@ class Show extends Component
     public function fermerConfirmationSuppression(): void
     {
         $this->confirmationSuppression = false;
+    }
+
+    public function ouvrirConfirmationReinitialisation(int $agentId): void
+    {
+        $this->agentAReinitialiserId = $agentId;
+        $this->motDePasseGenere = null;
+    }
+
+    #[Computed]
+    public function agentAReinitialiser(): ?User
+    {
+        if (! $this->agentAReinitialiserId) {
+            return null;
+        }
+
+        return User::find($this->agentAReinitialiserId);
+    }
+
+    public function fermerConfirmationReinitialisation(): void
+    {
+        $this->agentAReinitialiserId = null;
+        $this->motDePasseGenere = null;
+    }
+
+    public function reinitialiserMotDePasse(): void
+    {
+        if (! $this->agentAReinitialiserId) {
+            return;
+        }
+
+        $agent = User::whereKey($this->agentAReinitialiserId)
+            ->where('tenant_id', $this->tenantId)
+            ->firstOrFail();
+
+        $motDePasse = Str::password(10, symbols: false);
+
+        $agent->update(['password' => $motDePasse]);
+
+        $this->motDePasseGenere = $motDePasse;
     }
 
     public function render()

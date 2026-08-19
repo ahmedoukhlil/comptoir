@@ -70,4 +70,10 @@ return [
     'confirmer_suppression_tenant' => 'Cette action supprimera définitivement ce tenant, ses points et ses agents. Elle est irréversible.',
     'annuler' => 'Annuler',
     'confirmer_suppression' => 'Supprimer',
+
+    'reinitialiser' => 'Réinitialiser',
+    'reinitialiser_mot_de_passe' => 'Réinitialiser le mot de passe',
+    'confirmer_reinitialisation' => 'Un nouveau mot de passe sera généré pour :nom. L\'ancien ne fonctionnera plus.',
+    'mot_de_passe_reinitialise' => 'Mot de passe réinitialisé',
+    'fermer' => 'Fermer',
 ];

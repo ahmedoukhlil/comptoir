@@ -71,8 +71,14 @@
                             </div>
                             <div class="flex flex-wrap gap-1.5">
                                 @forelse ($point->agents as $agent)
-                                    <span class="text-xs font-semibold px-2.5 py-1.5 rounded-md bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink)]">
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold ps-2.5 pe-1.5 py-1.5 rounded-md bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink)]">
                                         {{ $agent->name }} ({{ $agent->telephone }})
+                                        <button
+                                            type="button"
+                                            wire:click="ouvrirConfirmationReinitialisation({{ $agent->id }})"
+                                            class="text-[10px] font-bold px-1.5 py-1 rounded text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-ink)] hover:text-white"
+                                            title="{{ __('admin.reinitialiser_mot_de_passe') }}"
+                                        >{{ __('admin.reinitialiser') }}</button>
                                     </span>
                                 @empty
                                     <span class="text-xs text-[color:var(--color-ink-soft)]">—</span>
@@ -117,6 +123,63 @@
                         class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-rust-deep)] hover:opacity-90 border-s border-[color:var(--color-line)]"
                     >{{ __('admin.confirmer_suppression') }}</button>
                 </div>
+            </div>
+        </div>
+    @endif
+
+    @if ($agentAReinitialiserId)
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" wire:click="fermerConfirmationReinitialisation"></div>
+
+            <div class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden">
+                @if ($motDePasseGenere)
+                    <div class="p-6">
+                        <div class="font-[family-name:var(--font-heading)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                            {{ __('admin.mot_de_passe_reinitialise') }}
+                        </div>
+                        <p class="text-sm text-[color:var(--color-ink-soft)] mb-3">
+                            {{ __('admin.mot_de_passe_note') }}
+                        </p>
+                        <div class="bg-[color:var(--color-sand-deep)] rounded-xl p-4 text-center">
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-xl text-[color:var(--color-ink)]" dir="ltr">{{ $motDePasseGenere }}</div>
+                        </div>
+                    </div>
+                    <div class="flex border-t border-[color:var(--color-line)]">
+                        <button
+                            type="button"
+                            wire:click="fermerConfirmationReinitialisation"
+                            class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90"
+                        >{{ __('admin.fermer') }}</button>
+                    </div>
+                @else
+                    <div class="p-6">
+                        <div class="flex items-center justify-center w-11 h-11 rounded-full bg-[color:var(--color-rust-deep)]/10 mb-4">
+                            <svg class="w-5 h-5 text-[color:var(--color-rust-deep)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                            </svg>
+                        </div>
+                        <div class="font-[family-name:var(--font-heading)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                            {{ __('admin.reinitialiser_mot_de_passe') }}
+                        </div>
+                        <p class="text-sm text-[color:var(--color-ink-soft)]">
+                            {{ __('admin.confirmer_reinitialisation', ['nom' => $this->agentAReinitialiser?->name]) }}
+                        </p>
+                    </div>
+
+                    <div class="flex border-t border-[color:var(--color-line)]">
+                        <button
+                            type="button"
+                            wire:click="fermerConfirmationReinitialisation"
+                            class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                        >{{ __('admin.annuler') }}</button>
+                        <button
+                            type="button"
+                            wire:click="reinitialiserMotDePasse"
+                            wire:loading.attr="disabled"
+                            class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)]"
+                        >{{ __('admin.reinitialiser') }}</button>
+                    </div>
+                @endif
             </div>
         </div>
     @endif
