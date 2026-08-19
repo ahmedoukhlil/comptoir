@@ -9,7 +9,7 @@
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
     --font-arabic: 'Cairo', ui-sans-serif, system-ui, sans-serif;
 
-    --color-ink: #0F172A;
+    --color-ink: #2F5D8C;
     --color-ink-soft: #475569;
     --color-sand: #F1F4F8;
     --color-sand-deep: #EEF1F5;
@@ -25,7 +25,7 @@
 
     /* Bleu secondaire du dégradé de bandeau, utilisé par ex. dans les
        en-têtes (var(--color-ink) -> var(--color-secondary)). */
-    --color-secondary: #1E3A8A;
+    --color-secondary: #4A7FB5;
 }
 
 [dir="rtl"] {
