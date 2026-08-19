@@ -20,11 +20,13 @@
         formaterMontant(v) { return Number(v || 0).toLocaleString('fr-FR').replace(/,/g, ' '); },
         texteEcart(e) {
             const t = window.ComptoirTraductions ?? {};
-            if (e === 0) return t.clotureEcartAucun ?? '';
+            if (e === 0) return t.clotureEcartAucun ?? @js(__('caisse.cloture_ecart_aucun'));
             const montant = this.formaterMontant(Math.abs(e));
-            const gabarit = e > 0 ? t.clotureEcartPositif : t.clotureEcartNegatif;
+            const gabarit = e > 0
+                ? (t.clotureEcartPositif ?? @js(__('caisse.cloture_ecart_positif')))
+                : (t.clotureEcartNegatif ?? @js(__('caisse.cloture_ecart_negatif')));
 
-            return (gabarit ?? '').replace(':montant', montant);
+            return gabarit.replace(':montant', montant);
         },
         taper(c) {
             const actuel = this.soldeCompteActuel;

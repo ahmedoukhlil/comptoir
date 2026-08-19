@@ -219,7 +219,7 @@
                                         </div>
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 flex items-center gap-1" dir="ltr">
                                             <span x-text="operation.heure"></span> · <span x-text="operation.client_telephone"></span>
-                                            <span class="text-[#B8853C]" x-text="'⏳ ' + (window.ComptoirTraductions?.syncBadgeAttente ?? '')"></span>
+                                            <span class="text-[#B8853C]" x-text="'⏳ ' + (window.ComptoirTraductions?.syncBadgeAttente ?? @js(__('caisse.sync_badge_attente')))"></span>
                                         </div>
                                     </div>
                                     <div class="font-[family-name:var(--font-mono)] font-bold text-[15px]" dir="ltr" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'">

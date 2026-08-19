@@ -23,12 +23,17 @@
         window.ComptoirTraductions = {
             erreurTelephoneDigits: @json(__('caisse.erreur_telephone_digits')),
             erreurMontantVide: @json(__('caisse.erreur_montant_vide')),
+            erreurSoldeInsuffisant: @json(__('caisse.erreur_solde_insuffisant')),
             syncEnAttente: @json(__('caisse.sync_en_attente')),
             syncBadgeAttente: @json(__('caisse.sync_badge_attente')),
             clotureEcartAucun: @json(__('caisse.cloture_ecart_aucun')),
             clotureEcartPositif: @json(__('caisse.cloture_ecart_positif')),
             clotureEcartNegatif: @json(__('caisse.cloture_ecart_negatif')),
         };
+
+        if (Object.values(window.ComptoirTraductions).some((v) => ! v)) {
+            console.error('ComptoirTraductions incomplet — une traduction manque probablement dans lang/.', window.ComptoirTraductions);
+        }
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');

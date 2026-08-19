@@ -109,7 +109,10 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
         },
 
         texteSyncEnAttente(n) {
-            return `${window.ComptoirTraductions?.syncEnAttente ?? ''} (${n})`;
+            const arabe = document.documentElement.lang === 'ar';
+            const texte = window.ComptoirTraductions?.syncEnAttente ?? (arabe ? 'بانتظار الإرسال' : "En attente d'envoi");
+
+            return `${texte} (${n})`;
         },
 
         taper(chiffre) {
@@ -134,19 +137,20 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
 
         validerChamps() {
             const t = window.ComptoirTraductions ?? {};
+            const arabe = document.documentElement.lang === 'ar';
 
             if (! /^\d{8}$/.test(this.telephone || '')) {
-                return t.erreurTelephoneDigits ?? 'Numéro invalide.';
+                return t.erreurTelephoneDigits ?? (arabe ? 'رقم غير صحيح.' : 'Numéro invalide.');
             }
 
             const montant = parseInt(this.montant || '0', 10);
 
             if (montant <= 0) {
-                return t.erreurMontantVide ?? 'Entrez un montant.';
+                return t.erreurMontantVide ?? (arabe ? 'أدخل مبلغاً.' : 'Entrez un montant.');
             }
 
             if (this.type === 'retrait' && montant > this.soldeOperateur(this.operateurId)) {
-                return t.erreurSoldeInsuffisant ?? 'Solde insuffisant.';
+                return t.erreurSoldeInsuffisant ?? (arabe ? 'الرصيد غير كافٍ.' : 'Solde insuffisant.');
             }
 
             return null;
