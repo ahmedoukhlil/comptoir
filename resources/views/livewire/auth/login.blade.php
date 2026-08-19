@@ -3,7 +3,7 @@
 
     <div class="w-full max-w-sm bg-[color:var(--color-sand)] rounded-3xl shadow-2xl p-8">
         <div class="text-center mb-6">
-            <img src="/comptoir_logo.png" alt="{{ __('caisse.app_nom') }}" class="w-48 h-48 mx-auto">
+            <img src="/Logo_comptoirVF.png" alt="{{ __('caisse.app_nom') }}" class="w-48 h-48 mx-auto">
         </div>
 
         <form wire:submit="seConnecter" class="space-y-4">
