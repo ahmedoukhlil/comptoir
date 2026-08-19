@@ -1,16 +1,16 @@
-<div class="min-h-screen bg-gradient-to-b from-[#0A2242] to-[color:var(--color-ink)] md:bg-none md:bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+<div class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
     <div class="mx-auto max-w-[980px] md:py-10 md:px-6">
-        <div class="bg-gradient-to-br from-[color:var(--color-sand)] via-[#F1F6FC] to-[color:var(--color-sand-deep)] md:rounded-[22px] md:border md:border-[color:var(--color-line)] md:shadow-2xl overflow-hidden">
+        <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
-            <div class="bg-[color:var(--color-ink)] text-[color:var(--color-sand)] px-5 pt-8 pb-6 md:px-9 md:py-6 relative">
+            <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
                 <div class="flex items-start justify-between">
                     <div>
-                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base">{{ __('caisse.historique_titre') }}</span>
-                        <b class="block text-sm font-semibold mt-0.5">{{ $this->point->nom }}</b>
+                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white">{{ __('caisse.historique_titre') }}</span>
+                        <b class="block text-sm font-semibold mt-0.5 text-[#B9C6E6]">{{ $this->point->nom }}</b>
                     </div>
                     <div class="flex items-center gap-3">
                         <x-selecteur-langue />
-                        <a href="{{ route('caisse.saisie') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
+                        <a href="{{ route('caisse.saisie') }}" class="text-[11px] font-semibold text-[#B9C6E6] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
                             {{ __('caisse.historique_retour') }}
                         </a>
                     </div>
@@ -89,7 +89,7 @@
                                     {{ $operation->created_at->format('d/m/Y H:i') }} · {{ $operation->numero_piece }} · {{ $operation->client_telephone }}
                                 </div>
                             </div>
-                            <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}">
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
                                 {{ $operation->type === 'depot' ? '+' : '−' }} {{ number_format($operation->montant, 0, ',', ' ') }}
                             </div>
                         </div>

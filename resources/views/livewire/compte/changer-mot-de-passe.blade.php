@@ -4,11 +4,11 @@
         ? route('admin.tenants.index')
         : (auth()->user()->peutUtiliserLaCaisse() ? route('caisse.saisie') : route('proprietaire.dashboard'));
 @endphp
-<div class="min-h-screen {{ $estSuperAdmin ? '' : 'bg-gradient-to-b from-[#0A2242] to-[color:var(--color-ink)] md:bg-none md:bg-[color:var(--color-sand)] '.(app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '') }}">
+<div class="min-h-screen {{ $estSuperAdmin ? '' : 'bg-[color:var(--color-sand)] '.(app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '') }}">
     <div class="mx-auto max-w-[500px] py-10 px-6">
-        <div class="bg-[color:var(--color-paper)] rounded-2xl border border-[color:var(--color-line)] shadow-sm overflow-hidden">
+        <div class="bg-[color:var(--color-card)] rounded-2xl border border-[color:var(--color-line)] shadow-sm overflow-hidden">
 
-            <div class="bg-[color:var(--color-ink)] text-white px-6 py-5">
+            <div class="px-6 py-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
                 <a href="{{ $retourRoute }}" class="text-[11px] font-semibold text-[#9AA6C0] underline">{{ $t('retour') }}</a>
                 <div class="mt-1.5 font-[family-name:var(--font-heading)] {{ $estSuperAdmin ? '' : 'rtl:font-[family-name:var(--font-arabic)]' }} font-bold text-lg">{{ $t('changer_mot_de_passe_titre') }}</div>
             </div>
