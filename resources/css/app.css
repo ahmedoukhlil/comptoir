@@ -31,3 +31,16 @@
 [dir="rtl"] {
     font-family: var(--font-arabic);
 }
+
+/* iOS/Android zooment automatiquement la page au focus d'un champ dont
+   la taille de police est < 16px. On force 16px sur mobile uniquement
+   (au-delà de md, la taille visuelle définie par Tailwind reprend le
+   dessus), pour éviter ce zoom sans jamais désactiver le zoom manuel
+   de l'utilisateur. */
+@media (max-width: 767px) {
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
