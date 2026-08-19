@@ -1,10 +1,17 @@
 <div
     x-data="{
-        soldeCompte: '',
+        operateurs: {{ Js::from($this->soldesTheoriquesParOperateur->map(fn ($l) => ['id' => $l['operateur']->id, 'nom' => $l['operateur']->nom, 'soldeTheorique' => $l['solde']])) }},
+        index: 0,
+        soldesComptes: {},
         enConfirmation: false,
+        confirmationOuverte: false,
         erreur: '',
-        soldeTheorique: {{ Js::from($this->soldeTheorique) }},
-        get ecart() { return (parseInt(this.soldeCompte || '0', 10)) - this.soldeTheorique; },
+        get operateurActuel() { return this.operateurs[this.index]; },
+        get soldeCompteActuel() { return this.soldesComptes[this.operateurActuel.id] ?? ''; },
+        get ecartActuel() { return (parseInt(this.soldeCompteActuel || '0', 10)) - this.operateurActuel.soldeTheorique; },
+        get tousSaisis() { return this.operateurs.every(o => this.soldesComptes[o.id] !== undefined && this.soldesComptes[o.id] !== ''); },
+        get soldeTheoriqueTotal() { return this.operateurs.reduce((s, o) => s + o.soldeTheorique, 0); },
+        get soldeCompteTotal() { return this.operateurs.reduce((s, o) => s + (parseInt(this.soldesComptes[o.id] || '0', 10)), 0); },
         formaterMontant(v) { return Number(v || 0).toLocaleString('fr-FR').replace(/,/g, ' '); },
         texteEcart(e) {
             const t = window.ComptoirTraductions ?? {};
@@ -15,22 +22,27 @@
             return (gabarit ?? '').replace(':montant', montant);
         },
         taper(c) {
-            if (this.soldeCompte.length >= 9) return;
-            this.soldeCompte = String(parseInt((this.soldeCompte || '0') + c, 10));
+            const actuel = this.soldeCompteActuel;
+            if (String(actuel).length >= 9) return;
+            this.soldesComptes[this.operateurActuel.id] = String(parseInt((actuel || '0') + c, 10));
         },
-        effacer() { this.soldeCompte = ''; },
+        effacer() { this.soldesComptes[this.operateurActuel.id] = ''; },
+        suivant() { if (this.index < this.operateurs.length - 1) this.index++; },
+        precedent() { if (this.index > 0) this.index--; },
         async cloturer() {
-            if (this.soldeCompte === '' || this.enConfirmation) return;
-            if (! confirm(@js(__('caisse.cloture_confirmer')) + ' ?')) return;
+            if (! this.tousSaisis || this.enConfirmation) return;
             this.erreur = '';
             this.enConfirmation = true;
             try {
-                const resultat = await this.$wire.cloturer(parseInt(this.soldeCompte, 10));
+                const payload = {};
+                this.operateurs.forEach(o => { payload[o.id] = parseInt(this.soldesComptes[o.id], 10); });
+                const resultat = await this.$wire.cloturer(payload);
                 if (resultat?.erreur) {
                     this.erreur = resultat.erreur;
                 }
             } finally {
                 this.enConfirmation = false;
+                this.confirmationOuverte = false;
             }
         },
     }"
@@ -57,6 +69,7 @@
                     <div class="text-center py-6">
                         <div class="text-4xl mb-3">✓</div>
                         <p class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-[color:var(--color-ink)] mb-1">{{ __('caisse.cloture_deja_faite') }}</p>
+
                         <div class="mt-6 grid grid-cols-2 gap-3 text-start">
                             <div class="bg-[color:var(--color-paper)] rounded-xl p-4 border border-[color:var(--color-line)]">
                                 <div class="text-[11px] font-semibold text-[color:var(--color-ink-soft)] uppercase">{{ __('caisse.cloture_solde_theorique') }}</div>
@@ -67,6 +80,7 @@
                                 <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1">{{ number_format($c->solde_compte, 0, ',', ' ') }}</div>
                             </div>
                         </div>
+
                         <div class="mt-4 rounded-xl p-4 font-semibold text-sm
                             {{ $c->ecart === 0 ? 'bg-[color:var(--color-green)]/10 text-[color:var(--color-green-deep)]' : 'bg-[color:var(--color-rust)]/10 text-[color:var(--color-rust-deep)]' }}">
                             @if ($c->ecart === 0)
@@ -77,25 +91,56 @@
                                 {{ __('caisse.cloture_ecart_negatif', ['montant' => number_format(abs($c->ecart), 0, ',', ' ')]) }}
                             @endif
                         </div>
+
+                        @if ($c->details->isNotEmpty())
+                            <div class="mt-6 text-start">
+                                <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.cloture_recapitulatif') }}</div>
+                                <div class="divide-y divide-dashed divide-[color:var(--color-line)]">
+                                    @foreach ($c->details as $detail)
+                                        <div class="flex items-center justify-between py-2.5">
+                                            <span class="text-sm font-semibold text-[color:var(--color-ink)]">{{ $detail->operateur->nom }}</span>
+                                            <span class="text-sm font-[family-name:var(--font-mono)] font-bold {{ $detail->ecart === 0 ? 'text-[color:var(--color-ink)]' : 'text-[color:var(--color-rust-deep)]' }}">
+                                                {{ number_format($detail->solde_compte, 0, ',', ' ') }}
+                                                @if ($detail->ecart !== 0)
+                                                    <span class="text-xs">({{ $detail->ecart > 0 ? '+' : '' }}{{ number_format($detail->ecart, 0, ',', ' ') }})</span>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
                         <a href="{{ route('caisse.historique') }}" class="inline-block mt-6 text-sm font-semibold text-[color:var(--color-ink)] underline">
                             {{ __('caisse.cloture_voir_historique') }}
                         </a>
                     </div>
                 @else
+                    {{-- Progression --}}
+                    <div class="flex items-center justify-center gap-1.5 mb-5">
+                        <template x-for="(op, i) in operateurs" :key="op.id">
+                            <span class="h-1.5 rounded-full transition-all" :class="i === index ? 'w-6 bg-[color:var(--color-ink)]' : (soldesComptes[op.id] !== undefined && soldesComptes[op.id] !== '' ? 'w-1.5 bg-[color:var(--color-green)]' : 'w-1.5 bg-[color:var(--color-line)]')"></span>
+                        </template>
+                    </div>
+                    <div class="text-center text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1" x-text="@js(__('caisse.cloture_etape', ['actuel' => ':actuel', 'total' => ':total'])).replace(':actuel', index + 1).replace(':total', operateurs.length)"></div>
+                    <div class="text-center mb-6">
+                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-lg text-[color:var(--color-ink)]" x-text="operateurActuel.nom"></div>
+                    </div>
+
                     <div class="text-center mb-6">
                         <div class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-ink-soft)]">{{ __('caisse.cloture_solde_theorique') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-3xl text-[color:var(--color-ink)] mt-1" x-text="formaterMontant(soldeTheorique)"></div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-3xl text-[color:var(--color-ink)] mt-1" x-text="formaterMontant(operateurActuel.soldeTheorique)"></div>
                     </div>
 
                     <div class="text-center mt-6 px-1">
                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide">{{ __('caisse.cloture_solde_compte') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" x-text="soldeCompte !== '' ? formaterMontant(soldeCompte) : '0'"></div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" x-text="soldeCompteActuel !== '' ? formaterMontant(soldeCompteActuel) : '0'"></div>
                         <div
-                            x-show="soldeCompte !== ''"
+                            x-show="soldeCompteActuel !== ''"
                             x-cloak
                             class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[12.5px] font-semibold min-h-[16px] mt-1.5"
-                            :class="ecart === 0 ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'"
-                            x-text="texteEcart(ecart)"
+                            :class="ecartActuel === 0 ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'"
+                            x-text="texteEcart(ecartActuel)"
                         ></div>
                     </div>
 
@@ -105,22 +150,39 @@
                                 type="button"
                                 x-on:click="taper(chiffre)"
                                 x-text="chiffre"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] transition"
+                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                             ></button>
                         </template>
-                        <button type="button" x-on:click="effacer()" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)]">{{ __('caisse.effacer') }}</button>
-                        <button type="button" x-on:click="taper('0')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] transition">0</button>
-                        <button type="button" x-on:click="taper('000')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)]">000</button>
+                        <button type="button" x-on:click="effacer()" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">{{ __('caisse.effacer') }}</button>
+                        <button type="button" x-on:click="taper('0')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">0</button>
+                        <button type="button" x-on:click="taper('000')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">000</button>
                     </div>
 
-                    <button
-                        type="button"
-                        x-on:click="cloturer()"
-                        :disabled="enConfirmation"
-                        class="w-full max-w-[340px] mx-auto mt-4 flex rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white items-center justify-center gap-2 bg-[color:var(--color-ink)] shadow-lg disabled:opacity-60"
-                    >
-                        {{ __('caisse.cloture_confirmer') }}
-                    </button>
+                    {{-- Navigation entre opérateurs / clôture --}}
+                    <div class="flex gap-2.5 mt-4 max-w-[340px] mx-auto">
+                        <button
+                            type="button"
+                            x-show="index > 0"
+                            x-on:click="precedent()"
+                            class="flex-1 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] border-[1.5px] border-[color:var(--color-line)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
+                        >{{ __('caisse.cloture_operateur_precedent') }}</button>
+
+                        <button
+                            type="button"
+                            x-show="index < operateurs.length - 1"
+                            x-on:click="suivant()"
+                            :disabled="soldeCompteActuel === ''"
+                            class="flex-1 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white bg-[color:var(--color-ink)] shadow-lg disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
+                        >{{ __('caisse.cloture_operateur_suivant') }}</button>
+
+                        <button
+                            type="button"
+                            x-show="index === operateurs.length - 1"
+                            x-on:click="confirmationOuverte = true"
+                            :disabled="! tousSaisis"
+                            class="flex-1 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white bg-[color:var(--color-ink)] shadow-lg disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
+                        >{{ __('caisse.cloture_confirmer') }}</button>
+                    </div>
                     <p x-show="erreur" x-cloak x-text="erreur" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
 
                     <div class="text-center mt-8">
@@ -128,6 +190,57 @@
                             {{ __('caisse.historique_retour') }}
                         </a>
                     </div>
+
+                    {{-- Modale de confirmation --}}
+                    <template x-teleport="body">
+                        <div x-show="confirmationOuverte" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4">
+                            <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" x-on:click="confirmationOuverte = false"></div>
+
+                            <div
+                                x-show="confirmationOuverte"
+                                x-transition:enter="transition ease-out duration-150"
+                                x-transition:enter-start="opacity-0 scale-95"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
+                            >
+                                <div class="p-6">
+                                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                                        {{ __('caisse.cloture_confirmer_titre') }}
+                                    </div>
+                                    <p class="text-sm text-[color:var(--color-ink-soft)] mb-4">
+                                        {{ __('caisse.cloture_confirmer_texte') }}
+                                    </p>
+
+                                    <div class="divide-y divide-dashed divide-[color:var(--color-line)] border-y border-dashed border-[color:var(--color-line)]">
+                                        <template x-for="op in operateurs" :key="op.id">
+                                            <div class="flex items-center justify-between py-2">
+                                                <span class="text-sm font-semibold text-[color:var(--color-ink)]" x-text="op.nom"></span>
+                                                <span class="text-sm font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" x-text="formaterMontant(soldesComptes[op.id])"></span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-3">
+                                        <span class="text-sm font-bold text-[color:var(--color-ink)]">{{ __('caisse.cloture_solde_compte') }}</span>
+                                        <span class="text-base font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" x-text="formaterMontant(soldeCompteTotal)"></span>
+                                    </div>
+                                </div>
+
+                                <div class="flex border-t border-[color:var(--color-line)]">
+                                    <button
+                                        type="button"
+                                        x-on:click="confirmationOuverte = false"
+                                        class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                                    >{{ __('caisse.annuler') }}</button>
+                                    <button
+                                        type="button"
+                                        x-on:click="cloturer()"
+                                        :disabled="enConfirmation"
+                                        class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60"
+                                    ><span x-show="! enConfirmation">{{ __('caisse.cloture_confirmer') }}</span><span x-show="enConfirmation" x-cloak>…</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 @endif
             </div>
         </div>

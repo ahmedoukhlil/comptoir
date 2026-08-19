@@ -36,4 +36,9 @@ class Cloture extends Model
     {
         return $this->hasMany(Operation::class);
     }
+
+    public function details(): HasMany
+    {
+        return $this->hasMany(ClotureDetail::class);
+    }
 }
