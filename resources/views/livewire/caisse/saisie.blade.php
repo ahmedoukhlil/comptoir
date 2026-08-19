@@ -6,64 +6,65 @@
         soldeTotalServeur: {{ Js::from($this->solde) }},
     })"
     x-init="init()"
-    class="min-h-screen bg-gradient-to-b from-[#0A2242] to-[color:var(--color-ink)] md:bg-none md:bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
+    class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
 >
     <div class="mx-auto max-w-[980px] md:py-10 md:px-6">
-        <div class="bg-gradient-to-br from-[color:var(--color-sand)] via-[#F1F6FC] to-[color:var(--color-sand-deep)] md:rounded-[22px] md:border md:border-[color:var(--color-line)] md:shadow-2xl overflow-hidden">
+        <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
-            {{-- Bandeau / solde --}}
-            <div class="bg-[color:var(--color-ink)] text-[color:var(--color-sand)] px-5 pt-8 pb-6 md:px-9 md:py-6 relative">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base">{{ __('caisse.app_nom') }}</span>
-                        <span class="text-xs text-[#9AA6C0]">{{ __('caisse.point') }}</span>
-                        <b class="block text-sm font-semibold mt-0.5">{{ $this->point->nom }}</b>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <x-selecteur-langue />
-                        <a href="{{ route('caisse.historique') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
-                            {{ __('caisse.historique_titre') }}
-                        </a>
-                        <a href="{{ route('caisse.cloture') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
-                            {{ __('caisse.cloture_lien') }}
-                        </a>
-                        @if (auth()->user()->estProprietaire())
-                            <a href="{{ route('proprietaire.agents') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
-                                {{ __('caisse.dashboard_gerer_agents') }}
-                            </a>
-                        @endif
-                        <a href="{{ route('compte.changer-mot-de-passe') }}" class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
-                            {{ __('caisse.mon_mot_de_passe') }}
-                        </a>
-                        <button
-                            onclick="document.getElementById('logout-form').submit()"
-                            class="text-[11px] font-semibold text-[#9AA6C0] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"
-                        >
-                            {{ __('caisse.deconnexion') }}
-                        </button>
-                    </div>
+            {{-- Barre du haut --}}
+            <div class="flex items-center justify-between px-5 pt-5 pb-2 md:px-9">
+                <div class="min-w-0">
+                    <span class="block text-[11px] text-[color:var(--color-ink-soft)]">{{ __('caisse.point') }}</span>
+                    <strong class="block text-sm font-semibold text-[color:var(--color-ink)] truncate">{{ $this->point->nom }}</strong>
                 </div>
-                <form id="logout-form" method="POST" action="{{ route('deconnexion') }}" class="hidden">
-                    @csrf
-                </form>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <x-selecteur-langue-claire />
+                    <a href="{{ route('caisse.historique') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.historique_titre') }}">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+                    </a>
+                    <a href="{{ route('caisse.cloture') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.cloture_lien') }}">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+                    </a>
+                    @if (auth()->user()->estProprietaire())
+                        <a href="{{ route('proprietaire.agents') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </a>
+                    @endif
+                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                    </a>
+                    <button
+                        onclick="document.getElementById('logout-form').submit()"
+                        class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]"
+                        aria-label="{{ __('caisse.deconnexion') }}"
+                    >
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <form id="logout-form" method="POST" action="{{ route('deconnexion') }}" class="hidden">
+                @csrf
+            </form>
 
-                {{-- Indicateur de synchronisation --}}
-                <div class="flex items-center gap-1.5 mt-3 text-[11px] font-semibold" :class="enLigne ? 'text-[#6FCB9F]' : 'text-[#E8B85C]'">
-                    <span class="w-1.5 h-1.5 rounded-full" :class="enLigne ? 'bg-[#6FCB9F]' : 'bg-[#E8B85C]'"></span>
+            {{-- Carte solde --}}
+            <div class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
+                <div class="flex items-center gap-1.5 text-[11px] font-semibold" :class="enLigne ? 'text-[#6FCB9F]' : 'text-[#F0C987]'">
+                    <span class="w-1.5 h-1.5 rounded-full" :class="enLigne ? 'bg-[#6FCB9F]' : 'bg-[#F0C987]'"></span>
                     <span x-show="enLigne && enAttente === 0">{{ __('caisse.sync_a_jour') }}</span>
                     <span x-show="!enLigne" x-cloak>{{ __('caisse.sync_hors_ligne') }}</span>
                     <span x-show="enLigne && enAttente > 0" x-cloak x-text="texteSyncEnAttente(enAttente)"></span>
                 </div>
 
-                <div class="text-xs font-semibold uppercase tracking-wide text-[#8C97B4] mt-4">{{ __('caisse.solde_label') }}</div>
-                <div class="font-[family-name:var(--font-mono)] font-bold text-[42px] md:text-[34px] mt-1.5 tabular-nums">
-                    <span x-text="formaterMontant(soldeAffiche)"></span><span class="text-[17px] text-[#8C97B4] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-medium ms-1">{{ __('caisse.devise') }}</span>
+                <div class="text-[11px] uppercase tracking-wide font-semibold text-[#B9C6E6] mt-3">{{ __('caisse.solde_label') }}</div>
+                <div class="flex items-baseline gap-2 flex-wrap mt-1">
+                    <span class="font-[family-name:var(--font-mono)] font-semibold text-[38px] md:text-[34px] leading-none tabular-nums" x-text="formaterMontant(soldeAffiche)"></span>
+                    <span class="text-base text-[#B9C6E6] font-medium">{{ __('caisse.devise') }}</span>
                 </div>
 
                 <div class="flex flex-wrap gap-2 mt-4">
                     <template x-for="operateur in operateurs" :key="operateur.id">
                         <div class="bg-white/10 rounded-lg px-3 py-1.5">
-                            <div class="text-[10px] font-semibold text-[#9AA6C0]" x-text="operateur.nom"></div>
+                            <div class="text-[10px] font-semibold text-[#B9C6E6]" x-text="operateur.nom"></div>
                             <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldeOperateur(operateur.id))"></div>
                         </div>
                     </template>
@@ -215,7 +216,7 @@
                                             <span class="text-[#B8853C]" x-text="'⏳ ' + (window.ComptoirTraductions?.syncBadgeAttente ?? '')"></span>
                                         </div>
                                     </div>
-                                    <div class="font-[family-name:var(--font-mono)] font-bold text-[15px]" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'">
+                                    <div class="font-[family-name:var(--font-mono)] font-bold text-[15px]" dir="ltr" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'">
                                         <span x-text="(operation.type === 'depot' ? '+' : '−') + ' ' + formaterMontant(operation.montant)"></span>
                                     </div>
                                 </div>
@@ -231,7 +232,7 @@
                                             {{ $operation->created_at->format('H:i') }} · {{ $operation->client_telephone }}
                                         </div>
                                     </div>
-                                    <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}">
+                                    <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
                                         {{ $operation->type === 'depot' ? '+' : '−' }} {{ number_format($operation->montant, 0, ',', ' ') }}
                                     </div>
                                 </div>

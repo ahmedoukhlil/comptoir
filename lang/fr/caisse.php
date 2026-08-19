@@ -128,4 +128,7 @@ return [
     'mot_de_passe_change_avec_succes' => 'Mot de passe changé avec succès.',
     'erreur_mot_de_passe_actuel' => 'Le mot de passe actuel est incorrect.',
     'retour' => 'Retour',
+    'section_operations' => 'Opérations',
+    'section_rapports_gestion' => 'Rapports & gestion',
+    'dashboard_points_badge' => 'points',
 ];

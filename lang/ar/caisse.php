@@ -128,4 +128,7 @@ return [
     'mot_de_passe_change_avec_succes' => 'تم تغيير كلمة السر بنجاح.',
     'erreur_mot_de_passe_actuel' => 'كلمة السر الحالية غير صحيحة.',
     'retour' => 'رجوع',
+    'section_operations' => 'العمليات',
+    'section_rapports_gestion' => 'التقارير والإدارة',
+    'dashboard_points_badge' => 'نقاط',
 ];
