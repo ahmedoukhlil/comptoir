@@ -158,7 +158,7 @@
                         </div>
 
                         {{-- Clavier --}}
-                        <div class="grid grid-cols-3 gap-2.5 mt-4 md:max-w-[340px]">
+                        <div class="grid grid-cols-3 gap-2.5 mt-4 md:max-w-[340px]" dir="ltr">
                             <template x-for="chiffre in ['1','2','3','4','5','6','7','8','9']" :key="chiffre">
                                 <button
                                     type="button"

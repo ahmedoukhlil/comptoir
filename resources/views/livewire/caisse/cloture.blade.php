@@ -144,7 +144,7 @@
                         ></div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2.5 mt-4 max-w-[340px] mx-auto">
+                    <div class="grid grid-cols-3 gap-2.5 mt-4 max-w-[340px] mx-auto" dir="ltr">
                         <template x-for="chiffre in ['1','2','3','4','5','6','7','8','9']" :key="chiffre">
                             <button
                                 type="button"

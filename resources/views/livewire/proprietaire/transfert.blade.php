@@ -101,7 +101,7 @@
                     <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" x-text="montant !== '' ? formaterMontant(montant) : '0'"></div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2.5 mt-4 max-w-[340px] mx-auto">
+                <div class="grid grid-cols-3 gap-2.5 mt-4 max-w-[340px] mx-auto" dir="ltr">
                     <template x-for="chiffre in ['1','2','3','4','5','6','7','8','9']" :key="chiffre">
                         <button
                             type="button"
