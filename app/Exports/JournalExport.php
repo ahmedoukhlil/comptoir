@@ -39,7 +39,7 @@ class JournalExport implements FromArray, WithHeadings, WithStyles
         $lignes = array_map(fn ($ligne) => [
             $ligne['date_heure']->format('d/m/Y H:i'),
             $ligne['numero_piece'],
-            $ligne['type'] === 'depot' ? __('caisse.recu') : __('caisse.donne'),
+            $ligne['type'] === 'depot' ? __('caisse.depot') : __('caisse.retrait'),
             $ligne['client'],
             $ligne['entree'] ?: null,
             $ligne['sortie'] ?: null,

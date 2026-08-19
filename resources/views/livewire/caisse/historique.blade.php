@@ -83,7 +83,7 @@
                             <div class="w-2.5 h-2.5 rounded-full flex-shrink-0 {{ $operation->type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]' }}"></div>
                             <div class="flex-1">
                                 <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
-                                    {{ $operation->type === 'depot' ? __('caisse.recu') : __('caisse.donne') }} — {{ $operation->operateur->nom }}
+                                    {{ $operation->type === 'depot' ? __('caisse.depot') : __('caisse.retrait') }} · {{ $operation->operateur->nom }}
                                 </div>
                                 <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 text-start" dir="ltr">
                                     {{ $operation->created_at->format('d/m/Y H:i') }} · {{ $operation->numero_piece }} · {{ $operation->client_telephone }}

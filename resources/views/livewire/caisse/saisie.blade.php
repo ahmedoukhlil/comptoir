@@ -215,7 +215,7 @@
                                     <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" :class="operation.type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]'"></div>
                                     <div class="flex-1">
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
-                                            <span x-text="(operation.type === 'depot' ? '{{ __('caisse.recu') }}' : '{{ __('caisse.donne') }}') + ' — ' + operation.operateur_nom"></span>
+                                            <span x-text="(operation.type === 'depot' ? '{{ __('caisse.depot') }}' : '{{ __('caisse.retrait') }}') + ' · ' + operation.operateur_nom"></span>
                                         </div>
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 flex items-center gap-1" dir="ltr">
                                             <span x-text="operation.heure"></span> · <span x-text="operation.client_telephone"></span>
@@ -232,7 +232,7 @@
                                     <div class="w-2.5 h-2.5 rounded-full flex-shrink-0 {{ $operation->type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]' }}"></div>
                                     <div class="flex-1">
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
-                                            {{ $operation->type === 'depot' ? __('caisse.recu') : __('caisse.donne') }} — {{ $operation->operateur->nom }}
+                                            {{ $operation->type === 'depot' ? __('caisse.depot') : __('caisse.retrait') }} · {{ $operation->operateur->nom }}
                                         </div>
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5" dir="ltr">
                                             {{ $operation->created_at->format('H:i') }} · {{ $operation->client_telephone }}

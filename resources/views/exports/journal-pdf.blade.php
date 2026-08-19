@@ -39,7 +39,7 @@
                 <tr>
                     <td>{{ $ligne['date_heure']->format('d/m/Y H:i') }}</td>
                     <td>{{ $ligne['numero_piece'] }}</td>
-                    <td>{{ $ligne['type'] === 'depot' ? __('caisse.recu') : __('caisse.donne') }}</td>
+                    <td>{{ $ligne['type'] === 'depot' ? __('caisse.depot') : __('caisse.retrait') }}</td>
                     <td>{{ $ligne['client'] }}</td>
                     <td class="num entree">{{ $ligne['entree'] ? number_format($ligne['entree'], 0, ',', ' ') : '' }}</td>
                     <td class="num sortie">{{ $ligne['sortie'] ? number_format($ligne['sortie'], 0, ',', ' ') : '' }}</td>
