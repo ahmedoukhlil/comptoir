@@ -9,6 +9,11 @@
         get operateurActuel() { return this.operateurs[this.index]; },
         get soldeCompteActuel() { return this.soldesComptes[this.operateurActuel.id] ?? ''; },
         get ecartActuel() { return (parseInt(this.soldeCompteActuel || '0', 10)) - this.operateurActuel.soldeTheorique; },
+        get ecartActuelImportant() {
+            const seuil = Math.max(1000, this.operateurActuel.soldeTheorique * 0.2);
+            return Math.abs(this.ecartActuel) >= seuil;
+        },
+        get ecartTotal() { return this.soldeCompteTotal - this.soldeTheoriqueTotal; },
         get tousSaisis() { return this.operateurs.every(o => this.soldesComptes[o.id] !== undefined && this.soldesComptes[o.id] !== ''); },
         get soldeTheoriqueTotal() { return this.operateurs.reduce((s, o) => s + o.soldeTheorique, 0); },
         get soldeCompteTotal() { return this.operateurs.reduce((s, o) => s + (parseInt(this.soldesComptes[o.id] || '0', 10)), 0); },
@@ -27,6 +32,10 @@
             this.soldesComptes[this.operateurActuel.id] = String(parseInt((actuel || '0') + c, 10));
         },
         effacer() { this.soldesComptes[this.operateurActuel.id] = ''; },
+        effacerDernier() {
+            const actuel = String(this.soldeCompteActuel || '');
+            this.soldesComptes[this.operateurActuel.id] = actuel.length > 1 ? actuel.slice(0, -1) : '';
+        },
         suivant() { if (this.index < this.operateurs.length - 1) this.index++; },
         precedent() { if (this.index > 0) this.index--; },
         async cloturer() {
@@ -136,12 +145,24 @@
                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide">{{ __('caisse.cloture_solde_compte') }}</div>
                         <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" dir="ltr" x-text="soldeCompteActuel !== '' ? formaterMontant(soldeCompteActuel) : '0'"></div>
                         <div
-                            x-show="soldeCompteActuel !== ''"
+                            x-show="soldeCompteActuel !== '' && ! ecartActuelImportant"
                             x-cloak
                             class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[12.5px] font-semibold min-h-[16px] mt-1.5"
                             :class="ecartActuel === 0 ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'"
                             x-text="texteEcart(ecartActuel)"
                         ></div>
+                    </div>
+
+                    <div
+                        x-show="soldeCompteActuel !== '' && ecartActuelImportant"
+                        x-cloak
+                        class="flex items-start gap-2.5 mt-4 max-w-[340px] mx-auto bg-[color:var(--color-rust)]/10 border-[1.5px] border-[color:var(--color-rust)]/30 rounded-xl px-3.5 py-3"
+                    >
+                        <span class="text-lg flex-shrink-0">⚠️</span>
+                        <div>
+                            <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm text-[color:var(--color-rust-deep)]" x-text="texteEcart(ecartActuel)"></div>
+                            <div class="text-xs text-[color:var(--color-rust-deep)] mt-0.5">{{ __('caisse.cloture_ecart_important') }}</div>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-3 gap-2.5 mt-4 max-w-[340px] mx-auto" dir="ltr">
@@ -153,9 +174,10 @@
                                 class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                             ></button>
                         </template>
-                        <button type="button" x-on:click="effacer()" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">{{ __('caisse.effacer') }}</button>
+                        <button type="button" x-on:click="effacerDernier()" aria-label="{{ __('caisse.effacer_dernier') }}" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center text-lg font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">⌫</button>
                         <button type="button" x-on:click="taper('0')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">0</button>
                         <button type="button" x-on:click="taper('000')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">000</button>
+                        <button type="button" x-on:click="effacer()" class="col-span-3 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-2xl py-3 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-xs font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-rust-deep)] hover:text-[color:var(--color-rust-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">{{ __('caisse.effacer_tout') }}</button>
                     </div>
 
                     {{-- Navigation entre opérateurs / clôture --}}
@@ -222,6 +244,10 @@
                                     <div class="flex items-center justify-between pt-3">
                                         <span class="text-sm font-bold text-[color:var(--color-ink)]">{{ __('caisse.cloture_solde_compte') }}</span>
                                         <span class="text-base font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="formaterMontant(soldeCompteTotal)"></span>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-1.5" x-show="ecartTotal !== 0">
+                                        <span class="text-xs font-semibold text-[color:var(--color-rust-deep)]">{{ __('caisse.cloture_ecart_total') }}</span>
+                                        <span class="text-sm font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-rust-deep)]" dir="ltr" x-text="(ecartTotal > 0 ? '+' : '') + formaterMontant(ecartTotal)"></span>
                                     </div>
                                 </div>
 
