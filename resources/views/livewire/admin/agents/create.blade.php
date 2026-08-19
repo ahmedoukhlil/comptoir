@@ -3,7 +3,7 @@
         <div class="bg-[color:var(--color-paper)] rounded-2xl border border-[color:var(--color-line)] shadow-sm overflow-hidden">
 
             <div class="bg-[color:var(--color-ink)] text-white px-6 py-5">
-                <a href="{{ route('admin.tenants.show', $this->point->tenant) }}" class="text-[11px] font-semibold text-[#9AA6C0] underline">{{ __('admin.retour_au_tenant') }}</a>
+                <a href="{{ route('admin.tenants.show', $this->point->tenant) }}" class="inline-flex items-center gap-1 text-xs font-semibold text-white/90 hover:text-white underline decoration-white/40 underline-offset-2"><span aria-hidden="true">&larr;</span> {{ __('admin.retour_au_tenant') }}</a>
                 <div class="mt-1.5 font-[family-name:var(--font-heading)] font-bold text-lg">{{ __('admin.nouvel_agent') }}</div>
                 <div class="text-xs text-[#9AA6C0] mt-0.5">{{ $this->point->nom }}</div>
             </div>

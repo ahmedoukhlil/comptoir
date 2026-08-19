@@ -9,7 +9,7 @@
         <div class="bg-[color:var(--color-card)] rounded-2xl border border-[color:var(--color-line)] shadow-sm overflow-hidden">
 
             <div class="px-6 py-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <a href="{{ $retourRoute }}" class="text-[11px] font-semibold text-[#9AA6C0] underline">{{ $t('retour') }}</a>
+                <a href="{{ $retourRoute }}" class="inline-flex items-center gap-1 text-xs font-semibold text-white/90 hover:text-white underline decoration-white/40 underline-offset-2"><span aria-hidden="true" class="rtl:rotate-180 inline-block">&larr;</span> {{ $t('retour') }}</a>
                 <div class="mt-1.5 font-[family-name:var(--font-heading)] {{ $estSuperAdmin ? '' : 'rtl:font-[family-name:var(--font-arabic)]' }} font-bold text-lg">{{ $t('changer_mot_de_passe_titre') }}</div>
             </div>
 
