@@ -10,6 +10,7 @@
         message: '',
         erreur: '',
         enConfirmation: false,
+        confirmationOuverte: false,
         formaterMontant(v) { return Number(v || 0).toLocaleString('fr-FR').replace(/,/g, ' '); },
         async chargerSoldes() {
             this.soldes = await this.$wire.soldesDuPoint(this.pointId);
@@ -19,6 +20,10 @@
             this.montant = String(parseInt((this.montant || '0') + c, 10));
         },
         effacer() { this.montant = ''; },
+        ouvrirConfirmation() {
+            if (this.montant === '' || parseInt(this.montant, 10) <= 0 || this.sourceId === this.destinationId) return;
+            this.confirmationOuverte = true;
+        },
         async confirmer() {
             if (this.montant === '' || this.enConfirmation) return;
             this.message = ''; this.erreur = '';
@@ -35,6 +40,7 @@
                 await this.chargerSoldes();
             } finally {
                 this.enConfirmation = false;
+                this.confirmationOuverte = false;
             }
         },
     }"
@@ -70,7 +76,7 @@
                     <template x-for="operateur in operateurs" :key="'src-' + operateur.id">
                         <button
                             type="button"
-                            x-on:click="sourceId = operateur.id"
+                            x-on:click="sourceId = operateur.id; if (destinationId === sourceId) destinationId = operateurs.find(o => o.id !== sourceId)?.id ?? null"
                             x-text="operateur.nom"
                             class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"
                             :class="sourceId === operateur.id ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
@@ -87,13 +93,15 @@
                     <template x-for="operateur in operateurs" :key="'dst-' + operateur.id">
                         <button
                             type="button"
-                            x-on:click="destinationId = operateur.id"
+                            x-on:click="if (operateur.id !== sourceId) destinationId = operateur.id"
                             x-text="operateur.nom"
-                            class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"
+                            :disabled="operateur.id === sourceId"
+                            class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] disabled:opacity-30 disabled:cursor-not-allowed"
                             :class="destinationId === operateur.id ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
                         ></button>
                     </template>
                 </div>
+                <p class="text-[11px] text-[color:var(--color-ink-soft)] -mt-4 mb-6" x-show="sourceId === destinationId" x-cloak>{{ __('caisse.transfert_choisir_destination_differente') }}</p>
 
                 {{-- Montant --}}
                 <div class="text-center mb-2 px-1">
@@ -126,8 +134,8 @@
 
                 <button
                     type="button"
-                    x-on:click="confirmer()"
-                    :disabled="enConfirmation"
+                    x-on:click="ouvrirConfirmation()"
+                    :disabled="enConfirmation || montant === '' || sourceId === destinationId"
                     class="w-full max-w-[340px] mx-auto mt-4 flex rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white items-center justify-center gap-2 bg-[color:var(--color-ink)] shadow-lg disabled:opacity-60"
                 >
                     {{ __('caisse.transfert_confirmer') }}
@@ -156,6 +164,57 @@
                     <a href="{{ route('proprietaire.dashboard') }}" class="text-sm font-semibold text-[color:var(--color-ink-soft)] underline">
                         {{ __('caisse.retour_dashboard') }}
                     </a>
+                </div>
+            </div>
+
+            {{-- Modale de confirmation --}}
+            <div x-show="confirmationOuverte" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4">
+                <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" x-on:click="confirmationOuverte = false"></div>
+
+                <div
+                    x-show="confirmationOuverte"
+                    x-transition:enter="transition ease-out duration-150"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
+                >
+                    <div class="p-6">
+                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                            {{ __('caisse.confirmation_titre') }}
+                        </div>
+                        <p class="text-sm text-[color:var(--color-ink-soft)] mb-4">
+                            {{ __('caisse.confirmation_texte') }}
+                        </p>
+
+                        <div class="divide-y divide-dashed divide-[color:var(--color-line)] border-y border-dashed border-[color:var(--color-line)]">
+                            <div class="flex items-center justify-between py-2.5">
+                                <span class="text-sm text-[color:var(--color-ink-soft)]">{{ __('caisse.transfert_source_label') }}</span>
+                                <span class="text-sm font-bold text-[color:var(--color-rust-deep)]" x-text="operateurs.find(o => o.id === sourceId)?.nom ?? ''"></span>
+                            </div>
+                            <div class="flex items-center justify-between py-2.5">
+                                <span class="text-sm text-[color:var(--color-ink-soft)]">{{ __('caisse.transfert_destination_label') }}</span>
+                                <span class="text-sm font-bold text-[color:var(--color-green-deep)]" x-text="operateurs.find(o => o.id === destinationId)?.nom ?? ''"></span>
+                            </div>
+                            <div class="flex items-center justify-between py-3">
+                                <span class="text-sm font-bold text-[color:var(--color-ink)]">{{ __('caisse.confirmation_montant') }}</span>
+                                <span class="text-lg font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="formaterMontant(montant)"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex border-t border-[color:var(--color-line)]">
+                        <button
+                            type="button"
+                            x-on:click="confirmationOuverte = false"
+                            class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                        >{{ __('caisse.confirmation_annuler') }}</button>
+                        <button
+                            type="button"
+                            x-on:click="confirmer()"
+                            :disabled="enConfirmation"
+                            class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60"
+                        ><span x-show="! enConfirmation">{{ __('caisse.confirmation_valider') }}</span><span x-show="enConfirmation" x-cloak>…</span></button>
+                    </div>
                 </div>
             </div>
         </div>

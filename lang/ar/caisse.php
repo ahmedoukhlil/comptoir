@@ -119,6 +119,7 @@ return [
     'transfert_solde_disponible' => 'الرصيد المتاح',
     'dashboard_transferer' => 'تحويل بين الصناديق',
     'erreur_transfert_meme_operateur' => 'يجب أن يكون المصدر والوجهة مختلفين.',
+    'transfert_choisir_destination_differente' => 'اختر مشغلاً مختلفاً عن المصدر.',
     'erreur_lecture_seule' => 'انتهت فترتك التجريبية المجانية. تواصل معنا لمواصلة تسجيل العمليات.',
     'essai_jours_restants' => 'الفترة التجريبية المجانية: :jours يوم(أيام) متبقية',
     'essai_expire_bandeau' => 'انتهت فترتك التجريبية المجانية — تم تفعيل وضع القراءة فقط.',

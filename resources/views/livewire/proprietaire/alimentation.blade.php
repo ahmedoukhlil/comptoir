@@ -7,10 +7,20 @@
         message: '',
         erreur: '',
         enConfirmation: false,
+        confirmationOuverte: false,
         get total() {
             return Object.values(this.montants).reduce((s, v) => s + (parseInt(v || '0', 10)), 0);
         },
+        get lignesSaisies() {
+            return this.operateurs
+                .filter(o => parseInt(this.montants[o.id] || '0', 10) > 0)
+                .map(o => ({ nom: o.nom, montant: parseInt(this.montants[o.id], 10) }));
+        },
         formaterMontant(v) { return Number(v || 0).toLocaleString('fr-FR').replace(/,/g, ' '); },
+        ouvrirConfirmation() {
+            if (this.total <= 0) return;
+            this.confirmationOuverte = true;
+        },
         async confirmer() {
             if (this.total <= 0 || this.enConfirmation) return;
             this.message = ''; this.erreur = '';
@@ -29,6 +39,7 @@
                 this.message = @js(__('caisse.alimentation_reussie'));
             } finally {
                 this.enConfirmation = false;
+                this.confirmationOuverte = false;
             }
         },
     }"
@@ -94,7 +105,7 @@
 
                 <button
                     type="button"
-                    x-on:click="confirmer()"
+                    x-on:click="ouvrirConfirmation()"
                     :disabled="enConfirmation || total <= 0"
                     class="w-full mt-4 flex rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white items-center justify-center gap-2 bg-[color:var(--color-ink)] shadow-lg disabled:opacity-60"
                 >
@@ -124,6 +135,55 @@
                     <a href="{{ route('proprietaire.dashboard') }}" class="text-sm font-semibold text-[color:var(--color-ink-soft)] underline">
                         {{ __('caisse.retour_dashboard') }}
                     </a>
+                </div>
+            </div>
+
+            {{-- Modale de confirmation --}}
+            <div x-show="confirmationOuverte" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4">
+                <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" x-on:click="confirmationOuverte = false"></div>
+
+                <div
+                    x-show="confirmationOuverte"
+                    x-transition:enter="transition ease-out duration-150"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
+                >
+                    <div class="p-6">
+                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                            {{ __('caisse.confirmation_titre') }}
+                        </div>
+                        <p class="text-sm text-[color:var(--color-ink-soft)] mb-4">
+                            {{ __('caisse.confirmation_texte') }}
+                        </p>
+
+                        <div class="divide-y divide-dashed divide-[color:var(--color-line)] border-y border-dashed border-[color:var(--color-line)]">
+                            <template x-for="ligne in lignesSaisies" :key="ligne.nom">
+                                <div class="flex items-center justify-between py-2.5">
+                                    <span class="text-sm font-semibold text-[color:var(--color-ink)]" x-text="ligne.nom"></span>
+                                    <span class="text-sm font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="formaterMontant(ligne.montant)"></span>
+                                </div>
+                            </template>
+                            <div class="flex items-center justify-between py-3">
+                                <span class="text-sm font-bold text-[color:var(--color-ink)]">{{ __('caisse.colonne_total') }}</span>
+                                <span class="text-lg font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="formaterMontant(total)"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex border-t border-[color:var(--color-line)]">
+                        <button
+                            type="button"
+                            x-on:click="confirmationOuverte = false"
+                            class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                        >{{ __('caisse.confirmation_annuler') }}</button>
+                        <button
+                            type="button"
+                            x-on:click="confirmer()"
+                            :disabled="enConfirmation"
+                            class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60"
+                        ><span x-show="! enConfirmation">{{ __('caisse.confirmation_valider') }}</span><span x-show="enConfirmation" x-cloak>…</span></button>
+                    </div>
                 </div>
             </div>
         </div>

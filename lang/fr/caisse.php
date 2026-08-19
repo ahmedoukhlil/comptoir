@@ -119,6 +119,7 @@ return [
     'transfert_solde_disponible' => 'Solde disponible',
     'dashboard_transferer' => 'Transférer entre caisses',
     'erreur_transfert_meme_operateur' => 'La source et la destination doivent être différentes.',
+    'transfert_choisir_destination_differente' => 'Choisissez un opérateur différent de la source.',
     'erreur_lecture_seule' => 'Votre essai gratuit est terminé. Contactez-nous pour continuer à saisir des opérations.',
     'essai_jours_restants' => 'Essai gratuit : :jours jour(s) restant(s)',
     'essai_expire_bandeau' => 'Votre essai gratuit est terminé — lecture seule activée.',
