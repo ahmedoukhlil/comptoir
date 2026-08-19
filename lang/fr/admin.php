@@ -65,4 +65,7 @@ return [
     'mot_de_passe_change_avec_succes' => 'Mot de passe changé avec succès.',
     'erreur_mot_de_passe_actuel' => 'Le mot de passe actuel est incorrect.',
     'retour' => 'Retour',
+
+    'supprimer_tenant' => 'Supprimer ce tenant',
+    'confirmer_suppression_tenant' => 'Supprimer définitivement ce tenant, ses points et ses agents ? Cette action est irréversible.',
 ];

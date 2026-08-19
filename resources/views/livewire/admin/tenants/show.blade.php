@@ -41,6 +41,15 @@
                     </p>
                 @endif
 
+                <div class="flex justify-end mb-6">
+                    <button
+                        type="button"
+                        wire:click="supprimer"
+                        wire:confirm="{{ __('admin.confirmer_suppression_tenant') }}"
+                        class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] border-[color:var(--color-rust-deep)] text-[color:var(--color-rust-deep)] hover:bg-[color:var(--color-rust-deep)] hover:text-white"
+                    >{{ __('admin.supprimer_tenant') }}</button>
+                </div>
+
                 <div class="flex items-center justify-between mb-3">
                     <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase">{{ __('admin.points_du_tenant') }}</div>
                     <a href="{{ route('admin.points.create', $this->tenant) }}" class="text-xs font-semibold text-[color:var(--color-ink)] underline">

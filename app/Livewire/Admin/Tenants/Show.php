@@ -46,6 +46,16 @@ class Show extends Component
         unset($this->tenant);
     }
 
+    public function supprimer(): void
+    {
+        $tenant = $this->tenant;
+
+        $tenant->agents()->delete();
+        $tenant->delete();
+
+        $this->redirectRoute('admin.tenants.index');
+    }
+
     public function render()
     {
         return view('livewire.admin.tenants.show');
