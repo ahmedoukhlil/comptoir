@@ -36,8 +36,9 @@
                     <span class="w-px bg-[color:var(--color-line)] mx-1"></span>
 
                     <button type="button" wire:click="$set('type', '')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === '' ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.historique_tous') }}</button>
-                    <button type="button" wire:click="$set('type', 'depot')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'depot' ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.entree') }}</button>
-                    <button type="button" wire:click="$set('type', 'retrait')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.sortie') }}</button>
+                    <button type="button" wire:click="$set('type', 'depot')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'depot' ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.depot') }}</button>
+                    <button type="button" wire:click="$set('type', 'retrait')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait') }}</button>
+                    <button type="button" wire:click="$set('type', 'retrait_beneficiaire')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait_beneficiaire' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait_beneficiaire') }}</button>
                 </div>
 
                 <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-xl px-4 py-2.5 mb-4 max-w-sm">
@@ -83,7 +84,7 @@
                             <div class="w-2.5 h-2.5 rounded-full flex-shrink-0 {{ $operation->type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]' }}"></div>
                             <div class="flex-1">
                                 <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
-                                    {{ $operation->type === 'depot' ? __('caisse.depot') : __('caisse.retrait') }} · {{ $operation->operateur->nom }}
+                                    {{ $operation->libelleType() }} · {{ $operation->operateur->nom }}
                                 </div>
                                 <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 text-start" dir="ltr">
                                     {{ $operation->created_at->format('d/m/Y H:i') }} · {{ $operation->numero_piece }} · {{ $operation->client_telephone }}

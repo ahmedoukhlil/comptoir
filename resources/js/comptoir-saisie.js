@@ -115,6 +115,17 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
             return Number(valeur || 0).toLocaleString('fr-FR').replace(/,/g, ' ');
         },
 
+        libelleType(type) {
+            const t = window.ComptoirTraductions ?? {};
+            const libelles = {
+                depot: t.libelleDepot,
+                retrait: t.libelleRetrait,
+                retrait_beneficiaire: t.libelleRetraitBeneficiaire,
+            };
+
+            return libelles[type] ?? type;
+        },
+
         texteSyncEnAttente(n) {
             const arabe = document.documentElement.lang === 'ar';
             const texte = window.ComptoirTraductions?.syncEnAttente ?? (arabe ? 'بانتظار الإرسال' : "En attente d'envoi");
@@ -156,7 +167,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
                 return t.erreurMontantVide ?? (arabe ? 'أدخل مبلغاً.' : 'Entrez un montant.');
             }
 
-            if (this.type === 'retrait' && montant > this.soldeOperateur(this.operateurId)) {
+            if ((this.type === 'retrait' || this.type === 'retrait_beneficiaire') && montant > this.soldeOperateur(this.operateurId)) {
                 return t.erreurSoldeInsuffisant ?? (arabe ? 'الرصيد غير كافٍ.' : 'Solde insuffisant.');
             }
 

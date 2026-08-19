@@ -24,7 +24,7 @@ class JournalBuilder
 
         foreach ($operationsTriees as $operation) {
             $entree = $operation->type === 'depot' ? $operation->montant : 0;
-            $sortie = $operation->type === 'retrait' ? $operation->montant : 0;
+            $sortie = in_array($operation->type, ['retrait', 'retrait_beneficiaire'], true) ? $operation->montant : 0;
             $solde += $entree - $sortie;
             $totalEntrees += $entree;
             $totalSorties += $sortie;

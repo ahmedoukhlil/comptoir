@@ -50,7 +50,7 @@ class Point extends Model
     {
         $alimentations = $this->alimentations()->sum('montant');
         $depots = $this->operations()->where('type', 'depot')->sum('montant');
-        $retraits = $this->operations()->where('type', 'retrait')->sum('montant');
+        $retraits = $this->operations()->whereIn('type', ['retrait', 'retrait_beneficiaire'])->sum('montant');
 
         return (int) ($alimentations + $depots - $retraits);
     }
@@ -78,7 +78,7 @@ class Point extends Model
             ->pluck('total', 'operateur_id');
 
         $retraits = $this->operations()
-            ->where('type', 'retrait')
+            ->whereIn('type', ['retrait', 'retrait_beneficiaire'])
             ->selectRaw('operateur_id, sum(montant) as total')
             ->groupBy('operateur_id')
             ->pluck('total', 'operateur_id');

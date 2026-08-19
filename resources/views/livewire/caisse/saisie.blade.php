@@ -83,23 +83,33 @@
                     {{-- Colonne formulaire --}}
                     <div>
                         {{-- Bascule dépôt/retrait --}}
-                        <div class="flex bg-[color:var(--color-sand-deep)] rounded-2xl p-1.5 gap-1.5">
+                        <div class="flex flex-col bg-[color:var(--color-sand-deep)] rounded-2xl p-1.5 gap-1.5">
                             <button
                                 type="button"
                                 x-on:click="type = 'depot'"
-                                class="flex-1 py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                                class="w-full py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                 :class="type === 'depot' ? 'bg-[color:var(--color-green)] text-white shadow-lg shadow-green-900/20' : 'text-[color:var(--color-ink-soft)]'"
                             >
                                 <span class="text-lg">↓</span> {{ __('caisse.depot') }}
                             </button>
-                            <button
-                                type="button"
-                                x-on:click="type = 'retrait'"
-                                class="flex-1 py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                :class="type === 'retrait' ? 'bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'text-[color:var(--color-ink-soft)]'"
-                            >
-                                <span class="text-lg">↑</span> {{ __('caisse.retrait') }}
-                            </button>
+                            <div class="flex gap-1.5">
+                                <button
+                                    type="button"
+                                    x-on:click="type = 'retrait'"
+                                    class="flex-1 py-3.5 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                                    :class="type === 'retrait' ? 'bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'text-[color:var(--color-ink-soft)]'"
+                                >
+                                    <span class="text-base">↑</span> {{ __('caisse.retrait') }}
+                                </button>
+                                <button
+                                    type="button"
+                                    x-on:click="type = 'retrait_beneficiaire'"
+                                    class="flex-1 py-3.5 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                                    :class="type === 'retrait_beneficiaire' ? 'bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'text-[color:var(--color-ink-soft)]'"
+                                >
+                                    <span class="text-base">↑</span> {{ __('caisse.retrait_beneficiaire') }}
+                                </button>
+                            </div>
                         </div>
 
                         {{-- Opérateur --}}
@@ -216,7 +226,7 @@
                                     <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" :class="operation.type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]'"></div>
                                     <div class="flex-1">
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
-                                            <span x-text="(operation.type === 'depot' ? '{{ __('caisse.depot') }}' : '{{ __('caisse.retrait') }}') + ' · ' + operation.operateur_nom"></span>
+                                            <span x-text="libelleType(operation.type) + ' · ' + operation.operateur_nom"></span>
                                         </div>
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 flex items-center gap-1" dir="ltr">
                                             <span x-text="operation.heure"></span> · <span x-text="operation.client_telephone"></span>
@@ -236,7 +246,7 @@
                                     <div class="w-2.5 h-2.5 rounded-full flex-shrink-0 {{ $operation->type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]' }}"></div>
                                     <div class="flex-1">
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
-                                            {{ $operation->type === 'depot' ? __('caisse.depot') : __('caisse.retrait') }} · {{ $operation->operateur->nom }}
+                                            {{ $operation->libelleType() }} · {{ $operation->operateur->nom }}
                                         </div>
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5" dir="ltr">
                                             {{ $operation->created_at->format('H:i') }} · {{ $operation->client_telephone }}
@@ -292,7 +302,7 @@
                         <div class="divide-y divide-dashed divide-[color:var(--color-line)] border-y border-dashed border-[color:var(--color-line)]">
                             <div class="flex items-center justify-between py-2.5">
                                 <span class="text-sm text-[color:var(--color-ink-soft)]">{{ __('caisse.confirmation_type') }}</span>
-                                <span class="text-sm font-bold" :class="type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'" x-text="type === 'depot' ? @js(__('caisse.depot')) : @js(__('caisse.retrait'))"></span>
+                                <span class="text-sm font-bold" :class="type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'" x-text="libelleType(type)"></span>
                             </div>
                             <div class="flex items-center justify-between py-2.5">
                                 <span class="text-sm text-[color:var(--color-ink-soft)]">{{ __('caisse.confirmation_operateur') }}</span>

@@ -20,7 +20,7 @@ class SyncController extends Controller
             'operations' => ['required', 'array'],
             'operations.*.uuid_client' => ['required', 'uuid'],
             'operations.*.operateur_id' => ['required', 'integer', Rule::exists('operateurs', 'id')->where('tenant_id', $tenantId)],
-            'operations.*.type' => ['required', 'in:depot,retrait'],
+            'operations.*.type' => ['required', 'in:depot,retrait,retrait_beneficiaire'],
             'operations.*.montant' => ['required', 'integer', 'min:1'],
             'operations.*.client_nom' => ['nullable', 'string'],
             'operations.*.client_telephone' => ['required', 'digits:8'],

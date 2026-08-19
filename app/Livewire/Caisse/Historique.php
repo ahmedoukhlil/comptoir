@@ -65,7 +65,7 @@ class Historique extends Component
     #[Computed]
     public function totalSorties(): int
     {
-        return (int) $this->baseFiltree()->where('type', 'retrait')->sum('montant');
+        return (int) $this->baseFiltree()->whereIn('type', ['retrait', 'retrait_beneficiaire'])->sum('montant');
     }
 
     protected function baseFiltree()

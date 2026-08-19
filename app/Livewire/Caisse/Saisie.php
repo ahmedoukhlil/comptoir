@@ -80,7 +80,7 @@ class Saisie extends Component
         }
 
         $validateur = validator($champs, [
-            'type' => ['required', 'in:depot,retrait'],
+            'type' => ['required', 'in:depot,retrait,retrait_beneficiaire'],
             'operateurId' => ['required', 'integer', 'exists:operateurs,id'],
             'telephone' => ['required', 'digits:8'],
             'clientNom' => ['nullable', 'string'],
@@ -103,7 +103,7 @@ class Saisie extends Component
             return ['erreur' => __('caisse.erreur_solde_insuffisant')];
         }
 
-        if ($donnees['type'] === 'retrait') {
+        if (in_array($donnees['type'], ['retrait', 'retrait_beneficiaire'], true)) {
             $soldeOperateur = $this->point->soldesParOperateur()
                 ->firstWhere('operateur.id', $operateur->id)['solde'] ?? 0;
 

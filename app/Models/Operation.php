@@ -60,6 +60,16 @@ class Operation extends Model
         return $this->cloture_id === null;
     }
 
+    public function estSortie(): bool
+    {
+        return in_array($this->type, ['retrait', 'retrait_beneficiaire'], true);
+    }
+
+    public function libelleType(): string
+    {
+        return __('caisse.'.$this->type);
+    }
+
     public static function genererNumeroPiece(): string
     {
         $annee = now()->year;

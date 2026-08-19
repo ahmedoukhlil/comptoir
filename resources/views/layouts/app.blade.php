@@ -29,6 +29,9 @@
             clotureEcartAucun: @json(__('caisse.cloture_ecart_aucun')),
             clotureEcartPositif: @json(__('caisse.cloture_ecart_positif')),
             clotureEcartNegatif: @json(__('caisse.cloture_ecart_negatif')),
+            libelleDepot: @json(__('caisse.depot')),
+            libelleRetrait: @json(__('caisse.retrait')),
+            libelleRetraitBeneficiaire: @json(__('caisse.retrait_beneficiaire')),
         };
 
         if (Object.values(window.ComptoirTraductions).some((v) => ! v)) {
