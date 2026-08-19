@@ -20,20 +20,20 @@
                 </div>
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <x-selecteur-langue-claire />
-                    <a href="{{ route('caisse.historique') }}" class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.historique_titre') }}">
+                    <a href="{{ route('caisse.historique') }}" class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.historique_titre') }}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
                     </a>
                     @if (auth()->user()->estProprietaire())
-                        <a href="{{ route('proprietaire.agents') }}" class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
+                        <a href="{{ route('proprietaire.agents') }}" class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                         </a>
                     @endif
-                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
+                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
                     </a>
                     <button
                         onclick="document.getElementById('logout-form').submit()"
-                        class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-rust)]/40 bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-rust-deep)] hover:border-[color:var(--color-rust-deep)] hover:bg-[color:var(--color-rust)]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-rust-deep)] transition"
+                        class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-rust)]/40 bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-rust-deep)] hover:border-[color:var(--color-rust-deep)] hover:bg-[color:var(--color-rust)]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-rust-deep)] transition"
                         aria-label="{{ __('caisse.deconnexion') }}"
                     >
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -46,23 +46,23 @@
 
             {{-- Carte solde --}}
             <div class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center gap-1.5 text-[11px] font-semibold" :class="enLigne ? 'text-[#6FCB9F]' : 'text-[#F0C987]'">
-                    <span class="w-1.5 h-1.5 rounded-full" :class="enLigne ? 'bg-[#6FCB9F]' : 'bg-[#F0C987]'"></span>
+                <div class="flex items-center gap-1.5 text-[11px] font-semibold" :class="enLigne ? 'text-[#86EFAC]' : 'text-[#FDE68A]'">
+                    <span class="w-1.5 h-1.5 rounded-full" :class="enLigne ? 'bg-[#86EFAC]' : 'bg-[#FDE68A]'"></span>
                     <span x-show="enLigne && enAttente === 0">{{ __('caisse.sync_a_jour') }}</span>
                     <span x-show="!enLigne" x-cloak>{{ __('caisse.sync_hors_ligne') }}</span>
                     <span x-show="enLigne && enAttente > 0" x-cloak x-text="texteSyncEnAttente(enAttente)"></span>
                 </div>
 
-                <div class="text-[11px] uppercase tracking-wide font-semibold text-[#B9C6E6] mt-3">{{ __('caisse.solde_label') }}</div>
+                <div class="text-[11px] uppercase tracking-wide font-semibold text-white mt-3">{{ __('caisse.solde_label') }}</div>
                 <div class="flex items-baseline gap-2 flex-wrap mt-1">
                     <span class="font-[family-name:var(--font-mono)] font-semibold text-[38px] md:text-[34px] leading-none tabular-nums" x-text="formaterMontant(soldeAffiche)"></span>
-                    <span class="text-base text-[#B9C6E6] font-medium">{{ __('caisse.devise') }}</span>
+                    <span class="text-base text-white font-medium">{{ __('caisse.devise') }}</span>
                 </div>
 
                 <div class="flex flex-wrap gap-2 mt-4">
                     <template x-for="operateur in operateurs" :key="operateur.id">
                         <div class="bg-white/10 rounded-lg px-3 py-1.5">
-                            <div class="text-[10px] font-semibold text-[#B9C6E6]" x-text="operateur.nom"></div>
+                            <div class="text-[10px] font-semibold text-white" x-text="operateur.nom"></div>
                             <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldeOperateur(operateur.id))"></div>
                         </div>
                     </template>
@@ -253,13 +253,13 @@
             {{-- Barre résumé --}}
             <div class="fixed md:static start-3.5 end-3.5 bottom-4 md:mx-9 md:mb-8 bg-[color:var(--color-ink)] rounded-[18px] px-4.5 py-4 flex justify-between items-center shadow-2xl">
                 <div>
-                    <div class="text-[10px] tracking-wide font-semibold text-[#8C97B4] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.benefice_label') }}</div>
-                    <div class="font-[family-name:var(--font-mono)] font-bold text-[17px] text-[#6FCB9F] mt-0.5">
+                    <div class="text-[10px] tracking-wide font-semibold text-white/90 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.benefice_label') }}</div>
+                    <div class="font-[family-name:var(--font-mono)] font-bold text-[17px] text-[#86EFAC] mt-0.5">
                         + {{ number_format($this->beneficeDuJour, 0, ',', ' ') }} {{ __('caisse.devise') }}
                     </div>
                 </div>
                 <div>
-                    <div class="text-[10px] tracking-wide font-semibold text-[#8C97B4] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operations_label') }}</div>
+                    <div class="text-[10px] tracking-wide font-semibold text-white/90 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operations_label') }}</div>
                     <div class="font-[family-name:var(--font-mono)] font-bold text-[17px] text-[color:var(--color-sand)] mt-0.5">
                         {{ $this->operationsDuJour->count() }}
                     </div>

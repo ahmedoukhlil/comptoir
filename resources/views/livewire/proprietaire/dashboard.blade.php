@@ -41,13 +41,13 @@
 
             {{-- Carte solde --}}
             <div class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-[#B9C6E6] font-semibold mb-1.5">
+                <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-white font-semibold mb-1.5">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     {{ __('caisse.dashboard_solde_total') }}
                 </div>
                 <div class="flex items-baseline gap-2 flex-wrap">
                     <span class="font-[family-name:var(--font-mono)] font-semibold text-[40px] leading-none tabular-nums" dir="ltr">{{ number_format($this->soldeTotal, 0, ',', ' ') }}</span>
-                    <span class="text-base text-[#B9C6E6] font-medium">{{ __('caisse.devise') }}</span>
+                    <span class="text-base text-white font-medium">{{ __('caisse.devise') }}</span>
                 </div>
             </div>
 

@@ -13,19 +13,20 @@
     --color-ink-soft: #475569;
     --color-sand: #F1F4F8;
     --color-sand-deep: #EEF1F5;
-    --color-gold: #A16207;
+    --color-gold: #9F6107;
     --color-gold-deep: #7A4E0A;
-    --color-rust: #DC2626;
+    --color-rust: #D82323;
     --color-rust-deep: #B91C1C;
-    --color-green: #059669;
+    --color-green: #047D58;
     --color-green-deep: #047857;
     --color-paper: #FFFFFF;
     --color-card: #FFFFFF;
     --color-line: #E2E8F0;
 
     /* Bleu secondaire du dégradé de bandeau, utilisé par ex. dans les
-       en-têtes (var(--color-ink) -> var(--color-secondary)). */
-    --color-secondary: #4A7FB5;
+       en-têtes (var(--color-ink) -> var(--color-secondary)). Assombri
+       pour garantir 4.5:1 avec le texte blanc du bandeau (WCAG AA). */
+    --color-secondary: #477AAE;
 }
 
 [dir="rtl"] {

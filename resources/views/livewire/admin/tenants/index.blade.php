@@ -5,7 +5,7 @@
             <div class="bg-[color:var(--color-ink)] text-white px-6 py-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <span class="block font-[family-name:var(--font-heading)] font-bold text-base">{{ __('admin.titre') }}</span>
-                    <span class="text-xs text-[#C7D2E3]">{{ __('admin.tenants_titre') }}</span>
+                    <span class="text-xs text-white/90">{{ __('admin.tenants_titre') }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <a href="{{ route('compte.changer-mot-de-passe') }}" class="text-xs font-semibold text-white bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 font-[family-name:var(--font-heading)]">

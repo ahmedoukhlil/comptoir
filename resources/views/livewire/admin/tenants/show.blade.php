@@ -76,7 +76,7 @@
                                         <button
                                             type="button"
                                             wire:click="ouvrirConfirmationReinitialisation({{ $agent->id }})"
-                                            class="text-[10px] font-bold px-1.5 py-1 rounded text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-ink)] hover:text-white"
+                                            class="text-[11px] font-bold px-2.5 py-1.5 min-h-[24px] rounded text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-ink)] hover:text-white"
                                             title="{{ __('admin.reinitialiser_mot_de_passe') }}"
                                         >{{ __('admin.reinitialiser') }}</button>
                                     </span>

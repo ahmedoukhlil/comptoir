@@ -6,11 +6,11 @@
                 <div class="flex items-start justify-between">
                     <div>
                         <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white">{{ __('caisse.historique_titre') }}</span>
-                        <b class="block text-sm font-semibold mt-0.5 text-[#B9C6E6]">{{ $this->point->nom }}</b>
+                        <b class="block text-sm font-semibold mt-0.5 text-white">{{ $this->point->nom }}</b>
                     </div>
                     <div class="flex items-center gap-3">
                         <x-selecteur-langue />
-                        <a href="{{ route('caisse.saisie') }}" class="text-[11px] font-semibold text-[#B9C6E6] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
+                        <a href="{{ route('caisse.saisie') }}" class="text-[11px] font-semibold text-white font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
                             {{ __('caisse.historique_retour') }}
                         </a>
                     </div>
