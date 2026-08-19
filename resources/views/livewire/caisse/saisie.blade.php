@@ -19,26 +19,26 @@
                 </div>
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <x-selecteur-langue-claire />
-                    <a href="{{ route('caisse.historique') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.historique_titre') }}">
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+                    <a href="{{ route('caisse.historique') }}" class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.historique_titre') }}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
                     </a>
-                    <a href="{{ route('caisse.cloture') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.cloture_lien') }}">
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+                    <a href="{{ route('caisse.cloture') }}" class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.cloture_lien') }}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
                     </a>
                     @if (auth()->user()->estProprietaire())
-                        <a href="{{ route('proprietaire.agents') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
-                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        <a href="{{ route('proprietaire.agents') }}" class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                         </a>
                     @endif
-                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
                     </a>
                     <button
                         onclick="document.getElementById('logout-form').submit()"
-                        class="w-10 h-10 rounded-xl border border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)]"
+                        class="w-10 h-10 rounded-xl border-[1.5px] border-[color:var(--color-rust)]/40 bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-rust-deep)] hover:border-[color:var(--color-rust-deep)] hover:bg-[color:var(--color-rust)]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-rust-deep)] transition"
                         aria-label="{{ __('caisse.deconnexion') }}"
                     >
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     </button>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                             <button
                                 type="button"
                                 x-on:click="type = 'depot'"
-                                class="flex-1 py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition"
+                                class="flex-1 py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                 :class="type === 'depot' ? 'bg-[color:var(--color-green)] text-white shadow-lg shadow-green-900/20' : 'text-[color:var(--color-ink-soft)]'"
                             >
                                 <span class="text-lg">↓</span> {{ __('caisse.depot') }}
@@ -89,7 +89,7 @@
                             <button
                                 type="button"
                                 x-on:click="type = 'retrait'"
-                                class="flex-1 py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition"
+                                class="flex-1 py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                 :class="type === 'retrait' ? 'bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'text-[color:var(--color-ink-soft)]'"
                             >
                                 <span class="text-lg">↑</span> {{ __('caisse.retrait') }}
@@ -103,7 +103,7 @@
                                 <button
                                     type="button"
                                     x-on:click="operateurId = operateur.id"
-                                    class="flex-1 text-center py-3.5 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition"
+                                    class="flex-1 text-center py-3.5 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                     :class="operateurId === operateur.id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-sand)]' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
                                     x-text="operateur.nom"
                                 ></button>
@@ -129,7 +129,7 @@
                         <button
                             type="button"
                             x-on:click="optionnelOuvert = ! optionnelOuvert"
-                            class="w-full text-center text-xs font-semibold text-[color:var(--color-ink-soft)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] py-2 mt-2"
+                            class="w-full text-center text-xs font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] py-2.5 mt-2 rounded-xl border-[1.5px] border-dashed border-[color:var(--color-line)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                         >
                             {{ __('caisse.ajouter_optionnel') }}
                         </button>
@@ -158,23 +158,23 @@
                                     type="button"
                                     x-on:click="taper(chiffre)"
                                     x-text="chiffre"
-                                    class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] transition"
+                                    class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                                 ></button>
                             </template>
                             <button
                                 type="button"
                                 x-on:click="effacer()"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)]"
+                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                             >{{ __('caisse.effacer') }}</button>
                             <button
                                 type="button"
                                 x-on:click="taper('0')"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] transition"
+                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                             >0</button>
                             <button
                                 type="button"
                                 x-on:click="taper('000')"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)]"
+                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                             >000</button>
                         </div>
 
@@ -183,7 +183,7 @@
                             type="button"
                             x-on:click="confirmer()"
                             :disabled="enConfirmation"
-                            class="w-full md:max-w-[340px] mt-4 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white flex items-center justify-center gap-2 transition disabled:opacity-60"
+                            class="w-full md:max-w-[340px] mt-4 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white flex items-center justify-center gap-2 transition disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             :class="type === 'depot' ? 'bg-[color:var(--color-green-deep)] shadow-lg shadow-green-900/25' : 'bg-[color:var(--color-rust-deep)] shadow-lg shadow-rust-900/25'"
                         >
                             {{ __('caisse.confirmer') }}
