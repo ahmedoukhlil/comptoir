@@ -73,11 +73,11 @@
                         <div class="mt-6 grid grid-cols-2 gap-3 text-start">
                             <div class="bg-[color:var(--color-paper)] rounded-xl p-4 border border-[color:var(--color-line)]">
                                 <div class="text-[11px] font-semibold text-[color:var(--color-ink-soft)] uppercase">{{ __('caisse.cloture_solde_theorique') }}</div>
-                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1">{{ number_format($c->solde_theorique, 0, ',', ' ') }}</div>
+                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1 text-start" dir="ltr">{{ number_format($c->solde_theorique, 0, ',', ' ') }}</div>
                             </div>
                             <div class="bg-[color:var(--color-paper)] rounded-xl p-4 border border-[color:var(--color-line)]">
                                 <div class="text-[11px] font-semibold text-[color:var(--color-ink-soft)] uppercase">{{ __('caisse.cloture_solde_compte') }}</div>
-                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1">{{ number_format($c->solde_compte, 0, ',', ' ') }}</div>
+                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1 text-start" dir="ltr">{{ number_format($c->solde_compte, 0, ',', ' ') }}</div>
                             </div>
                         </div>
 
@@ -99,7 +99,7 @@
                                     @foreach ($c->details as $detail)
                                         <div class="flex items-center justify-between py-2.5">
                                             <span class="text-sm font-semibold text-[color:var(--color-ink)]">{{ $detail->operateur->nom }}</span>
-                                            <span class="text-sm font-[family-name:var(--font-mono)] font-bold {{ $detail->ecart === 0 ? 'text-[color:var(--color-ink)]' : 'text-[color:var(--color-rust-deep)]' }}">
+                                            <span class="text-sm font-[family-name:var(--font-mono)] font-bold text-end {{ $detail->ecart === 0 ? 'text-[color:var(--color-ink)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
                                                 {{ number_format($detail->solde_compte, 0, ',', ' ') }}
                                                 @if ($detail->ecart !== 0)
                                                     <span class="text-xs">({{ $detail->ecart > 0 ? '+' : '' }}{{ number_format($detail->ecart, 0, ',', ' ') }})</span>
@@ -129,12 +129,12 @@
 
                     <div class="text-center mb-6">
                         <div class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-ink-soft)]">{{ __('caisse.cloture_solde_theorique') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-3xl text-[color:var(--color-ink)] mt-1" x-text="formaterMontant(operateurActuel.soldeTheorique)"></div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-3xl text-[color:var(--color-ink)] mt-1" dir="ltr" x-text="formaterMontant(operateurActuel.soldeTheorique)"></div>
                     </div>
 
                     <div class="text-center mt-6 px-1">
                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide">{{ __('caisse.cloture_solde_compte') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" x-text="soldeCompteActuel !== '' ? formaterMontant(soldeCompteActuel) : '0'"></div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" dir="ltr" x-text="soldeCompteActuel !== '' ? formaterMontant(soldeCompteActuel) : '0'"></div>
                         <div
                             x-show="soldeCompteActuel !== ''"
                             x-cloak
@@ -215,13 +215,13 @@
                                         <template x-for="op in operateurs" :key="op.id">
                                             <div class="flex items-center justify-between py-2">
                                                 <span class="text-sm font-semibold text-[color:var(--color-ink)]" x-text="op.nom"></span>
-                                                <span class="text-sm font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" x-text="formaterMontant(soldesComptes[op.id])"></span>
+                                                <span class="text-sm font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="formaterMontant(soldesComptes[op.id])"></span>
                                             </div>
                                         </template>
                                     </div>
                                     <div class="flex items-center justify-between pt-3">
                                         <span class="text-sm font-bold text-[color:var(--color-ink)]">{{ __('caisse.cloture_solde_compte') }}</span>
-                                        <span class="text-base font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" x-text="formaterMontant(soldeCompteTotal)"></span>
+                                        <span class="text-base font-[family-name:var(--font-mono)] font-bold text-[color:var(--color-ink)]" dir="ltr" x-text="formaterMontant(soldeCompteTotal)"></span>
                                     </div>
                                 </div>
 
