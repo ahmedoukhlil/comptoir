@@ -21,6 +21,10 @@ class Operateurs extends Component
 
     public bool $estCash = false;
 
+    public ?int $operateurAModifierId = null;
+
+    public string $commissionModifiee = '';
+
     #[Computed]
     public function tenant()
     {
@@ -80,6 +84,47 @@ class Operateurs extends Component
 
         $operateur->update(['actif' => ! $operateur->actif]);
 
+        unset($this->operateurs);
+    }
+
+    public function ouvrirModification(int $operateurId): void
+    {
+        $operateur = Operateur::where('tenant_id', $this->tenant->id)
+            ->whereKey($operateurId)
+            ->firstOrFail();
+
+        $this->operateurAModifierId = $operateur->id;
+        $this->commissionModifiee = (string) ($operateur->bareme_commission['tranches'][0]['pourcentage'] ?? 0);
+    }
+
+    public function fermerModification(): void
+    {
+        $this->operateurAModifierId = null;
+        $this->reset(['commissionModifiee']);
+        $this->resetErrorBag('commissionModifiee');
+    }
+
+    public function modifierCommission(): void
+    {
+        if ($erreur = $this->refuserSiLectureSeule()) {
+            $this->addError('lectureSeule', $erreur['erreur']);
+
+            return;
+        }
+
+        $this->validate([
+            'commissionModifiee' => ['required', 'numeric', 'min:0', 'max:100'],
+        ]);
+
+        $operateur = Operateur::where('tenant_id', $this->tenant->id)
+            ->whereKey($this->operateurAModifierId)
+            ->firstOrFail();
+
+        $operateur->update([
+            'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'pourcentage' => (float) $this->commissionModifiee]]],
+        ]);
+
+        $this->fermerModification();
         unset($this->operateurs);
     }
 

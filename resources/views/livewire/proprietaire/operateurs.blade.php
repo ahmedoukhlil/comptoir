@@ -68,11 +68,20 @@
                                     @endunless
                                 </div>
                             </div>
-                            <button
-                                type="button"
-                                wire:click="basculerActif({{ $operateur->id }})"
-                                class="text-[11px] font-semibold px-2.5 py-1.5 min-h-[24px] rounded-md {{ $operateur->actif ? 'bg-[color:var(--color-rust)]/10 text-[color:var(--color-rust-deep)]' : 'bg-[color:var(--color-green)]/10 text-[color:var(--color-green-deep)]' }}"
-                            >{{ $operateur->actif ? __('caisse.operateur_desactiver') : __('caisse.operateur_activer') }}</button>
+                            <div class="flex items-center gap-1.5 flex-shrink-0">
+                                @unless ($operateur->est_cash)
+                                    <button
+                                        type="button"
+                                        wire:click="ouvrirModification({{ $operateur->id }})"
+                                        class="text-[11px] font-semibold px-2.5 py-1.5 min-h-[24px] rounded-md bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink)]"
+                                    >{{ __('caisse.operateur_modifier') }}</button>
+                                @endunless
+                                <button
+                                    type="button"
+                                    wire:click="basculerActif({{ $operateur->id }})"
+                                    class="text-[11px] font-semibold px-2.5 py-1.5 min-h-[24px] rounded-md {{ $operateur->actif ? 'bg-[color:var(--color-rust)]/10 text-[color:var(--color-rust-deep)]' : 'bg-[color:var(--color-green)]/10 text-[color:var(--color-green-deep)]' }}"
+                                >{{ $operateur->actif ? __('caisse.operateur_desactiver') : __('caisse.operateur_activer') }}</button>
+                            </div>
                         </div>
                     @empty
                         <p class="text-sm text-[color:var(--color-ink-soft)] py-4 text-center">{{ __('caisse.operateurs_aucun') }}</p>
@@ -87,4 +96,40 @@
             </div>
         </div>
     </div>
+
+    @if ($operateurAModifierId)
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" wire:click="fermerModification"></div>
+
+            <div class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+                <form wire:submit="modifierCommission" class="p-6">
+                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-4">
+                        {{ __('caisse.operateur_modifier_titre') }}
+                    </div>
+
+                    <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_commission_label') }}</label>
+                    <div class="flex items-center gap-2.5 bg-[color:var(--color-sand-deep)] border-[1.5px] border-[color:var(--color-line)] rounded-lg px-3.5 py-2.5">
+                        <input type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" wire:model="commissionModifiee" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)]" autofocus>
+                        <span class="text-sm text-[color:var(--color-ink-soft)]">%</span>
+                    </div>
+                    @error('commissionModifiee') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
+                    @error('lectureSeule') <p class="text-xs text-[color:var(--color-rust-deep)] mt-2">{{ $message }}</p> @enderror
+                </form>
+
+                <div class="flex border-t border-[color:var(--color-line)]">
+                    <button
+                        type="button"
+                        wire:click="fermerModification"
+                        class="flex-1 text-sm font-semibold py-3.5 text-[color:var(--color-ink-soft)] hover:bg-[color:var(--color-sand-deep)]"
+                    >{{ __('caisse.annuler') }}</button>
+                    <button
+                        type="button"
+                        wire:click="modifierCommission"
+                        wire:loading.attr="disabled"
+                        class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60"
+                    >{{ __('caisse.enregistrer') }}</button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
