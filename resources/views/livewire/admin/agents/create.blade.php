@@ -10,10 +10,24 @@
 
             <div class="p-6">
                 @if ($motDePasseGenere)
-                    <div class="bg-[color:var(--color-green)]/10 border border-[color:var(--color-green)]/30 rounded-xl p-4 mb-6">
+                    <div
+                        x-data="{ copie: false, copier() { navigator.clipboard.writeText(@js($motDePasseGenere)).then(() => { this.copie = true; setTimeout(() => this.copie = false, 2000); }); } }"
+                        class="bg-[color:var(--color-green)]/10 border border-[color:var(--color-green)]/30 rounded-xl p-4 mb-6"
+                    >
                         <div class="text-sm font-semibold text-[color:var(--color-green-deep)]">{{ __('admin.agent_cree') }}</div>
                         <div class="text-xs text-[color:var(--color-ink-soft)] mt-2">{{ __('admin.mot_de_passe_genere') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-0.5">{{ $motDePasseGenere }}</div>
+                        <div class="flex items-center gap-2.5 mt-0.5">
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)]" dir="ltr">{{ $motDePasseGenere }}</div>
+                            <button
+                                type="button"
+                                x-on:click="copier()"
+                                class="flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg border-[1.5px] transition"
+                                :class="copie ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink)]'"
+                            >
+                                <svg x-show="! copie" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                <span x-text="copie ? @js(__('admin.copie')) : @js(__('admin.copier'))"></span>
+                            </button>
+                        </div>
                         <p class="text-xs text-[color:var(--color-ink-soft)] mt-2">{{ __('admin.mot_de_passe_note') }}</p>
                         <button type="button" wire:click="$set('motDePasseGenere', null)" class="text-xs font-semibold text-[color:var(--color-ink)] underline mt-3">
                             {{ __('admin.ajouter_un_autre_agent') }}

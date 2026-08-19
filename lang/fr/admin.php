@@ -76,4 +76,6 @@ return [
     'confirmer_reinitialisation' => 'Un nouveau mot de passe sera généré pour :nom. L\'ancien ne fonctionnera plus.',
     'mot_de_passe_reinitialise' => 'Mot de passe réinitialisé',
     'fermer' => 'Fermer',
+    'copier' => 'Copier',
+    'copie' => 'Copié !',
 ];
