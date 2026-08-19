@@ -45,6 +45,7 @@ class SyncController extends Controller
 
                 $operateur = Operateur::findOrFail($entree['operateur_id']);
                 $montant = (int) $entree['montant'];
+                $repartition = $operateur->repartirCommission($montant);
 
                 $operation = Operation::create([
                     'numero_piece' => Operation::genererNumeroPiece(),
@@ -54,7 +55,9 @@ class SyncController extends Controller
                     'operateur_id' => $operateur->id,
                     'type' => $entree['type'],
                     'montant' => $montant,
-                    'commission_calculee' => $operateur->calculerCommission($montant),
+                    'commission_calculee' => $repartition['frais'],
+                    'commission_part_point' => $repartition['part_point'],
+                    'commission_part_banque' => $repartition['part_banque'],
                     'client_nom' => $entree['client_nom'] ?? null,
                     'client_telephone' => $entree['client_telephone'],
                     'client_nni' => $entree['client_nni'] ?? null,

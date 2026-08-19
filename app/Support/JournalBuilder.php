@@ -44,6 +44,8 @@ class JournalBuilder
                 'sortie' => $sortie,
                 'solde' => $solde,
                 'commission' => $operation->commission_calculee,
+                'commission_part_point' => $operation->commission_part_point,
+                'commission_part_banque' => $operation->commission_part_banque,
                 'observation' => $operation->observation,
             ];
         }

@@ -28,7 +28,7 @@ class RapportExportController extends Controller
 
         $points = $tenant->points()->orderBy('nom')->get()->map(function ($point) use ($debut, $fin) {
             $capital = (int) $point->alimentations()->whereBetween('date', [$debut, $fin])->sum('montant');
-            $commissions = (int) $point->operations()->whereBetween('created_at', [$debut, $fin])->sum('commission_calculee');
+            $commissions = (int) $point->operations()->whereBetween('created_at', [$debut, $fin])->sum('commission_part_point');
 
             return ['point' => $point, 'capital' => $capital, 'commissions' => $commissions];
         });

@@ -38,6 +38,7 @@ class Saisie extends Component
                 'id' => $o->id,
                 'nom' => $o->nom,
                 'bareme_commission' => $o->bareme_commission,
+                'pourcentage_partage_point' => $o->pourcentage_partage_point,
             ])
             ->values()
             ->all();
@@ -69,7 +70,7 @@ class Saisie extends Component
     #[Computed]
     public function beneficeDuJour(): int
     {
-        return (int) $this->operationsDuJour->sum('commission_calculee');
+        return (int) $this->operationsDuJour->sum('commission_part_point');
     }
 
     public function confirmer(array $champs): array
@@ -112,6 +113,8 @@ class Saisie extends Component
         }
 
         DB::transaction(function () use ($operateur, $montant, $donnees) {
+            $repartition = $operateur->repartirCommission($montant);
+
             Operation::create([
                 'numero_piece' => Operation::genererNumeroPiece(),
                 'uuid_client' => (string) Str::uuid(),
@@ -120,7 +123,9 @@ class Saisie extends Component
                 'operateur_id' => $operateur->id,
                 'type' => $donnees['type'],
                 'montant' => $montant,
-                'commission_calculee' => $operateur->calculerCommission($montant),
+                'commission_calculee' => $repartition['frais'],
+                'commission_part_point' => $repartition['part_point'],
+                'commission_part_banque' => $repartition['part_banque'],
                 'client_nom' => $donnees['clientNom'] ?: null,
                 'client_telephone' => $donnees['telephone'],
                 'client_nni' => $donnees['clientNni'] ?: null,

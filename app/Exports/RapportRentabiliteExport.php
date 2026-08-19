@@ -32,7 +32,7 @@ class RapportRentabiliteExport implements FromArray, WithHeadings, WithStyles
 
         $lignes = $points->map(function ($point) {
             $capital = (int) $point->alimentations()->whereBetween('date', [$this->debut, $this->fin])->sum('montant');
-            $commissions = (int) $point->operations()->whereBetween('created_at', [$this->debut, $this->fin])->sum('commission_calculee');
+            $commissions = (int) $point->operations()->whereBetween('created_at', [$this->debut, $this->fin])->sum('commission_part_point');
 
             return [$point->nom, $capital, $commissions];
         })->all();

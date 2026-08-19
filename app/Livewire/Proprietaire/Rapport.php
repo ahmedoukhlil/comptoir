@@ -41,12 +41,14 @@ class Rapport extends Component
 
         return $this->tenant->points()->orderBy('nom')->get()->map(function ($point) use ($debut, $fin) {
             $capital = (int) $point->alimentations()->whereBetween('date', [$debut, $fin])->sum('montant');
-            $commissions = (int) $point->operations()->whereBetween('created_at', [$debut, $fin])->sum('commission_calculee');
+            $commissions = (int) $point->operations()->whereBetween('created_at', [$debut, $fin])->sum('commission_part_point');
+            $commissionsBanque = (int) $point->operations()->whereBetween('created_at', [$debut, $fin])->sum('commission_part_banque');
 
             return (object) [
                 'point' => $point,
                 'capital' => $capital,
                 'commissions' => $commissions,
+                'commissions_banque' => $commissionsBanque,
             ];
         });
     }
@@ -61,6 +63,12 @@ class Rapport extends Component
     public function totalCommissions(): int
     {
         return (int) $this->lignes->sum('commissions');
+    }
+
+    #[Computed]
+    public function totalCommissionsBanque(): int
+    {
+        return (int) $this->lignes->sum('commissions_banque');
     }
 
     #[Computed]

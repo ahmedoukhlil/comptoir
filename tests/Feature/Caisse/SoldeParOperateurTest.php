@@ -21,9 +21,9 @@ class SoldeParOperateurTest extends TestCase
         $tenant = Tenant::create(['nom' => 'T', 'plan' => 'solo', 'statut' => 'actif']);
         $point = Point::create(['tenant_id' => $tenant->id, 'nom' => 'K']);
         $agent = User::factory()->create(['tenant_id' => $tenant->id, 'point_id' => $point->id]);
-        $bankily = Operateur::create(['nom' => 'Bankily', 'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'pourcentage' => 1]]]]);
-        $masrivi = Operateur::create(['nom' => 'Masrivi', 'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'pourcentage' => 1]]]]);
-        $cash = Operateur::create(['nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
+        $bankily = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Bankily', 'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'frais' => 100]]], 'pourcentage_partage_point' => 50]);
+        $masrivi = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Masrivi', 'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'frais' => 100]]], 'pourcentage_partage_point' => 50]);
+        $cash = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
 
         // Bankily a très peu, Masrivi et Cash ont beaucoup : le total suffit largement
         // mais le solde Bankily spécifique ne suffit pas pour un retrait Bankily.

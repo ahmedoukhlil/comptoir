@@ -65,13 +65,15 @@ class DatabaseSeeder extends Seeder
 
         $bareme = [
             'tranches' => [
-                ['min' => 0, 'max' => null, 'pourcentage' => 1],
+                ['min' => 0, 'max' => 500, 'frais' => 9],
+                ['min' => 501, 'max' => 1000, 'frais' => 13],
+                ['min' => 1001, 'max' => 2000, 'frais' => 17],
             ],
         ];
 
-        Operateur::create(['nom' => 'Bankily', 'bareme_commission' => $bareme]);
-        Operateur::create(['nom' => 'Masrivi', 'bareme_commission' => $bareme]);
-        Operateur::create(['nom' => 'Sedad', 'bareme_commission' => $bareme]);
+        Operateur::create(['nom' => 'Bankily', 'bareme_commission' => $bareme, 'pourcentage_partage_point' => 50]);
+        Operateur::create(['nom' => 'Masrivi', 'bareme_commission' => $bareme, 'pourcentage_partage_point' => 50]);
+        Operateur::create(['nom' => 'Sedad', 'bareme_commission' => $bareme, 'pourcentage_partage_point' => 50]);
         Operateur::create(['nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
 
         // Tenant Solo de démo (essai gratuit en cours), pour tester le

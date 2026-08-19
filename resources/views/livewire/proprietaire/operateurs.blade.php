@@ -36,14 +36,22 @@
                     </div>
 
                     @unless ($estCash)
+                        <x-proprietaire.tranches-operateur :tranches="$tranches" />
+
                         <div>
-                            <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_commission_label') }}</label>
+                            <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>
+                            <p class="text-[11px] text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_partage_aide') }}</p>
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-lg px-3.5 py-2.5">
-                                <input type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" wire:model="commissionPourcentage" placeholder="1" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)]">
+                                <input type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" wire:model="pourcentagePartagePoint" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)]">
                                 <span class="text-sm text-[color:var(--color-ink-soft)]">%</span>
                             </div>
-                            @error('commissionPourcentage') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
+                            @error('pourcentagePartagePoint') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
                         </div>
+
+                        <label class="flex items-start gap-2.5 cursor-pointer">
+                            <input type="checkbox" wire:model="commissionVerseeDansSolde" class="mt-0.5 w-4 h-4 rounded border-[color:var(--color-line)] text-[color:var(--color-ink)]">
+                            <span class="text-xs text-[color:var(--color-ink-soft)]">{{ __('caisse.operateur_versee_dans_solde_aide') }}</span>
+                        </label>
                     @endunless
 
                     @error('lectureSeule') <p class="text-xs text-[color:var(--color-rust-deep)]">{{ $message }}</p> @enderror
@@ -64,7 +72,12 @@
                                 <div>
                                     <div class="text-sm font-semibold text-[color:var(--color-ink)]">{{ $operateur->nom }}</div>
                                     @unless ($operateur->est_cash)
-                                        <div class="text-[11px] text-[color:var(--color-ink-soft)]" dir="ltr">{{ $operateur->bareme_commission['tranches'][0]['pourcentage'] ?? 0 }}%</div>
+                                        <div class="text-[11px] text-[color:var(--color-ink-soft)]" dir="ltr">
+                                            {{ count($operateur->bareme_commission['tranches'] ?? []) }} {{ __('caisse.operateur_tranches_compte') }} · {{ $operateur->pourcentage_partage_point }}%
+                                            @if ($operateur->commission_versee_dans_solde)
+                                                · 💰
+                                            @endif
+                                        </div>
                                     @endunless
                                 </div>
                             </div>
@@ -98,25 +111,36 @@
     </div>
 
     @if ($operateurAModifierId)
-        <div class="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
             <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" wire:click="fermerModification"></div>
 
-            <div class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
-                <form wire:submit="modifierCommission" class="p-6">
-                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-4">
-                        {{ __('caisse.operateur_modifier_titre') }}
+            <div class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden max-h-full flex flex-col {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+                <form wire:submit="modifier" class="p-6 overflow-y-auto space-y-4">
+                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)]">
+                        {{ __('caisse.operateur_modifier_titre') }} — {{ $this->operateurAModifier?->nom }}
                     </div>
 
-                    <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_commission_label') }}</label>
-                    <div class="flex items-center gap-2.5 bg-[color:var(--color-sand-deep)] border-[1.5px] border-[color:var(--color-line)] rounded-lg px-3.5 py-2.5">
-                        <input type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" wire:model="commissionModifiee" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)]" autofocus>
-                        <span class="text-sm text-[color:var(--color-ink-soft)]">%</span>
+                    <x-proprietaire.tranches-operateur :tranches="$tranches" />
+
+                    <div>
+                        <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>
+                        <p class="text-[11px] text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_partage_aide') }}</p>
+                        <div class="flex items-center gap-2.5 bg-[color:var(--color-sand-deep)] border-[1.5px] border-[color:var(--color-line)] rounded-lg px-3.5 py-2.5">
+                            <input type="number" step="0.1" min="0" max="100" inputmode="decimal" dir="ltr" wire:model="pourcentagePartagePoint" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-mono)]">
+                            <span class="text-sm text-[color:var(--color-ink-soft)]">%</span>
+                        </div>
+                        @error('pourcentagePartagePoint') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
                     </div>
-                    @error('commissionModifiee') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
-                    @error('lectureSeule') <p class="text-xs text-[color:var(--color-rust-deep)] mt-2">{{ $message }}</p> @enderror
+
+                    <label class="flex items-start gap-2.5 cursor-pointer">
+                        <input type="checkbox" wire:model="commissionVerseeDansSolde" class="mt-0.5 w-4 h-4 rounded border-[color:var(--color-line)] text-[color:var(--color-ink)]">
+                        <span class="text-xs text-[color:var(--color-ink-soft)]">{{ __('caisse.operateur_versee_dans_solde_aide') }}</span>
+                    </label>
+
+                    @error('lectureSeule') <p class="text-xs text-[color:var(--color-rust-deep)]">{{ $message }}</p> @enderror
                 </form>
 
-                <div class="flex border-t border-[color:var(--color-line)]">
+                <div class="flex border-t border-[color:var(--color-line)] flex-shrink-0">
                     <button
                         type="button"
                         wire:click="fermerModification"
@@ -124,7 +148,7 @@
                     >{{ __('caisse.annuler') }}</button>
                     <button
                         type="button"
-                        wire:click="modifierCommission"
+                        wire:click="modifier"
                         wire:loading.attr="disabled"
                         class="flex-1 text-sm font-semibold py-3.5 text-white bg-[color:var(--color-ink)] hover:opacity-90 border-s border-[color:var(--color-line)] disabled:opacity-60"
                     >{{ __('caisse.enregistrer') }}</button>

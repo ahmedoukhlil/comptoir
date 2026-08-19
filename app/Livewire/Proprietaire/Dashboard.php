@@ -48,7 +48,7 @@ class Dashboard extends Component
                     'solde' => $point->soldeCaisse(),
                     'soldes_par_operateur' => $point->soldesParOperateur(),
                     'operations_jour' => $point->operations_jour_count,
-                    'benefices' => (int) $point->operations()->whereDate('created_at', today())->sum('commission_calculee'),
+                    'benefices' => (int) $point->operations()->whereDate('created_at', today())->sum('commission_part_point'),
                     'cloture' => $cloture,
                     'a_ecart' => $cloture && $cloture->ecart !== 0,
                     'cloture_manquante' => ! $cloture && now()->hour >= self::HEURE_CLOTURE_ATTENDUE,

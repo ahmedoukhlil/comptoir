@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
     'numero_piece', 'uuid_client', 'point_id', 'agent_id', 'operateur_id', 'type', 'montant',
-    'commission_calculee', 'client_nom', 'client_telephone', 'client_nni',
+    'commission_calculee', 'commission_part_point', 'commission_part_banque',
+    'client_nom', 'client_telephone', 'client_nni',
     'observation', 'synced', 'cloture_id',
 ])]
 class Operation extends Model

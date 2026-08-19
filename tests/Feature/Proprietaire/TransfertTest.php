@@ -22,8 +22,8 @@ class TransfertTest extends TestCase
         $tenant = Tenant::create(['nom' => 'T', 'plan' => 'reseau', 'statut' => 'actif']);
         $point = Point::create(['tenant_id' => $tenant->id, 'nom' => 'K']);
         $proprietaire = User::factory()->proprietaire()->create(['tenant_id' => $tenant->id]);
-        $bankily = Operateur::create(['nom' => 'Bankily', 'bareme_commission' => ['tranches' => []]]);
-        $cash = Operateur::create(['nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
+        $bankily = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Bankily', 'bareme_commission' => ['tranches' => []]]);
+        $cash = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
 
         $this->actingAs($proprietaire);
 
@@ -51,8 +51,8 @@ class TransfertTest extends TestCase
         $tenant = Tenant::create(['nom' => 'T', 'plan' => 'reseau', 'statut' => 'actif']);
         $point = Point::create(['tenant_id' => $tenant->id, 'nom' => 'K']);
         $proprietaire = User::factory()->proprietaire()->create(['tenant_id' => $tenant->id]);
-        $bankily = Operateur::create(['nom' => 'Bankily', 'bareme_commission' => ['tranches' => []]]);
-        $cash = Operateur::create(['nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
+        $bankily = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Bankily', 'bareme_commission' => ['tranches' => []]]);
+        $cash = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
 
         $this->actingAs($proprietaire);
 

@@ -1,6 +1,6 @@
 import { ajouterOperationLocale, listerOperationsEnAttente, compterEnAttente } from './offline-db.js';
 
-function calculerCommission(operateur, montant) {
+function calculerFrais(operateur, montant) {
     const tranches = operateur?.bareme_commission?.tranches ?? [];
 
     for (const tranche of tranches) {
@@ -8,15 +8,22 @@ function calculerCommission(operateur, montant) {
         const max = tranche.max ?? null;
 
         if (montant >= min && (max === null || montant <= max)) {
-            if (tranche.pourcentage !== undefined) {
-                return Math.round(montant * tranche.pourcentage / 100);
-            }
-
-            return tranche.montant_fixe ?? 0;
+            return tranche.frais ?? 0;
         }
     }
 
     return 0;
+}
+
+// Répartit le frais fixe entre part point de vente et part banque selon le
+// pourcentage_partage_point propre à l'opérateur — jamais un pourcentage
+// codé en dur ici, en miroir exact de Operateur::repartirCommission().
+function repartirCommission(operateur, montant) {
+    const frais = calculerFrais(operateur, montant);
+    const pourcentagePartagePoint = operateur?.pourcentage_partage_point ?? 0;
+    const partPoint = Math.round(frais * pourcentagePartagePoint / 100);
+
+    return { frais, partPoint, partBanque: frais - partPoint };
 }
 
 export default function comptoirSaisie({ point, operateurs, soldesServeur, soldeTotalServeur }) {
@@ -66,7 +73,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
 
             const operateur = this.operateurs.find(o => o.id === this.operateurId);
 
-            return operateur ? calculerCommission(operateur, montant) : 0;
+            return operateur ? repartirCommission(operateur, montant).partPoint : 0;
         },
 
         init() {
@@ -217,6 +224,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
 
                 const operateur = this.operateurs.find(o => o.id === this.operateurId);
                 const montant = parseInt(this.montant, 10);
+                const repartition = repartirCommission(operateur, montant);
 
                 const operation = {
                     uuid_client: crypto.randomUUID(),
@@ -224,7 +232,9 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
                     operateur_id: this.operateurId,
                     type: this.type,
                     montant,
-                    commission_calculee: calculerCommission(operateur, montant),
+                    commission_calculee: repartition.frais,
+                    commission_part_point: repartition.partPoint,
+                    commission_part_banque: repartition.partBanque,
                     client_nom: this.clientNom || null,
                     client_telephone: this.telephone,
                     client_nni: this.clientNni || null,

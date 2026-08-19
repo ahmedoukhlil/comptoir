@@ -31,8 +31,12 @@
                     </div>
                     <div class="bg-[color:var(--color-green)]/10 rounded-xl p-4">
                         <div class="text-[11px] font-semibold text-[color:var(--color-green-deep)] uppercase">{{ __('caisse.rapport_commissions') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-xl text-[color:var(--color-green-deep)] mt-1">+ {{ number_format($this->totalCommissions, 0, ',', ' ') }}</div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-xl text-[color:var(--color-green-deep)] mt-1" dir="ltr">+ {{ number_format($this->totalCommissions, 0, ',', ' ') }}</div>
                     </div>
+                </div>
+
+                <div class="text-[11px] text-[color:var(--color-ink-soft)] mb-6">
+                    {{ __('caisse.rapport_commissions_banque') }} : <span dir="ltr">{{ number_format($this->totalCommissionsBanque, 0, ',', ' ') }}</span>
                 </div>
 
                 {{-- Détail par point --}}

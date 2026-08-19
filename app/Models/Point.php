@@ -93,14 +93,27 @@ class Point extends Model
             ->groupBy('operateur_destination_id')
             ->pluck('total', 'operateur_destination_id');
 
+        // Pour les opérateurs qui reversent la part point de vente de la
+        // commission directement sur le solde de l'app (plutôt que hors
+        // application), cette part s'ajoute au solde comme si elle avait
+        // été créditée automatiquement.
+        $commissionsVersees = $this->operations()
+            ->selectRaw('operateur_id, sum(commission_part_point) as total')
+            ->groupBy('operateur_id')
+            ->pluck('total', 'operateur_id');
+
         return $operateurs->map(function (Operateur $operateur) use (
-            $alimentations, $depots, $retraits, $transfertsSortants, $transfertsEntrants
+            $alimentations, $depots, $retraits, $transfertsSortants, $transfertsEntrants, $commissionsVersees
         ) {
             $solde = (int) ($alimentations[$operateur->id] ?? 0)
                 + (int) ($depots[$operateur->id] ?? 0)
                 - (int) ($retraits[$operateur->id] ?? 0)
                 - (int) ($transfertsSortants[$operateur->id] ?? 0)
                 + (int) ($transfertsEntrants[$operateur->id] ?? 0);
+
+            if ($operateur->commission_versee_dans_solde) {
+                $solde += (int) ($commissionsVersees[$operateur->id] ?? 0);
+            }
 
             return ['operateur' => $operateur, 'solde' => $solde];
         });

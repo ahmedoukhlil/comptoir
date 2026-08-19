@@ -23,7 +23,8 @@ class ClotureTest extends TestCase
         $tenant = Tenant::create(['nom' => 'T', 'plan' => 'solo', 'statut' => 'actif']);
         $point = Point::create(['tenant_id' => $tenant->id, 'nom' => 'K']);
         $agent = User::factory()->create(['tenant_id' => $tenant->id, 'point_id' => $point->id]);
-        $bankily = Operateur::create(['nom' => 'Bankily', 'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'pourcentage' => 1]]]]);
+        $bankily = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Bankily', 'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'frais' => 100]]], 'pourcentage_partage_point' => 50]);
+        $cash = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
 
         Operation::create([
             'numero_piece' => 'OP-2026-000001',
@@ -34,16 +35,18 @@ class ClotureTest extends TestCase
             'type' => 'depot',
             'montant' => 10000,
             'commission_calculee' => 100,
+            'commission_part_point' => 50,
+            'commission_part_banque' => 50,
             'client_telephone' => '22334455',
             'synced' => true,
         ]);
 
         $this->actingAs($agent);
 
-        // Solde théorique = 10000, agent compte 9500 (écart de -500)
+        // Solde théorique Bankily = 10000, agent compte 9500 (écart de -500)
         Livewire::test(Cloture::class)
             ->assertSet('clotureDuJour', null)
-            ->call('cloturer', 9500);
+            ->call('cloturer', [$bankily->id => 9500, $cash->id => 0]);
 
         $cloture = ClotureModel::first();
         $this->assertNotNull($cloture);
@@ -62,10 +65,11 @@ class ClotureTest extends TestCase
         $tenant = Tenant::create(['nom' => 'T', 'plan' => 'solo', 'statut' => 'actif']);
         $point = Point::create(['tenant_id' => $tenant->id, 'nom' => 'K']);
         $agent = User::factory()->create(['tenant_id' => $tenant->id, 'point_id' => $point->id]);
+        $cash = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
 
         $this->actingAs($agent);
 
-        Livewire::test(Cloture::class)->call('cloturer', 0);
+        Livewire::test(Cloture::class)->call('cloturer', [$cash->id => 0]);
 
         $cloture = ClotureModel::first();
         $this->assertEquals(0, $cloture->ecart);
@@ -76,15 +80,16 @@ class ClotureTest extends TestCase
         $tenant = Tenant::create(['nom' => 'T', 'plan' => 'solo', 'statut' => 'actif']);
         $point = Point::create(['tenant_id' => $tenant->id, 'nom' => 'K']);
         $agent = User::factory()->create(['tenant_id' => $tenant->id, 'point_id' => $point->id]);
+        $cash = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
 
         $this->actingAs($agent);
 
-        Livewire::test(Cloture::class)->call('cloturer', 0);
+        Livewire::test(Cloture::class)->call('cloturer', [$cash->id => 0]);
 
         $this->assertCount(1, ClotureModel::all());
 
         // Une seconde tentative de clôture est ignorée (déjà clôturé)
-        Livewire::test(Cloture::class)->call('cloturer', 500);
+        Livewire::test(Cloture::class)->call('cloturer', [$cash->id => 500]);
 
         $this->assertCount(1, ClotureModel::all(), 'Une seule clôture par jour et par point.');
     }

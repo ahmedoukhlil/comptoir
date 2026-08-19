@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['tenant_id', 'nom', 'bareme_commission', 'est_cash', 'actif'])]
+#[Fillable(['tenant_id', 'nom', 'bareme_commission', 'est_cash', 'actif', 'pourcentage_partage_point', 'commission_versee_dans_solde'])]
 class Operateur extends Model
 {
     /** @use HasFactory<OperateurFactory> */
@@ -19,6 +19,9 @@ class Operateur extends Model
         return [
             'bareme_commission' => 'array',
             'est_cash' => 'boolean',
+            'actif' => 'boolean',
+            'pourcentage_partage_point' => 'float',
+            'commission_versee_dans_solde' => 'boolean',
         ];
     }
 
@@ -42,21 +45,41 @@ class Operateur extends Model
         return $this->hasMany(Operation::class);
     }
 
-    public function calculerCommission(int $montant): int
+    /**
+     * Frais fixe (en MRU) de la tranche correspondant au montant, tel que
+     * défini dans la grille tarifaire de l'opérateur. Ce frais est ensuite
+     * réparti entre le point de vente et la banque via
+     * pourcentage_partage_point — jamais un pourcentage codé en dur.
+     */
+    public function calculerFrais(int $montant): int
     {
         foreach ($this->bareme_commission['tranches'] ?? [] as $tranche) {
             $min = $tranche['min'] ?? 0;
             $max = $tranche['max'] ?? null;
 
             if ($montant >= $min && ($max === null || $montant <= $max)) {
-                if (isset($tranche['pourcentage'])) {
-                    return (int) round($montant * $tranche['pourcentage'] / 100);
-                }
-
-                return (int) ($tranche['montant_fixe'] ?? 0);
+                return (int) ($tranche['frais'] ?? 0);
             }
         }
 
         return 0;
+    }
+
+    /**
+     * Répartit le frais fixe entre part point de vente et part banque,
+     * selon le pourcentage_partage_point propre à cet opérateur.
+     *
+     * @return array{frais: int, part_point: int, part_banque: int}
+     */
+    public function repartirCommission(int $montant): array
+    {
+        $frais = $this->calculerFrais($montant);
+        $partPoint = (int) round($frais * $this->pourcentage_partage_point / 100);
+
+        return [
+            'frais' => $frais,
+            'part_point' => $partPoint,
+            'part_banque' => $frais - $partPoint,
+        ];
     }
 }

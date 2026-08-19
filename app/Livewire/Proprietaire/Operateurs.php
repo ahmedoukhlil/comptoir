@@ -17,13 +17,18 @@ class Operateurs extends Component
 
     public string $nom = '';
 
-    public string $commissionPourcentage = '';
-
     public bool $estCash = false;
 
-    public ?int $operateurAModifierId = null;
+    public string $pourcentagePartagePoint = '50';
 
-    public string $commissionModifiee = '';
+    public bool $commissionVerseeDansSolde = false;
+
+    /** @var array<int, array{min: string, max: string, frais: string}> */
+    public array $tranches = [
+        ['min' => '0', 'max' => '', 'frais' => ''],
+    ];
+
+    public ?int $operateurAModifierId = null;
 
     #[Computed]
     public function tenant()
@@ -41,6 +46,33 @@ class Operateurs extends Component
             ->get();
     }
 
+    #[Computed]
+    public function operateurAModifier(): ?Operateur
+    {
+        if (! $this->operateurAModifierId) {
+            return null;
+        }
+
+        return Operateur::where('tenant_id', $this->tenant->id)
+            ->whereKey($this->operateurAModifierId)
+            ->first();
+    }
+
+    public function ajouterTranche(): void
+    {
+        $this->tranches[] = ['min' => '', 'max' => '', 'frais' => ''];
+    }
+
+    public function retirerTranche(int $index): void
+    {
+        if (count($this->tranches) <= 1) {
+            return;
+        }
+
+        unset($this->tranches[$index]);
+        $this->tranches = array_values($this->tranches);
+    }
+
     public function creer(): void
     {
         if ($erreur = $this->refuserSiLectureSeule()) {
@@ -49,24 +81,21 @@ class Operateurs extends Component
             return;
         }
 
-        $this->validate([
-            'nom' => ['required', 'string', 'max:255'],
-            'commissionPourcentage' => ['required_if:estCash,false', 'nullable', 'numeric', 'min:0', 'max:100'],
-        ]);
-
-        $bareme = $this->estCash
-            ? ['tranches' => []]
-            : ['tranches' => [['min' => 0, 'max' => null, 'pourcentage' => (float) $this->commissionPourcentage]]];
+        $this->validerFormulaire();
 
         Operateur::create([
             'tenant_id' => $this->tenant->id,
             'nom' => $this->nom,
-            'bareme_commission' => $bareme,
+            'bareme_commission' => $this->baremeDepuisFormulaire(),
             'est_cash' => $this->estCash,
+            'pourcentage_partage_point' => $this->estCash ? 0 : (float) $this->pourcentagePartagePoint,
+            'commission_versee_dans_solde' => $this->estCash ? false : $this->commissionVerseeDansSolde,
             'actif' => true,
         ]);
 
-        $this->reset(['nom', 'commissionPourcentage', 'estCash']);
+        $this->reset(['nom', 'estCash', 'pourcentagePartagePoint', 'commissionVerseeDansSolde', 'tranches']);
+        $this->pourcentagePartagePoint = '50';
+        $this->tranches = [['min' => '0', 'max' => '', 'frais' => '']];
         unset($this->operateurs);
     }
 
@@ -94,17 +123,30 @@ class Operateurs extends Component
             ->firstOrFail();
 
         $this->operateurAModifierId = $operateur->id;
-        $this->commissionModifiee = (string) ($operateur->bareme_commission['tranches'][0]['pourcentage'] ?? 0);
+        $this->pourcentagePartagePoint = (string) $operateur->pourcentage_partage_point;
+        $this->commissionVerseeDansSolde = $operateur->commission_versee_dans_solde;
+
+        $tranchesExistantes = $operateur->bareme_commission['tranches'] ?? [];
+
+        $this->tranches = $tranchesExistantes
+            ? array_map(fn ($t) => [
+                'min' => (string) ($t['min'] ?? 0),
+                'max' => $t['max'] !== null ? (string) $t['max'] : '',
+                'frais' => (string) ($t['frais'] ?? 0),
+            ], $tranchesExistantes)
+            : [['min' => '0', 'max' => '', 'frais' => '']];
     }
 
     public function fermerModification(): void
     {
         $this->operateurAModifierId = null;
-        $this->reset(['commissionModifiee']);
-        $this->resetErrorBag('commissionModifiee');
+        $this->reset(['pourcentagePartagePoint', 'commissionVerseeDansSolde', 'tranches']);
+        $this->pourcentagePartagePoint = '50';
+        $this->tranches = [['min' => '0', 'max' => '', 'frais' => '']];
+        $this->resetErrorBag();
     }
 
-    public function modifierCommission(): void
+    public function modifier(): void
     {
         if ($erreur = $this->refuserSiLectureSeule()) {
             $this->addError('lectureSeule', $erreur['erreur']);
@@ -112,20 +154,54 @@ class Operateurs extends Component
             return;
         }
 
-        $this->validate([
-            'commissionModifiee' => ['required', 'numeric', 'min:0', 'max:100'],
-        ]);
-
         $operateur = Operateur::where('tenant_id', $this->tenant->id)
             ->whereKey($this->operateurAModifierId)
             ->firstOrFail();
 
+        $this->estCash = $operateur->est_cash;
+
+        $this->validerFormulaire();
+
         $operateur->update([
-            'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'pourcentage' => (float) $this->commissionModifiee]]],
+            'bareme_commission' => $this->baremeDepuisFormulaire(),
+            'pourcentage_partage_point' => $operateur->est_cash ? 0 : (float) $this->pourcentagePartagePoint,
+            'commission_versee_dans_solde' => $operateur->est_cash ? false : $this->commissionVerseeDansSolde,
         ]);
 
         $this->fermerModification();
         unset($this->operateurs);
+    }
+
+    private function validerFormulaire(): void
+    {
+        $regles = [
+            'nom' => ['required_without:operateurAModifierId', 'string', 'max:255'],
+        ];
+
+        if (! $this->estCash) {
+            $regles['pourcentagePartagePoint'] = ['required', 'numeric', 'min:0', 'max:100'];
+            $regles['tranches'] = ['required', 'array', 'min:1'];
+            $regles['tranches.*.min'] = ['required', 'integer', 'min:0'];
+            $regles['tranches.*.max'] = ['nullable', 'integer', 'min:0'];
+            $regles['tranches.*.frais'] = ['required', 'integer', 'min:0'];
+        }
+
+        $this->validate($regles);
+    }
+
+    private function baremeDepuisFormulaire(): array
+    {
+        if ($this->estCash) {
+            return ['tranches' => []];
+        }
+
+        return [
+            'tranches' => collect($this->tranches)->map(fn ($t) => [
+                'min' => (int) $t['min'],
+                'max' => $t['max'] === '' ? null : (int) $t['max'],
+                'frais' => (int) $t['frais'],
+            ])->all(),
+        ];
     }
 
     public function render()
