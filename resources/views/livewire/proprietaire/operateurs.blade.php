@@ -27,13 +27,13 @@
                                 wire:click="$set('estCash', false)"
                                 aria-pressed="{{ $estCash ? 'false' : 'true' }}"
                                 class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] {{ ! $estCash ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
-                            >📱 {{ __('caisse.operateur_type_mobile') }}</button>
+                            ><x-icone-type-operateur :est-cash="false" width="16" height="16" class="inline-block align-text-bottom" /> {{ __('caisse.operateur_type_mobile') }}</button>
                             <button
                                 type="button"
                                 wire:click="$set('estCash', true)"
                                 aria-pressed="{{ $estCash ? 'true' : 'false' }}"
                                 class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] {{ $estCash ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
-                            >💵 {{ __('caisse.operateur_type_cash') }}</button>
+                            ><x-icone-type-operateur :est-cash="true" width="16" height="16" class="inline-block align-text-bottom" /> {{ __('caisse.operateur_type_cash') }}</button>
                         </div>
                     </div>
 
@@ -70,14 +70,14 @@
                     @forelse ($this->operateurs as $operateur)
                         <div class="flex items-center justify-between py-2.5 {{ ! $operateur->actif ? 'opacity-50' : '' }}">
                             <div class="flex items-center gap-2.5">
-                                <span class="text-base">{{ $operateur->est_cash ? '💵' : '📱' }}</span>
+                                <x-icone-type-operateur :est-cash="$operateur->est_cash" width="17" height="17" class="text-[color:var(--color-ink-soft)] flex-shrink-0" />
                                 <div>
                                     <div class="text-sm font-semibold text-[color:var(--color-ink)]">{{ $operateur->nom }}</div>
                                     @unless ($operateur->est_cash)
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)]" dir="ltr">
                                             {{ count($operateur->bareme_commission['tranches'] ?? []) }} {{ __('caisse.operateur_tranches_compte') }} · {{ $operateur->pourcentage_partage_point }}%
                                             @if ($operateur->commission_versee_dans_solde)
-                                                · 💰
+                                                · <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-text-bottom" aria-label="{{ __('caisse.operateur_versee_dans_solde_aide') }}"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
                                             @endif
                                         </div>
                                     @endunless

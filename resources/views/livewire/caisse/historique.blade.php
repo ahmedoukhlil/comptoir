@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-xl px-4 py-2.5 mb-4 max-w-sm">
-                    <span class="text-base text-[color:var(--color-ink-soft)]">🔎</span>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     <input
                         type="tel"
                         wire:model.live.debounce.400ms="recherche"
@@ -57,11 +57,11 @@
                     <a
                         href="{{ route('caisse.historique.export.excel', ['operateurId' => $operateurId, 'type' => $type, 'recherche' => $recherche]) }}"
                         class="text-xs font-semibold px-4 py-2.5 rounded-lg bg-[color:var(--color-green-deep)] text-white flex items-center gap-1.5"
-                    >📊 {{ __('caisse.historique_exporter_excel') }}</a>
+                    ><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> {{ __('caisse.historique_exporter_excel') }}</a>
                     <a
                         href="{{ route('caisse.historique.export.pdf', ['operateurId' => $operateurId, 'type' => $type, 'recherche' => $recherche]) }}"
                         class="text-xs font-semibold px-4 py-2.5 rounded-lg bg-[color:var(--color-rust-deep)] text-white flex items-center gap-1.5"
-                    >📄 {{ __('caisse.historique_exporter_pdf') }}</a>
+                    ><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> {{ __('caisse.historique_exporter_pdf') }}</a>
                 </div>
 
                 {{-- Résumé --}}

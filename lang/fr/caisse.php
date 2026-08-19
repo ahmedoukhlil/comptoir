@@ -16,7 +16,7 @@ return [
     'montant_label' => 'Combien (MRU) ?',
     'commission_label' => 'Commission :',
     'effacer' => 'Effacer',
-    'confirmer' => "✓ C'est fait",
+    'confirmer' => "C'est fait",
     'confirmation_titre' => 'Vérifiez avant de valider',
     'confirmation_texte' => 'Cette opération ne pourra plus être annulée depuis l\'application.',
     'confirmation_type' => 'Opération',

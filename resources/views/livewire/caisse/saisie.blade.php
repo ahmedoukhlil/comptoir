@@ -119,7 +119,7 @@
                         {{-- Téléphone client --}}
                         <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mt-6 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.telephone_label') }}</div>
                         <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5">
-                            <span class="text-lg text-[color:var(--color-ink-soft)]">☎</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                             <input
                                 type="tel"
                                 x-model="telephone"
@@ -141,11 +141,11 @@
                         </button>
                         <div x-show="optionnelOuvert" x-cloak class="flex flex-col gap-2 mt-1.5">
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-xl px-3.5 py-2.5">
-                                <span class="text-base text-[color:var(--color-ink-soft)]">👤</span>
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                 <input type="text" x-model="clientNom" placeholder="{{ __('caisse.nom_placeholder') }}" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)]">
                             </div>
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-xl px-3.5 py-2.5">
-                                <span class="text-base text-[color:var(--color-ink-soft)]">🪪</span>
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="6" y1="15" x2="10" y2="15"/><circle cx="7" cy="10" r="1.5"/><line x1="12" y1="9" x2="18" y2="9"/><line x1="12" y1="12" x2="18" y2="12"/></svg>
                                 <input type="text" x-model="clientNni" inputmode="numeric" placeholder="{{ __('caisse.nni_placeholder') }}" dir="ltr" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] text-start">
                             </div>
                         </div>
@@ -192,6 +192,7 @@
                             class="w-full md:max-w-[340px] mt-4 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white flex items-center justify-center gap-2 transition disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             :class="type === 'depot' ? 'bg-[color:var(--color-green-deep)] shadow-lg shadow-green-900/25' : 'bg-[color:var(--color-rust-deep)] shadow-lg shadow-rust-900/25'"
                         >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
                             {{ __('caisse.confirmer') }}
                         </button>
                         <p x-show="erreurLocale" x-cloak x-text="erreurLocale" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
@@ -219,7 +220,10 @@
                                         </div>
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 flex items-center gap-1" dir="ltr">
                                             <span x-text="operation.heure"></span> · <span x-text="operation.client_telephone"></span>
-                                            <span class="text-[#B8853C]" x-text="'⏳ ' + (window.ComptoirTraductions?.syncBadgeAttente ?? @js(__('caisse.sync_badge_attente')))"></span>
+                                            <span class="inline-flex items-center gap-0.5 text-[#B8853C]">
+                                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                                                <span x-text="window.ComptoirTraductions?.syncBadgeAttente ?? @js(__('caisse.sync_badge_attente'))"></span>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="font-[family-name:var(--font-mono)] font-bold text-[15px]" dir="ltr" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'">

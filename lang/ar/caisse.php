@@ -16,7 +16,7 @@ return [
     'montant_label' => 'كم المبلغ؟',
     'commission_label' => 'العمولة:',
     'effacer' => 'مسح',
-    'confirmer' => '✓ تم',
+    'confirmer' => 'تم',
     'confirmation_titre' => 'تحقق قبل التأكيد',
     'confirmation_texte' => 'لا يمكن التراجع عن هذه العملية بعد تأكيدها من التطبيق.',
     'confirmation_type' => 'نوع العملية',

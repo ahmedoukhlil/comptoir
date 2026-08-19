@@ -71,8 +71,9 @@
                 <div class="flex flex-col gap-2.5">
                     @foreach ($this->operateurs as $operateur)
                         <div class="flex items-center gap-3 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-xl px-4 py-3">
-                            <div class="w-24 flex-shrink-0 text-sm font-bold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
-                                {{ $operateur->est_cash ? '💵' : '📱' }} {{ $operateur->nom }}
+                            <div class="w-24 flex-shrink-0 flex items-center gap-1.5 text-sm font-bold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
+                                <x-icone-type-operateur :est-cash="$operateur->est_cash" width="15" height="15" class="flex-shrink-0 text-[color:var(--color-ink-soft)]" />
+                                {{ $operateur->nom }}
                             </div>
                             <input
                                 type="number"

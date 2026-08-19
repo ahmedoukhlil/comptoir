@@ -78,7 +78,9 @@
                 @if ($this->clotureDuJour)
                     @php $c = $this->clotureDuJour; @endphp
                     <div class="text-center py-6">
-                        <div class="text-4xl mb-3">✓</div>
+                        <div class="flex justify-center mb-3">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-green-deep)]"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+                        </div>
                         <p class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-[color:var(--color-ink)] mb-1">{{ __('caisse.cloture_deja_faite') }}</p>
 
                         <div class="mt-6 grid grid-cols-2 gap-3 text-start">
@@ -160,7 +162,7 @@
                         x-cloak
                         class="flex items-start gap-2.5 mt-4 max-w-[340px] mx-auto bg-[color:var(--color-rust)]/10 border-[1.5px] border-[color:var(--color-rust)]/30 rounded-xl px-3.5 py-3"
                     >
-                        <span class="text-lg flex-shrink-0">⚠️</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-rust-deep)] flex-shrink-0"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
                         <div>
                             <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm text-[color:var(--color-rust-deep)]" x-text="texteEcart(ecartActuel)"></div>
                             <div class="text-xs text-[color:var(--color-rust-deep)] mt-0.5">{{ __('caisse.cloture_ecart_important') }}</div>
@@ -176,7 +178,7 @@
                                 class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                             ></button>
                         </template>
-                        <button type="button" x-on:click="effacerDernier()" aria-label="{{ __('caisse.effacer_dernier') }}" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center text-lg font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">⌫</button>
+                        <button type="button" x-on:click="effacerDernier()" aria-label="{{ __('caisse.effacer_dernier') }}" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 flex items-center justify-center text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg></button>
                         <button type="button" x-on:click="taper('0')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">0</button>
                         <button type="button" x-on:click="taper('000')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">000</button>
                         <button type="button" x-on:click="effacer()" class="col-span-3 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-2xl py-3 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-xs font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-rust-deep)] hover:text-[color:var(--color-rust-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">{{ __('caisse.effacer_tout') }}</button>

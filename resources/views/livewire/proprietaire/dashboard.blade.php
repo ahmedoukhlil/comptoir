@@ -138,7 +138,7 @@
                             <div class="flex flex-wrap gap-1.5 px-4 pb-3.5">
                                 @foreach ($ligne->soldes_par_operateur as $so)
                                     <span class="inline-flex items-center gap-1 text-[10px] font-semibold bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink-soft)] rounded-md px-2 py-1" dir="ltr">
-                                        <span>{{ $so['operateur']->est_cash ? '💵' : '📱' }} {{ $so['operateur']->nom }} :</span>
+                                        <span class="inline-flex items-center gap-1"><x-icone-type-operateur :est-cash="$so['operateur']->est_cash" width="11" height="11" class="flex-shrink-0" /> {{ $so['operateur']->nom }} :</span>
                                         <span>{{ number_format($so['solde'], 0, ',', ' ') }}</span>
                                     </span>
                                 @endforeach
@@ -146,7 +146,7 @@
 
                             @if ($ligne->a_ecart)
                                 <div class="mx-4 mb-3.5 flex items-center flex-wrap gap-1.5 text-[11px] font-semibold text-[color:var(--color-rust-deep)] bg-[color:var(--color-rust)]/10 rounded-lg px-2.5 py-1.5" dir="ltr">
-                                    <span>⚠</span>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
                                     <span>{{ __('caisse.dashboard_alerte_ecart') }}</span>
                                     <span>({{ $ligne->cloture->ecart > 0 ? '+' : '' }}{{ number_format($ligne->cloture->ecart, 0, ',', ' ') }})</span>
                                 </div>
@@ -154,13 +154,17 @@
 
                             @if ($ligne->cloture_manquante)
                                 <div class="mx-4 mb-3.5 flex items-center gap-1.5 text-[11px] font-semibold text-[#8C6A1F] bg-[#E8B85C]/15 rounded-lg px-2.5 py-1.5">
-                                    <span>⏰</span> {{ __('caisse.dashboard_alerte_pas_cloture') }}
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                                    {{ __('caisse.dashboard_alerte_pas_cloture') }}
                                 </div>
                             @endif
 
                             @if ($ligne->cloture)
                                 <div class="mx-4 mb-3.5 flex items-center justify-between gap-2 flex-wrap text-[11px] font-semibold text-[color:var(--color-green-deep)] bg-[color:var(--color-green)]/10 rounded-lg px-2.5 py-1.5">
-                                    <span class="flex items-center gap-1.5">✓ {{ __('caisse.dashboard_journee_cloturee') }}</span>
+                                    <span class="flex items-center gap-1.5">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                                        {{ __('caisse.dashboard_journee_cloturee') }}
+                                    </span>
                                     <button
                                         type="button"
                                         wire:click="ouvrirConfirmationReouverture({{ $ligne->point->id }})"

@@ -19,8 +19,8 @@
 
                 {{-- Exports --}}
                 <div class="flex gap-2 mb-6">
-                    <a href="{{ route('proprietaire.rapport.export.excel', ['periode' => $periode]) }}" class="text-xs font-semibold px-4 py-2.5 rounded-lg bg-[color:var(--color-green-deep)] text-white flex items-center gap-1.5">📊 {{ __('caisse.historique_exporter_excel') }}</a>
-                    <a href="{{ route('proprietaire.rapport.export.pdf', ['periode' => $periode]) }}" class="text-xs font-semibold px-4 py-2.5 rounded-lg bg-[color:var(--color-rust-deep)] text-white flex items-center gap-1.5">📄 {{ __('caisse.historique_exporter_pdf') }}</a>
+                    <a href="{{ route('proprietaire.rapport.export.excel', ['periode' => $periode]) }}" class="text-xs font-semibold px-4 py-2.5 rounded-lg bg-[color:var(--color-green-deep)] text-white flex items-center gap-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> {{ __('caisse.historique_exporter_excel') }}</a>
+                    <a href="{{ route('proprietaire.rapport.export.pdf', ['periode' => $periode]) }}" class="text-xs font-semibold px-4 py-2.5 rounded-lg bg-[color:var(--color-rust-deep)] text-white flex items-center gap-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> {{ __('caisse.historique_exporter_pdf') }}</a>
                 </div>
 
                 {{-- Résumé --}}
