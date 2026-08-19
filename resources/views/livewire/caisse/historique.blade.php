@@ -68,11 +68,11 @@
                 <div class="grid grid-cols-2 gap-3 mb-6">
                     <div class="bg-[color:var(--color-green)]/10 rounded-xl p-4">
                         <div class="text-[11px] font-semibold text-[color:var(--color-green-deep)] uppercase">{{ __('caisse.colonne_entrees') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-green-deep)] mt-1">+ {{ number_format($this->totalEntrees, 0, ',', ' ') }}</div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-green-deep)] mt-1 text-start" dir="ltr">+ {{ number_format($this->totalEntrees, 0, ',', ' ') }}</div>
                     </div>
                     <div class="bg-[color:var(--color-rust)]/10 rounded-xl p-4">
                         <div class="text-[11px] font-semibold text-[color:var(--color-rust-deep)] uppercase">{{ __('caisse.colonne_sorties') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-rust-deep)] mt-1">− {{ number_format($this->totalSorties, 0, ',', ' ') }}</div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-rust-deep)] mt-1 text-start" dir="ltr">− {{ number_format($this->totalSorties, 0, ',', ' ') }}</div>
                     </div>
                 </div>
 
@@ -85,11 +85,11 @@
                                 <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
                                     {{ $operation->type === 'depot' ? __('caisse.recu') : __('caisse.donne') }} — {{ $operation->operateur->nom }}
                                 </div>
-                                <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5" dir="ltr">
+                                <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 text-start" dir="ltr">
                                     {{ $operation->created_at->format('d/m/Y H:i') }} · {{ $operation->numero_piece }} · {{ $operation->client_telephone }}
                                 </div>
                             </div>
-                            <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] text-end {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
                                 {{ $operation->type === 'depot' ? '+' : '−' }} {{ number_format($operation->montant, 0, ',', ' ') }}
                             </div>
                         </div>
