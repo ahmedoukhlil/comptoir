@@ -11,6 +11,8 @@
     @livewireStyles
 </head>
 <body class="antialiased {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+    <x-splash-pwa />
+
     {{ $slot }}
     @livewireScripts
     <script>

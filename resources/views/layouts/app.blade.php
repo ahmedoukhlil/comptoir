@@ -14,6 +14,8 @@
     @livewireStyles
 </head>
 <body class="antialiased bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+    <x-splash-pwa />
+
     <x-bandeau-essai />
     {{ $slot }}
     @livewireScripts
