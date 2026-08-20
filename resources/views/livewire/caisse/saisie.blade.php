@@ -137,6 +137,7 @@
                                 maxlength="8"
                                 placeholder="{{ __('caisse.telephone_placeholder') }}"
                                 dir="ltr"
+                                x-on:focus="setTimeout(() => $el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 200)"
                                 class="flex-1 border-none bg-transparent outline-none font-[family-name:var(--font-mono)] text-lg font-bold text-[color:var(--color-ink)] tracking-wide text-start"
                             >
                         </div>
@@ -152,11 +153,11 @@
                         <div x-show="optionnelOuvert" x-cloak class="flex flex-col gap-2 mt-1.5">
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-xl px-3.5 py-2.5">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                <input type="text" x-model="clientNom" placeholder="{{ __('caisse.nom_placeholder') }}" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)]">
+                                <input type="text" x-model="clientNom" placeholder="{{ __('caisse.nom_placeholder') }}" x-on:focus="setTimeout(() => $el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 200)" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)]">
                             </div>
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-xl px-3.5 py-2.5">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="6" y1="15" x2="10" y2="15"/><circle cx="7" cy="10" r="1.5"/><line x1="12" y1="9" x2="18" y2="9"/><line x1="12" y1="12" x2="18" y2="12"/></svg>
-                                <input type="text" x-model="clientNni" inputmode="numeric" placeholder="{{ __('caisse.nni_placeholder') }}" dir="ltr" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] text-start">
+                                <input type="text" x-model="clientNni" inputmode="numeric" placeholder="{{ __('caisse.nni_placeholder') }}" dir="ltr" x-on:focus="setTimeout(() => $el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 200)" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] text-start">
                             </div>
                         </div>
 
@@ -169,6 +170,7 @@
                                     inputmode="numeric"
                                     x-model="montant"
                                     x-on:input="montant = $event.target.value.replace(/\D/g, '').slice(0, 9)"
+                                    x-on:focus="setTimeout(() => $el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 200)"
                                     placeholder="0"
                                     dir="ltr"
                                     class="flex-1 min-w-0 border-none bg-transparent outline-none font-[family-name:var(--font-mono)] font-bold text-[32px] text-[color:var(--color-ink)] tabular-nums text-end placeholder:text-[color:var(--color-ink-soft)]/50"
