@@ -8,6 +8,9 @@
                     <span class="text-xs text-white/90">{{ __('admin.tenants_titre') }}</span>
                 </div>
                 <div class="flex items-center gap-2">
+                    <a href="{{ route('admin.operateurs.index') }}" class="text-xs font-semibold text-white bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 font-[family-name:var(--font-heading)]">
+                        {{ __('admin.operateurs_titre') }}
+                    </a>
                     <a href="{{ route('compte.changer-mot-de-passe') }}" class="text-xs font-semibold text-white bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 font-[family-name:var(--font-heading)]">
                         {{ __('admin.mon_mot_de_passe') }}
                     </a>

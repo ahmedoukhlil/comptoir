@@ -10,6 +10,16 @@ function attributBareme(typeOperation) {
     }[typeOperation];
 }
 
+// Nom de l'attribut pourcentage_partage_point_* correspondant à un type
+// d'opération, en miroir exact de Operateur::attributPourcentagePartagePoint().
+function attributPourcentagePartagePoint(typeOperation) {
+    return {
+        depot: 'pourcentage_partage_point_depot',
+        retrait: 'pourcentage_partage_point_retrait_client',
+        retrait_beneficiaire: 'pourcentage_partage_point_retrait_beneficiaire',
+    }[typeOperation];
+}
+
 function calculerFrais(operateur, montant, typeOperation) {
     const bareme = operateur?.[attributBareme(typeOperation)];
     const tranches = bareme?.tranches ?? [];
@@ -27,11 +37,12 @@ function calculerFrais(operateur, montant, typeOperation) {
 }
 
 // Répartit le frais fixe entre part point de vente et part banque selon le
-// pourcentage_partage_point propre à l'opérateur — jamais un pourcentage
-// codé en dur ici, en miroir exact de Operateur::repartirCommission().
+// pourcentage_partage_point_* propre à l'opérateur et au type d'opération —
+// jamais un pourcentage codé en dur ici, en miroir exact de
+// Operateur::repartirCommission().
 function repartirCommission(operateur, montant, typeOperation) {
     const frais = calculerFrais(operateur, montant, typeOperation);
-    const pourcentagePartagePoint = operateur?.pourcentage_partage_point ?? 0;
+    const pourcentagePartagePoint = operateur?.[attributPourcentagePartagePoint(typeOperation)] ?? 0;
     const partPoint = Math.round(frais * pourcentagePartagePoint / 100);
 
     return { frais, partPoint, partBanque: frais - partPoint };

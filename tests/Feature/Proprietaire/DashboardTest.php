@@ -22,8 +22,9 @@ class DashboardTest extends TestCase
         $pointA = Point::create(['tenant_id' => $tenant->id, 'nom' => 'Point A']);
         $pointB = Point::create(['tenant_id' => $tenant->id, 'nom' => 'Point B']);
         $proprietaire = User::factory()->proprietaire()->create(['tenant_id' => $tenant->id]);
-        $bankily = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Bankily', 'bareme_depot' => ['tranches' => []], 'bareme_retrait_client' => ['tranches' => []], 'bareme_retrait_beneficiaire' => ['tranches' => []]]);
-        $cash = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Cash', 'bareme_depot' => ['tranches' => []], 'bareme_retrait_client' => ['tranches' => []], 'bareme_retrait_beneficiaire' => ['tranches' => []], 'est_cash' => true]);
+        $bankily = Operateur::create(['nom' => 'Bankily', 'bareme_depot' => ['tranches' => []], 'bareme_retrait_client' => ['tranches' => []], 'bareme_retrait_beneficiaire' => ['tranches' => []]]);
+        $cash = Operateur::create(['nom' => 'Cash', 'bareme_depot' => ['tranches' => []], 'bareme_retrait_client' => ['tranches' => []], 'bareme_retrait_beneficiaire' => ['tranches' => []], 'est_cash' => true]);
+        $tenant->operateurs()->attach([$bankily->id, $cash->id], ['actif' => true]);
 
         $this->actingAs($proprietaire);
 

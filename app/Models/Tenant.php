@@ -6,6 +6,7 @@ use Database\Factories\TenantFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
@@ -51,6 +52,11 @@ class Tenant extends Model
     public function alimentations(): HasMany
     {
         return $this->hasMany(Alimentation::class);
+    }
+
+    public function operateurs(): BelongsToMany
+    {
+        return $this->belongsToMany(Operateur::class, 'tenant_operateur')->withPivot('actif')->withTimestamps();
     }
 
     public function peutSuperviserPlusieursPoints(): bool

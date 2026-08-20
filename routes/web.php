@@ -4,6 +4,9 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\RapportExportController;
 use App\Http\Controllers\SyncController;
 use App\Livewire\Admin\Agents\Create as AdminAgentsCreate;
+use App\Livewire\Admin\Operateurs\Create as AdminOperateursCreate;
+use App\Livewire\Admin\Operateurs\Edit as AdminOperateursEdit;
+use App\Livewire\Admin\Operateurs\Index as AdminOperateursIndex;
 use App\Livewire\Admin\Points\Create as AdminPointsCreate;
 use App\Livewire\Admin\Tenants\Create as AdminTenantsCreate;
 use App\Livewire\Admin\Tenants\Index as AdminTenantsIndex;
@@ -123,3 +126,15 @@ Route::get('/admin/tenants/{tenantId}/points/creer', AdminPointsCreate::class)
 Route::get('/admin/points/{pointId}/agents/creer', AdminAgentsCreate::class)
     ->middleware(['auth', 'super-admin'])
     ->name('admin.agents.create');
+
+Route::get('/admin/operateurs', AdminOperateursIndex::class)
+    ->middleware(['auth', 'super-admin'])
+    ->name('admin.operateurs.index');
+
+Route::get('/admin/operateurs/creer', AdminOperateursCreate::class)
+    ->middleware(['auth', 'super-admin'])
+    ->name('admin.operateurs.create');
+
+Route::get('/admin/operateurs/{operateurId}', AdminOperateursEdit::class)
+    ->middleware(['auth', 'super-admin'])
+    ->name('admin.operateurs.edit');

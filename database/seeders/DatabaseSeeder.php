@@ -72,10 +72,14 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        Operateur::create(['nom' => 'Bankily', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point' => 50]);
-        Operateur::create(['nom' => 'Masrivi', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point' => 50]);
-        Operateur::create(['nom' => 'Sedad', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point' => 50]);
-        Operateur::create(['nom' => 'Cash', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeDepot, 'bareme_retrait_beneficiaire' => $baremeDepot, 'est_cash' => true]);
+        $bankily = Operateur::create(['nom' => 'Bankily', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point_depot' => 50, 'pourcentage_partage_point_retrait_client' => 50, 'pourcentage_partage_point_retrait_beneficiaire' => 50]);
+        $masrivi = Operateur::create(['nom' => 'Masrivi', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point_depot' => 50, 'pourcentage_partage_point_retrait_client' => 50, 'pourcentage_partage_point_retrait_beneficiaire' => 50]);
+        $sedad = Operateur::create(['nom' => 'Sedad', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point_depot' => 50, 'pourcentage_partage_point_retrait_client' => 50, 'pourcentage_partage_point_retrait_beneficiaire' => 50]);
+        $cash = Operateur::create(['nom' => 'Cash', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeDepot, 'bareme_retrait_beneficiaire' => $baremeDepot, 'est_cash' => true, 'pourcentage_partage_point_depot' => 0, 'pourcentage_partage_point_retrait_client' => 0, 'pourcentage_partage_point_retrait_beneficiaire' => 0]);
+
+        // Le super-admin active les opérateurs pour chaque tenant — ils
+        // sont inactifs par défaut à leur création.
+        $tenant->operateurs()->attach([$bankily->id, $masrivi->id, $sedad->id, $cash->id], ['actif' => true]);
 
         // Tenant Solo de démo (essai gratuit en cours), pour tester le
         // verrouillage des écrans multi-points par plan tarifaire.
@@ -98,6 +102,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Khadija Mint Ahmed',
             'telephone' => '33112244',
         ]);
+
+        $tenantSolo->operateurs()->attach([$bankily->id, $masrivi->id, $sedad->id, $cash->id], ['actif' => true]);
 
         // Compte super-admin de démo pour le back-office Syslog.
         User::factory()->superAdmin()->create([

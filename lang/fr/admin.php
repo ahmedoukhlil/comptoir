@@ -3,6 +3,7 @@
 return [
     'titre' => 'Back-office Syslog',
     'tenants_titre' => 'Tenants',
+    'operateurs_titre' => 'Opérateurs',
     'rechercher_tenant' => 'Rechercher un tenant',
     'colonne_nom' => 'Nom',
     'colonne_plan' => 'Plan',

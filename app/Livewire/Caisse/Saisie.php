@@ -27,7 +27,7 @@ class Saisie extends Component
     #[Computed]
     public function operateurs()
     {
-        return Operateur::query()->duTenant($this->point->tenant_id)->mobileMoney()->actif()->orderBy('id')->get();
+        return Operateur::query()->actifPourTenant($this->point->tenant_id)->mobileMoney()->orderBy('id')->get();
     }
 
     #[Computed]
@@ -40,7 +40,9 @@ class Saisie extends Component
                 'bareme_depot' => $o->bareme_depot,
                 'bareme_retrait_client' => $o->bareme_retrait_client,
                 'bareme_retrait_beneficiaire' => $o->bareme_retrait_beneficiaire,
-                'pourcentage_partage_point' => $o->pourcentage_partage_point,
+                'pourcentage_partage_point_depot' => $o->pourcentage_partage_point_depot,
+                'pourcentage_partage_point_retrait_client' => $o->pourcentage_partage_point_retrait_client,
+                'pourcentage_partage_point_retrait_beneficiaire' => $o->pourcentage_partage_point_retrait_beneficiaire,
             ])
             ->values()
             ->all();

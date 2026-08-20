@@ -7,9 +7,9 @@ use Illuminate\Database\Seeder;
 
 /**
  * Grille tarifaire réelle "Retrait Espèce Client" de Bankily : met à jour
- * le barème de retrait client de l'opérateur Bankily pour CHAQUE tenant
- * existant (chaque tenant a sa propre copie de l'opérateur). Le dépôt reste
- * gratuit et le retrait bénéficiaire n'est pas concerné par ce barème.
+ * le barème de retrait client de l'opérateur global Bankily (partagé par
+ * tous les tenants). Le dépôt reste gratuit et le retrait bénéficiaire
+ * n'est pas concerné par ce barème.
  *
  * Exécution : php artisan db:seed --class=BaremeBankilyRetraitClientSeeder
  */

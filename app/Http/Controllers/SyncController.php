@@ -19,7 +19,7 @@ class SyncController extends Controller
         $data = $request->validate([
             'operations' => ['required', 'array'],
             'operations.*.uuid_client' => ['required', 'uuid'],
-            'operations.*.operateur_id' => ['required', 'integer', Rule::exists('operateurs', 'id')->where('tenant_id', $tenantId)],
+            'operations.*.operateur_id' => ['required', 'integer', Rule::exists('tenant_operateur', 'operateur_id')->where('tenant_id', $tenantId)],
             'operations.*.type' => ['required', 'in:depot,retrait,retrait_beneficiaire'],
             'operations.*.montant' => ['required', 'integer', 'min:1'],
             'operations.*.client_nom' => ['nullable', 'string'],

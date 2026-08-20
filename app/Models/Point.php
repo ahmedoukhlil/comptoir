@@ -64,7 +64,7 @@ class Point extends Model
      */
     public function soldesParOperateur(): Collection
     {
-        $operateurs = Operateur::query()->where('tenant_id', $this->tenant_id)->orderBy('id')->get();
+        $operateurs = Operateur::query()->duTenant($this->tenant_id)->orderBy('id')->get();
 
         $alimentations = $this->alimentations()
             ->selectRaw('operateur_id, sum(montant) as total')

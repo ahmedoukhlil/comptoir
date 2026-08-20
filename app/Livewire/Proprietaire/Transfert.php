@@ -33,7 +33,7 @@ class Transfert extends Component
     #[Computed]
     public function operateurs()
     {
-        return Operateur::query()->duTenant($this->tenant->id)->actif()->orderBy('id')->get();
+        return Operateur::query()->actifPourTenant($this->tenant->id)->orderBy('id')->get();
     }
 
     #[Computed]
