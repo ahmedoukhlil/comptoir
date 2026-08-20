@@ -135,6 +135,15 @@ Route::get('/admin/operateurs/creer', AdminOperateursCreate::class)
     ->middleware(['auth', 'super-admin'])
     ->name('admin.operateurs.create');
 
+Route::get('/admin/operateurs/modele-import-tranches', function () {
+    return \Maatwebsite\Excel\Facades\Excel::download(
+        new \App\Exports\TranchesOperateurTemplateExport(),
+        'modele-tranches.xlsx'
+    );
+})
+    ->middleware(['auth', 'super-admin'])
+    ->name('admin.operateurs.modele-import');
+
 Route::get('/admin/operateurs/{operateurId}', AdminOperateursEdit::class)
     ->middleware(['auth', 'super-admin'])
     ->name('admin.operateurs.edit');

@@ -2,6 +2,11 @@
 
 namespace App\Livewire\Concerns;
 
+use App\Imports\TranchesOperateurImport;
+use Livewire\Attributes\Validate;
+use Livewire\WithFileUploads;
+use Maatwebsite\Excel\Facades\Excel;
+
 /**
  * Logique partagée de saisie des grilles tarifaires (barème + pourcentage
  * de partage) par type d'opération (dépôt / retrait client / retrait
@@ -10,6 +15,8 @@ namespace App\Livewire\Concerns;
  */
 trait GereBaremesParType
 {
+    use WithFileUploads;
+
     private const TYPES = ['depot', 'retrait', 'retrait_beneficiaire'];
 
     private const TRANCHE_VIDE = ['min' => '0', 'max' => '', 'frais' => ''];
@@ -21,6 +28,26 @@ trait GereBaremesParType
 
     /** @var array<string, string> */
     public array $pourcentagesParType = [];
+
+    #[Validate('nullable|file|mimes:xlsx,xls|max:2048')]
+    public $fichierImport = null;
+
+    public function importerTranches(): void
+    {
+        $this->validate(['fichierImport' => ['required', 'file', 'mimes:xlsx,xls', 'max:2048']]);
+
+        $import = new TranchesOperateurImport();
+        Excel::import($import, $this->fichierImport->getRealPath());
+
+        if (! $import->tranches) {
+            $this->addError('fichierImport', __('caisse.import_tranches_vide'));
+
+            return;
+        }
+
+        $this->tranchesParType[$this->onglet] = $import->tranches;
+        $this->fichierImport = null;
+    }
 
     public function changerOnglet(string $type): void
     {

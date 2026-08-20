@@ -13,6 +13,23 @@
 
     @foreach (['depot', 'retrait', 'retrait_beneficiaire'] as $type)
         <div @if ($onglet !== $type) style="display:none" @endif class="space-y-4">
+            <div class="flex items-center gap-2 flex-wrap bg-[color:var(--color-sand)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-lg px-3 py-2.5">
+                <label class="flex-1 min-w-[160px] text-xs font-semibold text-[color:var(--color-ink)] cursor-pointer">
+                    <span class="block mb-1">{{ __('caisse.import_tranches_label') }}</span>
+                    <input type="file" wire:model="fichierImport" accept=".xlsx,.xls" class="block w-full text-xs">
+                </label>
+                <button
+                    type="button"
+                    wire:click="importerTranches"
+                    wire:loading.attr="disabled"
+                    class="text-xs font-semibold px-3 py-2 rounded-lg bg-[color:var(--color-ink)] text-white flex-shrink-0"
+                >{{ __('caisse.import_tranches_bouton') }}</button>
+                <a href="{{ route('admin.operateurs.modele-import') }}" class="text-xs font-semibold text-[color:var(--color-ink-soft)] underline flex-shrink-0">
+                    {{ __('caisse.import_tranches_modele') }}
+                </a>
+            </div>
+            @error('fichierImport') <p class="text-xs text-[color:var(--color-rust-deep)]">{{ $message }}</p> @enderror
+
             <x-proprietaire.tranches-operateur :tranches="$tranchesParType[$type]" :type="$type" />
 
             <div>
