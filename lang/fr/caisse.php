@@ -38,6 +38,8 @@ return [
     'erreur_telephone_digits' => 'Le numéro doit contenir 8 chiffres.',
     'erreur_montant_vide' => 'Entrez un montant.',
     'erreur_solde_insuffisant' => 'Le solde de caisse est insuffisant.',
+    'erreur_type_vide' => 'Choisissez le type d\'opération.',
+    'erreur_operateur_vide' => 'Choisissez l\'opérateur.',
     'sync_a_jour' => 'À jour',
     'sync_hors_ligne' => 'Hors ligne — vos opérations seront envoyées au retour du réseau',
     'sync_en_attente' => "En attente d'envoi",

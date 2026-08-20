@@ -61,8 +61,12 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
         enConfirmation: false,
         confirmationOuverte: false,
 
-        type: 'depot',
-        operateurId: operateurs[0]?.id ?? null,
+        // Aucune présélection par défaut : l'agent doit choisir explicitement
+        // le type d'opération et l'opérateur à chaque saisie, pour éviter
+        // les erreurs par omission (validerChamps() bloque tant que ces
+        // deux champs restent vides).
+        type: null,
+        operateurId: null,
         telephone: '',
         optionnelOuvert: false,
         clientNom: '',
@@ -168,6 +172,8 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
         },
 
         reinitialiserFormulaire() {
+            this.type = null;
+            this.operateurId = null;
             this.telephone = '';
             this.clientNom = '';
             this.clientNni = '';
@@ -178,6 +184,14 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
         validerChamps() {
             const t = window.ComptoirTraductions ?? {};
             const arabe = document.documentElement.lang === 'ar';
+
+            if (! this.type) {
+                return t.erreurTypeVide ?? (arabe ? 'اختر نوع العملية.' : "Choisissez le type d'opération.");
+            }
+
+            if (! this.operateurId) {
+                return t.erreurOperateurVide ?? (arabe ? 'اختر المشغل.' : "Choisissez l'opérateur.");
+            }
 
             if (! /^\d{8}$/.test(this.telephone || '')) {
                 return t.erreurTelephoneDigits ?? (arabe ? 'رقم غير صحيح.' : 'Numéro invalide.');

@@ -38,6 +38,8 @@ return [
     'erreur_telephone_digits' => 'يجب أن يتكون الرقم من 8 أرقام.',
     'erreur_montant_vide' => 'أدخل مبلغاً.',
     'erreur_solde_insuffisant' => 'رصيد الصندوق غير كافٍ.',
+    'erreur_type_vide' => 'اختر نوع العملية.',
+    'erreur_operateur_vide' => 'اختر المشغل.',
     'sync_a_jour' => 'محدّث',
     'sync_hors_ligne' => 'غير متصل — ستُرسل عملياتك عند عودة الشبكة',
     'sync_en_attente' => 'في انتظار الإرسال',
