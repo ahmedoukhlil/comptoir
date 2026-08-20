@@ -87,8 +87,8 @@
                             <button
                                 type="button"
                                 x-on:click="type = 'depot'"
-                                class="w-full py-4 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                :class="type === 'depot' ? 'bg-[color:var(--color-green)] text-white shadow-lg shadow-green-900/20' : 'text-[color:var(--color-ink-soft)]'"
+                                class="w-full py-4 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                                :class="type === 'depot' ? 'border-transparent bg-[color:var(--color-green)] text-white shadow-lg shadow-green-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
                             >
                                 <span class="text-lg">↓</span> {{ __('caisse.depot') }}
                             </button>
@@ -96,16 +96,16 @@
                                 <button
                                     type="button"
                                     x-on:click="type = 'retrait'"
-                                    class="flex-1 py-3.5 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                    :class="type === 'retrait' ? 'bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'text-[color:var(--color-ink-soft)]'"
+                                    class="flex-1 py-3.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                                    :class="type === 'retrait' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
                                 >
                                     <span class="text-base">↑</span> {{ __('caisse.retrait') }}
                                 </button>
                                 <button
                                     type="button"
                                     x-on:click="type = 'retrait_beneficiaire'"
-                                    class="flex-1 py-3.5 rounded-xl font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                    :class="type === 'retrait_beneficiaire' ? 'bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'text-[color:var(--color-ink-soft)]'"
+                                    class="flex-1 py-3.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                                    :class="type === 'retrait_beneficiaire' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
                                 >
                                     <span class="text-base">↑</span> {{ __('caisse.retrait_beneficiaire') }}
                                 </button>
