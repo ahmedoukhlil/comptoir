@@ -59,7 +59,7 @@
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-4 4 4 4-8 4 8"/></svg>
                             {{ __('caisse.dashboard_operations_jour') }}
                         </div>
-                        <div class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-ink)] tabular-nums">{{ $this->operationsJourTotal }}</div>
+                        <div class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-ink)] tabular-nums" dir="ltr">{{ $this->operationsJourTotal }}</div>
                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1.5">{{ now()->translatedFormat('d/m/Y') }}</div>
                     </div>
                     <div class="bg-[color:var(--color-card)] border border-[color:var(--color-line)] rounded-2xl p-4">
@@ -67,7 +67,7 @@
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
                             {{ __('caisse.dashboard_benefices_cumules') }}
                         </div>
-                        <div class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-green-deep)] tabular-nums">+{{ number_format($this->beneficesTotal, 0, ',', ' ') }}</div>
+                        <div class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-green-deep)] tabular-nums" dir="ltr">+{{ number_format($this->beneficesTotal, 0, ',', ' ') }}</div>
                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1.5">{{ __('caisse.devise') }}</div>
                     </div>
                 </div>
@@ -125,12 +125,13 @@
                                     <div class="font-semibold text-sm text-[color:var(--color-ink)] truncate">{{ $ligne->point->nom }}</div>
                                     <div class="flex items-center flex-wrap gap-x-1 text-xs text-[color:var(--color-ink-soft)] mt-0.5">
                                         <span class="truncate">{{ __('caisse.dashboard_operations_jour') }} :</span>
-                                        <span class="font-[family-name:var(--font-mono)] tabular-nums">{{ $ligne->operations_jour }}</span>
+                                        <span class="font-[family-name:var(--font-mono)] tabular-nums" dir="ltr">{{ $ligne->operations_jour }}</span>
                                         <span>·</span>
-                                        <span class="font-[family-name:var(--font-mono)] tabular-nums text-[color:var(--color-green-deep)] font-medium">+{{ number_format($ligne->benefices, 0, ',', ' ') }} {{ __('caisse.devise') }}</span>
+                                        <span class="font-[family-name:var(--font-mono)] tabular-nums text-[color:var(--color-green-deep)] font-medium" dir="ltr">+{{ number_format($ligne->benefices, 0, ',', ' ') }}</span>
+                                        <span>{{ __('caisse.devise') }}</span>
                                     </div>
                                 </div>
-                                <div class="font-[family-name:var(--font-mono)] font-semibold text-sm text-[color:var(--color-ink)] tabular-nums flex-shrink-0">
+                                <div class="font-[family-name:var(--font-mono)] font-semibold text-sm text-[color:var(--color-ink)] tabular-nums flex-shrink-0" dir="ltr">
                                     {{ number_format($ligne->solde, 0, ',', ' ') }}
                                 </div>
                             </div>
@@ -139,7 +140,7 @@
                                 @foreach ($ligne->soldes_par_operateur as $so)
                                     <span class="inline-flex items-center gap-1 text-[10px] font-semibold bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink-soft)] rounded-md px-2 py-1">
                                         <span class="inline-flex items-center gap-1"><x-icone-type-operateur :est-cash="$so['operateur']->est_cash" width="11" height="11" class="flex-shrink-0" /> {{ $so['operateur']->nom }} :</span>
-                                        <span class="font-[family-name:var(--font-mono)] tabular-nums">{{ number_format($so['solde'], 0, ',', ' ') }}</span>
+                                        <span class="font-[family-name:var(--font-mono)] tabular-nums" dir="ltr">{{ number_format($so['solde'], 0, ',', ' ') }}</span>
                                     </span>
                                 @endforeach
                             </div>
@@ -148,7 +149,7 @@
                                 <div class="mx-4 mb-3.5 flex items-center flex-wrap gap-1.5 text-[11px] font-semibold text-[color:var(--color-rust-deep)] bg-[color:var(--color-rust)]/10 rounded-lg px-2.5 py-1.5">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
                                     <span>{{ __('caisse.dashboard_alerte_ecart') }}</span>
-                                    <span class="font-[family-name:var(--font-mono)] tabular-nums">({{ $ligne->cloture->ecart > 0 ? '+' : '' }}{{ number_format($ligne->cloture->ecart, 0, ',', ' ') }})</span>
+                                    <span class="font-[family-name:var(--font-mono)] tabular-nums" dir="ltr">({{ $ligne->cloture->ecart > 0 ? '+' : '' }}{{ number_format($ligne->cloture->ecart, 0, ',', ' ') }})</span>
                                 </div>
                             @endif
 
