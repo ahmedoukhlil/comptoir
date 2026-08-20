@@ -59,9 +59,7 @@
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-4 4 4 4-8 4 8"/></svg>
                             {{ __('caisse.dashboard_operations_jour') }}
                         </div>
-                        <div class="flex items-baseline gap-1.5" dir="ltr">
-                            <span class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-ink)] tabular-nums">{{ $this->operationsJourTotal }}</span>
-                        </div>
+                        <div class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-ink)] tabular-nums">{{ $this->operationsJourTotal }}</div>
                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1.5">{{ now()->translatedFormat('d/m/Y') }}</div>
                     </div>
                     <div class="bg-[color:var(--color-card)] border border-[color:var(--color-line)] rounded-2xl p-4">
@@ -69,9 +67,7 @@
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
                             {{ __('caisse.dashboard_benefices_cumules') }}
                         </div>
-                        <div class="flex items-baseline gap-1.5" dir="ltr">
-                            <span class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-green-deep)] tabular-nums">+{{ number_format($this->beneficesTotal, 0, ',', ' ') }}</span>
-                        </div>
+                        <div class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-green-deep)] tabular-nums">+{{ number_format($this->beneficesTotal, 0, ',', ' ') }}</div>
                         <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1.5">{{ __('caisse.devise') }}</div>
                     </div>
                 </div>
