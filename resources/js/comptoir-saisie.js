@@ -159,18 +159,6 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
             return `${texte} (${n})`;
         },
 
-        taper(chiffre) {
-            if (this.montant.length >= 9) {
-                return;
-            }
-
-            this.montant = String(parseInt((this.montant || '0') + chiffre, 10));
-        },
-
-        effacer() {
-            this.montant = '';
-        },
-
         reinitialiserFormulaire() {
             this.type = null;
             this.operateurId = null;

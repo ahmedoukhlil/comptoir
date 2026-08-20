@@ -161,37 +161,21 @@
                         </div>
 
                         {{-- Montant --}}
-                        <div class="text-center mt-6 px-1">
-                            <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide">{{ __('caisse.montant_label') }}</div>
-                            <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" x-text="montant !== '' ? formaterMontant(montant) : '0'"></div>
-                            <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[12.5px] font-semibold text-[color:var(--color-green-deep)] min-h-[16px] mt-1.5" x-show="commissionActuelle > 0" x-text="'{{ __('caisse.commission_label') }} ' + formaterMontant(commissionActuelle) + ' {{ __('caisse.devise') }}'"></div>
-                        </div>
-
-                        {{-- Clavier --}}
-                        <div class="grid grid-cols-3 gap-2.5 mt-4 md:max-w-[340px]" dir="ltr">
-                            <template x-for="chiffre in ['1','2','3','4','5','6','7','8','9']" :key="chiffre">
-                                <button
-                                    type="button"
-                                    x-on:click="taper(chiffre)"
-                                    x-text="chiffre"
-                                    class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
-                                ></button>
-                            </template>
-                            <button
-                                type="button"
-                                x-on:click="effacer()"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
-                            >{{ __('caisse.effacer') }}</button>
-                            <button
-                                type="button"
-                                x-on:click="taper('0')"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
-                            >0</button>
-                            <button
-                                type="button"
-                                x-on:click="taper('000')"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
-                            >000</button>
+                        <div class="mt-6 px-1">
+                            <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.montant_label') }}</div>
+                            <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 focus-within:border-[color:var(--color-ink)]">
+                                <input
+                                    type="text"
+                                    inputmode="numeric"
+                                    x-model="montant"
+                                    x-on:input="montant = $event.target.value.replace(/\D/g, '').slice(0, 9)"
+                                    placeholder="0"
+                                    dir="ltr"
+                                    class="flex-1 min-w-0 border-none bg-transparent outline-none font-[family-name:var(--font-mono)] font-bold text-[32px] text-[color:var(--color-ink)] tabular-nums text-end placeholder:text-[color:var(--color-ink-soft)]/50"
+                                >
+                                <span class="text-sm font-semibold text-[color:var(--color-ink-soft)] flex-shrink-0">{{ __('caisse.devise') }}</span>
+                            </div>
+                            <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[12.5px] font-semibold text-[color:var(--color-green-deep)] min-h-[16px] mt-1.5 text-center" x-show="commissionActuelle > 0" x-text="'{{ __('caisse.commission_label') }} ' + formaterMontant(commissionActuelle) + ' {{ __('caisse.devise') }}'"></div>
                         </div>
 
                         {{-- Confirmer --}}
