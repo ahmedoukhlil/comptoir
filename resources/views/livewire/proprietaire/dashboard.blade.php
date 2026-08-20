@@ -45,9 +45,9 @@
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     {{ __('caisse.dashboard_solde_total') }}
                 </div>
-                <div class="flex items-baseline gap-2 flex-wrap" dir="ltr">
-                    <span class="font-[family-name:var(--font-mono)] font-bold text-[40px] leading-tight tabular-nums tracking-tight">{{ number_format($this->soldeTotal, 0, ',', ' ') }}</span>
-                    <span class="text-base text-white/90 font-medium">{{ __('caisse.devise') }}</span>
+                <div class="flex items-baseline gap-2.5 flex-wrap" dir="ltr">
+                    <span class="font-[family-name:var(--font-mono)] font-bold text-[40px] leading-[1.15] tabular-nums tracking-tight">{{ number_format($this->soldeTotal, 0, ',', ' ') }}</span>
+                    <span class="text-sm text-white/80 font-semibold uppercase tracking-wide">{{ __('caisse.devise') }}</span>
                 </div>
             </div>
 
@@ -59,16 +59,20 @@
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-4 4 4 4-8 4 8"/></svg>
                             {{ __('caisse.dashboard_operations_jour') }}
                         </div>
-                        <div class="font-[family-name:var(--font-mono)] text-[26px] font-bold text-[color:var(--color-ink)] tabular-nums text-start" dir="ltr">{{ $this->operationsJourTotal }}</div>
-                        <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1">{{ now()->translatedFormat('d/m/Y') }}</div>
+                        <div class="flex items-baseline gap-1.5" dir="ltr">
+                            <span class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-ink)] tabular-nums">{{ $this->operationsJourTotal }}</span>
+                        </div>
+                        <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1.5">{{ now()->translatedFormat('d/m/Y') }}</div>
                     </div>
                     <div class="bg-[color:var(--color-card)] border border-[color:var(--color-line)] rounded-2xl p-4">
                         <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wide font-semibold text-[color:var(--color-ink-soft)] mb-2">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
                             {{ __('caisse.dashboard_benefices_cumules') }}
                         </div>
-                        <div class="font-[family-name:var(--font-mono)] text-[26px] font-bold text-[color:var(--color-green-deep)] tabular-nums text-start" dir="ltr">+{{ number_format($this->beneficesTotal, 0, ',', ' ') }}</div>
-                        <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1">{{ __('caisse.devise') }}</div>
+                        <div class="flex items-baseline gap-1.5" dir="ltr">
+                            <span class="font-[family-name:var(--font-mono)] text-[28px] leading-none font-bold text-[color:var(--color-green-deep)] tabular-nums">+{{ number_format($this->beneficesTotal, 0, ',', ' ') }}</span>
+                        </div>
+                        <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-1.5">{{ __('caisse.devise') }}</div>
                     </div>
                 </div>
 
