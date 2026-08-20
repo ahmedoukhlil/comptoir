@@ -175,6 +175,8 @@ return [
     'operateur_partage_label' => 'حصة نقطة البيع',
     'operateur_partage_aide' => 'النسبة من الرسم الثابت لكل فئة التي تعود لنقطة البيع — الباقي يعود للبنك/المشغل.',
     'operateur_versee_dans_solde_aide' => 'هذا المشغل يضيف حصة نقطة البيع تلقائياً إلى رصيد الصندوق في التطبيق.',
+    'operateur_onglets_bareme' => 'جدول الأسعار حسب نوع العملية',
+    'operateur_beneficiaire_non_defini' => 'جدول المستفيد غير محدد',
     'mon_mot_de_passe' => 'كلمة سري',
     'changer_mot_de_passe_titre' => 'تغيير كلمة السر',
     'mot_de_passe_actuel_label' => 'كلمة السر الحالية',

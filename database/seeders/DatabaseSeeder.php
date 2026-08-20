@@ -63,7 +63,8 @@ class DatabaseSeeder extends Seeder
             'telephone' => '22998877',
         ]);
 
-        $bareme = [
+        $baremeDepot = ['tranches' => []];
+        $baremeRetrait = [
             'tranches' => [
                 ['min' => 0, 'max' => 500, 'frais' => 9],
                 ['min' => 501, 'max' => 1000, 'frais' => 13],
@@ -71,10 +72,10 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        Operateur::create(['nom' => 'Bankily', 'bareme_commission' => $bareme, 'pourcentage_partage_point' => 50]);
-        Operateur::create(['nom' => 'Masrivi', 'bareme_commission' => $bareme, 'pourcentage_partage_point' => 50]);
-        Operateur::create(['nom' => 'Sedad', 'bareme_commission' => $bareme, 'pourcentage_partage_point' => 50]);
-        Operateur::create(['nom' => 'Cash', 'bareme_commission' => ['tranches' => []], 'est_cash' => true]);
+        Operateur::create(['nom' => 'Bankily', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point' => 50]);
+        Operateur::create(['nom' => 'Masrivi', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point' => 50]);
+        Operateur::create(['nom' => 'Sedad', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeRetrait, 'bareme_retrait_beneficiaire' => $baremeDepot, 'pourcentage_partage_point' => 50]);
+        Operateur::create(['nom' => 'Cash', 'bareme_depot' => $baremeDepot, 'bareme_retrait_client' => $baremeDepot, 'bareme_retrait_beneficiaire' => $baremeDepot, 'est_cash' => true]);
 
         // Tenant Solo de démo (essai gratuit en cours), pour tester le
         // verrouillage des écrans multi-points par plan tarifaire.

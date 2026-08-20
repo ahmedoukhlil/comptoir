@@ -20,7 +20,7 @@ class ExportControllerTest extends TestCase
         $tenant = Tenant::create(['nom' => 'T', 'plan' => 'solo', 'statut' => 'actif']);
         $point = Point::create(['tenant_id' => $tenant->id, 'nom' => 'K']);
         $agent = User::factory()->create(['tenant_id' => $tenant->id, 'point_id' => $point->id]);
-        $bankily = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Bankily', 'bareme_commission' => ['tranches' => [['min' => 0, 'max' => null, 'frais' => 100]]], 'pourcentage_partage_point' => 50]);
+        $bankily = Operateur::create(['tenant_id' => $tenant->id, 'nom' => 'Bankily', 'bareme_depot' => ['tranches' => []], 'bareme_retrait_client' => ['tranches' => [['min' => 0, 'max' => null, 'frais' => 100]]], 'bareme_retrait_beneficiaire' => ['tranches' => []], 'pourcentage_partage_point' => 50]);
 
         Operation::create([
             'numero_piece' => 'OP-2026-000001',

@@ -175,6 +175,8 @@ return [
     'operateur_partage_label' => 'Part du point de vente',
     'operateur_partage_aide' => 'Pourcentage du frais fixe de chaque fourchette qui revient au point de vente — le reste revient à la banque/opérateur.',
     'operateur_versee_dans_solde_aide' => 'Cet opérateur reverse automatiquement la part du point de vente sur le solde de la caisse dans l\'application.',
+    'operateur_onglets_bareme' => 'Grille tarifaire par type d\'opération',
+    'operateur_beneficiaire_non_defini' => 'grille bénéficiaire non définie',
     'mon_mot_de_passe' => 'Mon mot de passe',
     'changer_mot_de_passe_titre' => 'Changer mon mot de passe',
     'mot_de_passe_actuel_label' => 'Mot de passe actuel',

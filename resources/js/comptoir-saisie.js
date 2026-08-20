@@ -1,7 +1,18 @@
 import { ajouterOperationLocale, listerOperationsEnAttente, compterEnAttente } from './offline-db.js';
 
-function calculerFrais(operateur, montant) {
-    const tranches = operateur?.bareme_commission?.tranches ?? [];
+// Nom de l'attribut bareme_* correspondant à un type d'opération, en
+// miroir exact de Operateur::attributBareme() côté PHP.
+function attributBareme(typeOperation) {
+    return {
+        depot: 'bareme_depot',
+        retrait: 'bareme_retrait_client',
+        retrait_beneficiaire: 'bareme_retrait_beneficiaire',
+    }[typeOperation];
+}
+
+function calculerFrais(operateur, montant, typeOperation) {
+    const bareme = operateur?.[attributBareme(typeOperation)];
+    const tranches = bareme?.tranches ?? [];
 
     for (const tranche of tranches) {
         const min = tranche.min ?? 0;
@@ -18,8 +29,8 @@ function calculerFrais(operateur, montant) {
 // Répartit le frais fixe entre part point de vente et part banque selon le
 // pourcentage_partage_point propre à l'opérateur — jamais un pourcentage
 // codé en dur ici, en miroir exact de Operateur::repartirCommission().
-function repartirCommission(operateur, montant) {
-    const frais = calculerFrais(operateur, montant);
+function repartirCommission(operateur, montant, typeOperation) {
+    const frais = calculerFrais(operateur, montant, typeOperation);
     const pourcentagePartagePoint = operateur?.pourcentage_partage_point ?? 0;
     const partPoint = Math.round(frais * pourcentagePartagePoint / 100);
 
@@ -73,7 +84,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
 
             const operateur = this.operateurs.find(o => o.id === this.operateurId);
 
-            return operateur ? repartirCommission(operateur, montant).partPoint : 0;
+            return operateur ? repartirCommission(operateur, montant, this.type).partPoint : 0;
         },
 
         init() {
@@ -235,7 +246,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
 
                 const operateur = this.operateurs.find(o => o.id === this.operateurId);
                 const montant = parseInt(this.montant, 10);
-                const repartition = repartirCommission(operateur, montant);
+                const repartition = repartirCommission(operateur, montant, this.type);
 
                 const operation = {
                     uuid_client: crypto.randomUUID(),

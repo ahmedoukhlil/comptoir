@@ -38,7 +38,25 @@
                     </div>
 
                     @unless ($estCash)
-                        <x-proprietaire.tranches-operateur :tranches="$tranches" />
+                        <div>
+                            <div class="flex gap-1.5 mb-3" role="tablist" aria-label="{{ __('caisse.operateur_onglets_bareme') }}">
+                                @foreach (['depot', 'retrait', 'retrait_beneficiaire'] as $type)
+                                    <button
+                                        type="button"
+                                        role="tab"
+                                        aria-selected="{{ $onglet === $type ? 'true' : 'false' }}"
+                                        wire:click="changerOnglet('{{ $type }}')"
+                                        class="flex-1 text-xs font-semibold px-2 py-2 rounded-lg border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] {{ $onglet === $type ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
+                                    >{{ __('caisse.'.$type) }}</button>
+                                @endforeach
+                            </div>
+
+                            @foreach (['depot', 'retrait', 'retrait_beneficiaire'] as $type)
+                                <div @if ($onglet !== $type) style="display:none" @endif>
+                                    <x-proprietaire.tranches-operateur :tranches="$tranchesParType[$type]" :type="$type" />
+                                </div>
+                            @endforeach
+                        </div>
 
                         <div>
                             <label for="operateur-partage" class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>
@@ -75,7 +93,10 @@
                                     <div class="text-sm font-semibold text-[color:var(--color-ink)]">{{ $operateur->nom }}</div>
                                     @unless ($operateur->est_cash)
                                         <div class="text-[11px] text-[color:var(--color-ink-soft)]" dir="ltr">
-                                            {{ count($operateur->bareme_commission['tranches'] ?? []) }} {{ __('caisse.operateur_tranches_compte') }} · {{ $operateur->pourcentage_partage_point }}%
+                                            {{ count($operateur->bareme_retrait_client['tranches'] ?? []) }} {{ __('caisse.operateur_tranches_compte') }} · {{ $operateur->pourcentage_partage_point }}%
+                                            @if (empty($operateur->bareme_retrait_beneficiaire['tranches'] ?? []))
+                                                · <span class="text-[#8C6A1F]">{{ __('caisse.operateur_beneficiaire_non_defini') }}</span>
+                                            @endif
                                             @if ($operateur->commission_versee_dans_solde)
                                                 · <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block align-text-bottom" aria-label="{{ __('caisse.operateur_versee_dans_solde_aide') }}"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
                                             @endif
@@ -124,7 +145,25 @@
                         {{ __('caisse.operateur_modifier_titre') }} — {{ $this->operateurAModifier?->nom }}
                     </div>
 
-                    <x-proprietaire.tranches-operateur :tranches="$tranches" />
+                    <div>
+                        <div class="flex gap-1.5 mb-3" role="tablist" aria-label="{{ __('caisse.operateur_onglets_bareme') }}">
+                            @foreach (['depot', 'retrait', 'retrait_beneficiaire'] as $type)
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    aria-selected="{{ $onglet === $type ? 'true' : 'false' }}"
+                                    wire:click="changerOnglet('{{ $type }}')"
+                                    class="flex-1 text-xs font-semibold px-2 py-2 rounded-lg border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] {{ $onglet === $type ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
+                                >{{ __('caisse.'.$type) }}</button>
+                            @endforeach
+                        </div>
+
+                        @foreach (['depot', 'retrait', 'retrait_beneficiaire'] as $type)
+                            <div @if ($onglet !== $type) style="display:none" @endif>
+                                <x-proprietaire.tranches-operateur :tranches="$tranchesParType[$type]" :type="$type" />
+                            </div>
+                        @endforeach
+                    </div>
 
                     <div>
                         <label for="operateur-modif-partage" class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_partage_label') }}</label>

@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['tenant_id', 'nom', 'bareme_commission', 'est_cash', 'actif', 'pourcentage_partage_point', 'commission_versee_dans_solde'])]
+#[Fillable([
+    'tenant_id', 'nom', 'bareme_depot', 'bareme_retrait_client', 'bareme_retrait_beneficiaire',
+    'est_cash', 'actif', 'pourcentage_partage_point', 'commission_versee_dans_solde',
+])]
 class Operateur extends Model
 {
     /** @use HasFactory<OperateurFactory> */
@@ -17,7 +20,9 @@ class Operateur extends Model
     protected function casts(): array
     {
         return [
-            'bareme_commission' => 'array',
+            'bareme_depot' => 'array',
+            'bareme_retrait_client' => 'array',
+            'bareme_retrait_beneficiaire' => 'array',
             'est_cash' => 'boolean',
             'actif' => 'boolean',
             'pourcentage_partage_point' => 'float',
@@ -46,14 +51,31 @@ class Operateur extends Model
     }
 
     /**
-     * Frais fixe (en MRU) de la tranche correspondant au montant, tel que
-     * défini dans la grille tarifaire de l'opérateur. Ce frais est ensuite
-     * réparti entre le point de vente et la banque via
-     * pourcentage_partage_point — jamais un pourcentage codé en dur.
+     * Nom de l'attribut bareme_* correspondant à un type d'opération.
      */
-    public function calculerFrais(int $montant): int
+    private function attributBareme(string $typeOperation): string
     {
-        foreach ($this->bareme_commission['tranches'] ?? [] as $tranche) {
+        return match ($typeOperation) {
+            'depot' => 'bareme_depot',
+            'retrait' => 'bareme_retrait_client',
+            'retrait_beneficiaire' => 'bareme_retrait_beneficiaire',
+            default => throw new \InvalidArgumentException("Type d'opération inconnu : {$typeOperation}"),
+        };
+    }
+
+    /**
+     * Frais fixe (en MRU) de la tranche correspondant au montant, tel que
+     * défini dans la grille tarifaire propre au type d'opération (le dépôt
+     * est en général gratuit, retrait client et retrait bénéficiaire ont
+     * chacun leur propre grille). Ce frais est ensuite réparti entre le
+     * point de vente et la banque via pourcentage_partage_point — jamais un
+     * pourcentage codé en dur.
+     */
+    public function calculerFrais(int $montant, string $typeOperation): int
+    {
+        $bareme = $this->{$this->attributBareme($typeOperation)};
+
+        foreach ($bareme['tranches'] ?? [] as $tranche) {
             $min = $tranche['min'] ?? 0;
             $max = $tranche['max'] ?? null;
 
@@ -71,9 +93,9 @@ class Operateur extends Model
      *
      * @return array{frais: int, part_point: int, part_banque: int}
      */
-    public function repartirCommission(int $montant): array
+    public function repartirCommission(int $montant, string $typeOperation): array
     {
-        $frais = $this->calculerFrais($montant);
+        $frais = $this->calculerFrais($montant, $typeOperation);
         $partPoint = (int) round($frais * $this->pourcentage_partage_point / 100);
 
         return [

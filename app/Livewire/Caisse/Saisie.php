@@ -37,7 +37,9 @@ class Saisie extends Component
             ->map(fn (Operateur $o) => [
                 'id' => $o->id,
                 'nom' => $o->nom,
-                'bareme_commission' => $o->bareme_commission,
+                'bareme_depot' => $o->bareme_depot,
+                'bareme_retrait_client' => $o->bareme_retrait_client,
+                'bareme_retrait_beneficiaire' => $o->bareme_retrait_beneficiaire,
                 'pourcentage_partage_point' => $o->pourcentage_partage_point,
             ])
             ->values()
@@ -113,7 +115,7 @@ class Saisie extends Component
         }
 
         DB::transaction(function () use ($operateur, $montant, $donnees) {
-            $repartition = $operateur->repartirCommission($montant);
+            $repartition = $operateur->repartirCommission($montant, $donnees['type']);
 
             Operation::create([
                 'numero_piece' => Operation::genererNumeroPiece(),
