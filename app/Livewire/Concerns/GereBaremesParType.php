@@ -19,9 +19,13 @@ trait GereBaremesParType
 
     private const TYPES = ['depot', 'retrait', 'retrait_beneficiaire'];
 
+    // Le dépôt est toujours gratuit : aucun onglet éditable pour lui, sa
+    // grille reste vide en base sans passer par le formulaire.
+    private const TYPES_EDITABLES = ['retrait', 'retrait_beneficiaire'];
+
     private const TRANCHE_VIDE = ['min' => '0', 'max' => '', 'frais' => ''];
 
-    public string $onglet = 'depot';
+    public string $onglet = 'retrait';
 
     /** @var array<string, array<int, array{min: string, max: string, frais: string}>> */
     public array $tranchesParType = [];
@@ -51,7 +55,7 @@ trait GereBaremesParType
 
     public function changerOnglet(string $type): void
     {
-        if (in_array($type, self::TYPES, true)) {
+        if (in_array($type, self::TYPES_EDITABLES, true)) {
             $this->onglet = $type;
         }
     }
@@ -109,7 +113,7 @@ trait GereBaremesParType
 
         $regles = [];
 
-        foreach (self::TYPES as $type) {
+        foreach (self::TYPES_EDITABLES as $type) {
             // Une tranche jamais remplie (placeholder min=0/max=''/frais='',
             // ex: un onglet encore sans grille comme retrait bénéficiaire)
             // doit rester valide : seules les lignes où l'utilisateur a
@@ -126,7 +130,7 @@ trait GereBaremesParType
 
     private function baremeDepuisFormulaire(string $type, bool $estCash): array
     {
-        if ($estCash) {
+        if ($estCash || $type === 'depot') {
             return ['tranches' => []];
         }
 
@@ -150,6 +154,6 @@ trait GereBaremesParType
 
     private function pourcentageDepuisFormulaire(string $type, bool $estCash): float
     {
-        return $estCash ? 0 : (float) ($this->pourcentagesParType[$type] ?? 0);
+        return ($estCash || $type === 'depot') ? 0 : (float) ($this->pourcentagesParType[$type] ?? 0);
     }
 }

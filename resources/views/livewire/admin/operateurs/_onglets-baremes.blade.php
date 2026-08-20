@@ -1,6 +1,6 @@
 <div>
     <div class="flex gap-1.5 mb-3" role="tablist" aria-label="{{ __('caisse.operateur_onglets_bareme') }}">
-        @foreach (['depot', 'retrait', 'retrait_beneficiaire'] as $type)
+        @foreach (['retrait', 'retrait_beneficiaire'] as $type)
             <button
                 type="button"
                 role="tab"
