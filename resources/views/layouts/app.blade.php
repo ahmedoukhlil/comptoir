@@ -18,6 +18,7 @@
 
     <x-bandeau-essai />
     {{ $slot }}
+    <x-bouton-installer-pwa />
     @livewireScripts
     <script>
         window.ComptoirTraductions = {
