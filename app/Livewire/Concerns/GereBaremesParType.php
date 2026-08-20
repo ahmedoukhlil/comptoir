@@ -110,10 +110,14 @@ trait GereBaremesParType
         $regles = [];
 
         foreach (self::TYPES as $type) {
+            // Une tranche jamais remplie (placeholder min=0/max=''/frais='',
+            // ex: un onglet encore sans grille comme retrait bénéficiaire)
+            // doit rester valide : seules les lignes où l'utilisateur a
+            // renseigné un frais sont réellement validées comme entiers.
             $regles["tranchesParType.{$type}"] = ['required', 'array', 'min:1'];
             $regles["tranchesParType.{$type}.*.min"] = ['required', 'integer', 'min:0'];
             $regles["tranchesParType.{$type}.*.max"] = ['nullable', 'integer', 'min:0'];
-            $regles["tranchesParType.{$type}.*.frais"] = ['required', 'integer', 'min:0'];
+            $regles["tranchesParType.{$type}.*.frais"] = ['nullable', 'integer', 'min:0'];
             $regles["pourcentagesParType.{$type}"] = ['required', 'numeric', 'min:0', 'max:100'];
         }
 
