@@ -28,16 +28,6 @@
 
             return gabarit.replace(':montant', montant);
         },
-        taper(c) {
-            const actuel = this.soldeCompteActuel;
-            if (String(actuel).length >= 9) return;
-            this.soldesComptes[this.operateurActuel.id] = String(parseInt((actuel || '0') + c, 10));
-        },
-        effacer() { this.soldesComptes[this.operateurActuel.id] = ''; },
-        effacerDernier() {
-            const actuel = String(this.soldeCompteActuel || '');
-            this.soldesComptes[this.operateurActuel.id] = actuel.length > 1 ? actuel.slice(0, -1) : '';
-        },
         suivant() { if (this.index < this.operateurs.length - 1) this.index++; },
         precedent() { if (this.index > 0) this.index--; },
         async cloturer() {
@@ -145,9 +135,20 @@
                         <div class="font-[family-name:var(--font-mono)] font-bold text-3xl text-[color:var(--color-ink)] mt-1" dir="ltr" x-text="formaterMontant(operateurActuel.soldeTheorique)"></div>
                     </div>
 
-                    <div class="text-center mt-6 px-1">
-                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide">{{ __('caisse.cloture_solde_compte') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" dir="ltr" x-text="soldeCompteActuel !== '' ? formaterMontant(soldeCompteActuel) : '0'"></div>
+                    <div class="mt-6 px-1">
+                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.cloture_solde_compte') }}</div>
+                        <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 max-w-[340px] mx-auto focus-within:border-[color:var(--color-ink)]">
+                            <input
+                                type="text"
+                                inputmode="numeric"
+                                :value="soldeCompteActuel"
+                                x-on:input="soldesComptes[operateurActuel.id] = $event.target.value.replace(/\D/g, '').slice(0, 9)"
+                                placeholder="0"
+                                dir="ltr"
+                                class="flex-1 min-w-0 border-none bg-transparent outline-none font-[family-name:var(--font-mono)] font-bold text-[32px] text-[color:var(--color-ink)] tabular-nums text-end placeholder:text-[color:var(--color-ink-soft)]/50"
+                            >
+                            <span class="text-sm font-semibold text-[color:var(--color-ink-soft)] flex-shrink-0">{{ __('caisse.devise') }}</span>
+                        </div>
                         <div
                             x-show="soldeCompteActuel !== '' && ! ecartActuelImportant"
                             x-cloak
@@ -167,21 +168,6 @@
                             <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm text-[color:var(--color-rust-deep)]" x-text="texteEcart(ecartActuel)"></div>
                             <div class="text-xs text-[color:var(--color-rust-deep)] mt-0.5">{{ __('caisse.cloture_ecart_important') }}</div>
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2.5 mt-4 max-w-[340px] mx-auto" dir="ltr">
-                        <template x-for="chiffre in ['1','2','3','4','5','6','7','8','9']" :key="chiffre">
-                            <button
-                                type="button"
-                                x-on:click="taper(chiffre)"
-                                x-text="chiffre"
-                                class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
-                            ></button>
-                        </template>
-                        <button type="button" x-on:click="effacerDernier()" aria-label="{{ __('caisse.effacer_dernier') }}" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 flex items-center justify-center text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg></button>
-                        <button type="button" x-on:click="taper('0')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] hover:border-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">0</button>
-                        <button type="button" x-on:click="taper('000')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-ink)] hover:text-[color:var(--color-ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">000</button>
-                        <button type="button" x-on:click="effacer()" class="col-span-3 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-2xl py-3 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-xs font-bold text-[color:var(--color-ink-soft)] hover:border-[color:var(--color-rust-deep)] hover:text-[color:var(--color-rust-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition">{{ __('caisse.effacer_tout') }}</button>
                     </div>
 
                     {{-- Navigation entre opérateurs / clôture --}}

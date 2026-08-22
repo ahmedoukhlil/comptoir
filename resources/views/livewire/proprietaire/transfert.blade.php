@@ -15,11 +15,6 @@
         async chargerSoldes() {
             this.soldes = await this.$wire.soldesDuPoint(this.pointId);
         },
-        taper(c) {
-            if (this.montant.length >= 9) return;
-            this.montant = String(parseInt((this.montant || '0') + c, 10));
-        },
-        effacer() { this.montant = ''; },
         ouvrirConfirmation() {
             if (this.montant === '' || parseInt(this.montant, 10) <= 0 || this.sourceId === this.destinationId) return;
             this.confirmationOuverte = true;
@@ -104,23 +99,20 @@
                 <p class="text-[11px] text-[color:var(--color-ink-soft)] -mt-4 mb-6" x-show="sourceId === destinationId" x-cloak>{{ __('caisse.transfert_choisir_destination_differente') }}</p>
 
                 {{-- Montant --}}
-                <div class="text-center mb-2 px-1">
-                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide">{{ __('caisse.transfert_montant_label') }}</div>
-                    <div class="font-[family-name:var(--font-mono)] font-bold text-[48px] text-[color:var(--color-ink)] tabular-nums leading-none mt-1.5" x-text="montant !== '' ? formaterMontant(montant) : '0'"></div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2.5 mt-4 max-w-[340px] mx-auto" dir="ltr">
-                    <template x-for="chiffre in ['1','2','3','4','5','6','7','8','9']" :key="chiffre">
-                        <button
-                            type="button"
-                            x-on:click="taper(chiffre)"
-                            x-text="chiffre"
-                            class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] transition"
-                        ></button>
-                    </template>
-                    <button type="button" x-on:click="effacer()" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)]">{{ __('caisse.effacer') }}</button>
-                    <button type="button" x-on:click="taper('0')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-mono)] text-xl font-bold text-[color:var(--color-ink)] active:scale-95 active:bg-[color:var(--color-sand-deep)] transition">0</button>
-                    <button type="button" x-on:click="taper('000')" class="bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl py-4.5 text-center font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-bold text-[color:var(--color-ink-soft)]">000</button>
+                <div class="mt-2 px-1">
+                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.transfert_montant_label') }}</div>
+                    <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 max-w-[340px] mx-auto focus-within:border-[color:var(--color-ink)]">
+                        <input
+                            type="text"
+                            inputmode="numeric"
+                            x-model="montant"
+                            x-on:input="montant = $event.target.value.replace(/\D/g, '').slice(0, 9)"
+                            placeholder="0"
+                            dir="ltr"
+                            class="flex-1 min-w-0 border-none bg-transparent outline-none font-[family-name:var(--font-mono)] font-bold text-[32px] text-[color:var(--color-ink)] tabular-nums text-end placeholder:text-[color:var(--color-ink-soft)]/50"
+                        >
+                        <span class="text-sm font-semibold text-[color:var(--color-ink-soft)] flex-shrink-0">{{ __('caisse.devise') }}</span>
+                    </div>
                 </div>
 
                 <div class="mt-4">
