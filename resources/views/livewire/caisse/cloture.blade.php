@@ -130,6 +130,8 @@
                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-lg text-[color:var(--color-ink)]" x-text="operateurActuel.nom"></div>
                     </div>
 
+                    <p class="text-center text-sm text-[color:var(--color-ink-soft)] max-w-[320px] mx-auto mb-6">{{ __('caisse.cloture_aide') }}</p>
+
                     <div class="text-center mb-6">
                         <div class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-ink-soft)]">{{ __('caisse.cloture_solde_theorique') }}</div>
                         <div class="font-[family-name:var(--font-mono)] font-bold text-3xl text-[color:var(--color-ink)] mt-1" dir="ltr" x-text="formaterMontant(operateurActuel.soldeTheorique)"></div>

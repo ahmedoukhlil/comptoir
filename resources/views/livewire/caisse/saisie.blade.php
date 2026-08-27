@@ -18,25 +18,29 @@
                     <strong class="block text-sm font-semibold text-[color:var(--color-ink)] truncate">{{ $this->point->nom }}</strong>
                     <span class="block text-[11px] text-[color:var(--color-ink-soft)] mt-0.5">{{ now()->translatedFormat('l d F Y') }}</span>
                 </div>
-                <div class="flex items-center gap-2 flex-shrink-0">
+                <div class="flex items-start gap-1.5 flex-shrink-0">
                     <x-selecteur-langue-claire />
-                    <a href="{{ route('caisse.historique') }}" class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.historique_titre') }}">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+                    <a href="{{ route('caisse.historique') }}" class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.historique_titre') }}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+                        <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_historique') }}</span>
                     </a>
                     @if (auth()->user()->estProprietaire())
-                        <a href="{{ route('proprietaire.agents') }}" class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        <a href="{{ route('proprietaire.agents') }}" class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                            <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_agents') }}</span>
                         </a>
                     @endif
-                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                    <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                        <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_mot_de_passe') }}</span>
                     </a>
                     <button
                         onclick="document.getElementById('logout-form').submit()"
-                        class="w-11 h-11 rounded-xl border-[1.5px] border-[color:var(--color-rust)]/40 bg-[color:var(--color-card)] flex items-center justify-center text-[color:var(--color-rust-deep)] hover:border-[color:var(--color-rust-deep)] hover:bg-[color:var(--color-rust)]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-rust-deep)] transition"
+                        class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-rust)]/40 bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-rust-deep)] hover:border-[color:var(--color-rust-deep)] hover:bg-[color:var(--color-rust)]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-rust-deep)] transition"
                         aria-label="{{ __('caisse.deconnexion') }}"
                     >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_deconnexion') }}</span>
                     </button>
                 </div>
             </div>
@@ -333,6 +337,23 @@
                         ><span x-show="! enConfirmation">{{ __('caisse.confirmation_valider') }}</span><span x-show="enConfirmation" x-cloak>…</span></button>
                     </div>
                 </div>
+            </div>
+
+            {{-- Toast de confirmation après une opération réussie --}}
+            <div
+                x-show="toastVisible"
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                role="status"
+                class="fixed bottom-24 md:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 z-40 flex items-center gap-2 bg-[color:var(--color-green-deep)] text-white text-sm font-semibold rounded-full px-5 py-3 shadow-xl"
+            >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                {{ __('caisse.operation_reussie') }}
             </div>
         </div>
     </div>

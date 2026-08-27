@@ -60,6 +60,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
         erreurLocale: '',
         enConfirmation: false,
         confirmationOuverte: false,
+        toastVisible: false,
 
         // Aucune présélection par défaut : l'agent doit choisir explicitement
         // le type d'opération et l'opérateur à chaque saisie, pour éviter
@@ -173,6 +174,11 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
             this.optionnelOuvert = false;
         },
 
+        afficherToastSucces() {
+            this.toastVisible = true;
+            setTimeout(() => { this.toastVisible = false; }, 2500);
+        },
+
         validerChamps() {
             const t = window.ComptoirTraductions ?? {};
             const arabe = document.documentElement.lang === 'ar';
@@ -257,6 +263,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
                     }
 
                     this.reinitialiserFormulaire();
+                    this.afficherToastSucces();
 
                     return;
                 }
@@ -284,6 +291,7 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
                 await this.chargerOperationsLocales();
                 this.enAttente = await compterEnAttente();
                 this.reinitialiserFormulaire();
+                this.afficherToastSucces();
             } finally {
                 this.enConfirmation = false;
                 this.confirmationOuverte = false;
