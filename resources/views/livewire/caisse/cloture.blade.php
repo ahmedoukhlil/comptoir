@@ -195,7 +195,7 @@
                             class="flex-1 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white bg-[color:var(--color-ink)] shadow-lg disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                         >{{ __('caisse.cloture_confirmer') }}</button>
                     </div>
-                    <p x-show="erreur" x-cloak x-text="erreur" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
+                    <p x-show="erreur" x-cloak x-text="erreur" role="alert" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
 
                     <div class="text-center mt-8">
                         <a href="{{ route('caisse.saisie') }}" class="text-sm font-semibold text-[color:var(--color-ink-soft)] underline">
@@ -205,7 +205,12 @@
 
                     {{-- Modale de confirmation --}}
                     <template x-teleport="body">
-                        <div x-show="confirmationOuverte" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4">
+                        <div
+                            x-show="confirmationOuverte"
+                            x-cloak
+                            x-on:keydown.escape.window="confirmationOuverte = false"
+                            class="fixed inset-0 z-50 flex items-center justify-center px-4"
+                        >
                             <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" x-on:click="confirmationOuverte = false"></div>
 
                             <div
@@ -213,6 +218,8 @@
                                 x-transition:enter="transition ease-out duration-150"
                                 x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
+                                role="dialog"
+                                aria-modal="true"
                                 class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
                             >
                                 <div class="p-6">

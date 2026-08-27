@@ -19,26 +19,36 @@
 
             <div class="px-5 py-6 md:px-9 md:py-8">
                 {{-- Filtres --}}
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <button
-                        type="button"
-                        wire:click="$set('operateurId', null)"
-                        class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ ! $operateurId ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}"
-                    >{{ __('caisse.historique_tous') }}</button>
-                    @foreach ($this->operateurs as $operateur)
+                <div class="mb-4">
+                    <div class="text-[11px] font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-1.5">{{ __('caisse.historique_operateur') }}</div>
+                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ __('caisse.historique_operateur') }}">
                         <button
                             type="button"
-                            wire:click="$set('operateurId', {{ $operateur->id }})"
-                            class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $operateurId === $operateur->id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}"
-                        >{{ $operateur->nom }}</button>
-                    @endforeach
+                            role="radio"
+                            aria-checked="{{ ! $operateurId ? 'true' : 'false' }}"
+                            wire:click="$set('operateurId', null)"
+                            class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ ! $operateurId ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}"
+                        >{{ __('caisse.historique_tous') }}</button>
+                        @foreach ($this->operateurs as $operateur)
+                            <button
+                                type="button"
+                                role="radio"
+                                aria-checked="{{ $operateurId === $operateur->id ? 'true' : 'false' }}"
+                                wire:click="$set('operateurId', {{ $operateur->id }})"
+                                class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $operateurId === $operateur->id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}"
+                            >{{ $operateur->nom }}</button>
+                        @endforeach
+                    </div>
+                </div>
 
-                    <span class="w-px bg-[color:var(--color-line)] mx-1"></span>
-
-                    <button type="button" wire:click="$set('type', '')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === '' ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.historique_tous') }}</button>
-                    <button type="button" wire:click="$set('type', 'depot')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'depot' ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.depot') }}</button>
-                    <button type="button" wire:click="$set('type', 'retrait')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait') }}</button>
-                    <button type="button" wire:click="$set('type', 'retrait_beneficiaire')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait_beneficiaire' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait_beneficiaire') }}</button>
+                <div class="mb-4">
+                    <div class="text-[11px] font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-1.5">{{ __('caisse.historique_type') }}</div>
+                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ __('caisse.historique_type') }}">
+                        <button type="button" role="radio" aria-checked="{{ $type === '' ? 'true' : 'false' }}" wire:click="$set('type', '')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === '' ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.historique_tous') }}</button>
+                        <button type="button" role="radio" aria-checked="{{ $type === 'depot' ? 'true' : 'false' }}" wire:click="$set('type', 'depot')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'depot' ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.depot') }}</button>
+                        <button type="button" role="radio" aria-checked="{{ $type === 'retrait' ? 'true' : 'false' }}" wire:click="$set('type', 'retrait')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait') }}</button>
+                        <button type="button" role="radio" aria-checked="{{ $type === 'retrait_beneficiaire' ? 'true' : 'false' }}" wire:click="$set('type', 'retrait_beneficiaire')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait_beneficiaire' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait_beneficiaire') }}</button>
+                    </div>
                 </div>
 
                 <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-xl px-4 py-2.5 mb-4 max-w-sm">

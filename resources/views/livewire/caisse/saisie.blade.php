@@ -83,9 +83,11 @@
                     {{-- Colonne formulaire --}}
                     <div>
                         {{-- Bascule dépôt/retrait --}}
-                        <div class="flex flex-col bg-[color:var(--color-sand-deep)] rounded-2xl p-1.5 gap-1.5">
+                        <div class="flex flex-col bg-[color:var(--color-sand-deep)] rounded-2xl p-1.5 gap-1.5" role="radiogroup" aria-label="{{ __('caisse.operateur_label') }}">
                             <button
                                 type="button"
+                                role="radio"
+                                :aria-checked="(type === 'depot').toString()"
                                 x-on:click="type = 'depot'"
                                 class="w-full py-4 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                 :class="type === 'depot' ? 'border-transparent bg-[color:var(--color-green)] text-white shadow-lg shadow-green-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
@@ -95,6 +97,8 @@
                             <div class="flex gap-1.5">
                                 <button
                                     type="button"
+                                    role="radio"
+                                    :aria-checked="(type === 'retrait').toString()"
                                     x-on:click="type = 'retrait'"
                                     class="flex-1 py-3.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                     :class="type === 'retrait' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
@@ -103,6 +107,8 @@
                                 </button>
                                 <button
                                     type="button"
+                                    role="radio"
+                                    :aria-checked="(type === 'retrait_beneficiaire').toString()"
                                     x-on:click="type = 'retrait_beneficiaire'"
                                     class="flex-1 py-3.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                     :class="type === 'retrait_beneficiaire' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
@@ -114,10 +120,12 @@
 
                         {{-- Opérateur --}}
                         <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mt-6 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operateur_label') }}</div>
-                        <div class="flex gap-2">
+                        <div class="flex gap-2" role="radiogroup" aria-label="{{ __('caisse.operateur_label') }}">
                             <template x-for="operateur in operateurs" :key="operateur.id">
                                 <button
                                     type="button"
+                                    role="radio"
+                                    :aria-checked="(operateurId === operateur.id).toString()"
                                     x-on:click="operateurId = operateur.id"
                                     class="flex-1 text-center py-3.5 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                     :class="operateurId === operateur.id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-sand)]' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
@@ -182,14 +190,14 @@
                         <button
                             type="button"
                             x-on:click="ouvrirConfirmation()"
-                            :disabled="enConfirmation"
+                            :disabled="enConfirmation || ! formulaireValide"
                             class="w-full md:max-w-[340px] mt-4 rounded-2xl py-[19px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white flex items-center justify-center gap-2 transition disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             :class="! type ? 'bg-[color:var(--color-ink-soft)]' : (type === 'depot' ? 'bg-[color:var(--color-green-deep)] shadow-lg shadow-green-900/25' : 'bg-[color:var(--color-rust-deep)] shadow-lg shadow-rust-900/25')"
                         >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
                             {{ __('caisse.confirmer') }}
                         </button>
-                        <p x-show="erreurLocale" x-cloak x-text="erreurLocale" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
+                        <p x-show="erreurLocale" x-cloak x-text="erreurLocale" role="alert" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
                     </div>
 
                     {{-- Colonne historique --}}
@@ -265,7 +273,12 @@
             </div>
 
             {{-- Modale de confirmation avant opération --}}
-            <div x-show="confirmationOuverte" x-cloak class="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div
+                x-show="confirmationOuverte"
+                x-cloak
+                x-on:keydown.escape.window="fermerConfirmation()"
+                class="fixed inset-0 z-50 flex items-center justify-center px-4"
+            >
                 <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" x-on:click="fermerConfirmation()"></div>
 
                 <div
@@ -273,6 +286,8 @@
                     x-transition:enter="transition ease-out duration-150"
                     x-transition:enter-start="opacity-0 scale-95"
                     x-transition:enter-end="opacity-100 scale-100"
+                    role="dialog"
+                    aria-modal="true"
                     class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
                 >
                     <div class="p-6">

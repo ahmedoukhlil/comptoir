@@ -90,6 +90,10 @@ export default function comptoirSaisie({ point, operateurs, soldesServeur, solde
             return this.soldeTotalServeur + impactLocal;
         },
 
+        get formulaireValide() {
+            return this.validerChamps() === null;
+        },
+
         get commissionActuelle() {
             const montant = parseInt(this.montant || '0', 10);
 
