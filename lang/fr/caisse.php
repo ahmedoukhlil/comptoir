@@ -217,8 +217,10 @@ return [
     'guide_saisie_4' => 'Entrez le montant ici.',
     'guide_saisie_5' => 'Vérifiez les informations affichées, puis confirmez. Une fois confirmée, l\'opération ne peut plus être annulée.',
     'guide_dashboard_1' => 'Voici le total de l\'argent disponible sur tous vos points de vente.',
-    'guide_dashboard_2' => 'Utilisez ces boutons pour ajouter de l\'argent dans une caisse ou en déplacer entre deux caisses.',
-    'guide_dashboard_3' => 'Chaque point apparaît ici avec son solde. Une clôture manquante ou un écart de caisse sont signalés par un bandeau de couleur.',
+    'guide_dashboard_2' => 'Le nombre d\'opérations du jour et les bénéfices cumulés sur l\'ensemble de vos points.',
+    'guide_dashboard_3' => 'Utilisez ces boutons pour ajouter de l\'argent dans une caisse ou en déplacer entre deux caisses.',
+    'guide_dashboard_4' => 'Consultez vos rapports, gérez vos agents et vos opérateurs mobile money depuis ces raccourcis.',
+    'guide_dashboard_5' => 'Chaque point apparaît ici avec son solde. Une clôture manquante ou un écart de caisse sont signalés par un bandeau de couleur.',
 
     'guide_cloture_1' => 'Cet écran vous fait passer chaque opérateur un par un pour clôturer la journée.',
     'guide_cloture_2' => 'Voici le solde théorique calculé par l\'application pour cet opérateur, d\'après les opérations du jour.',

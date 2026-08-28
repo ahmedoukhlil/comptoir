@@ -62,7 +62,7 @@
 
             <div class="px-5 md:px-9 pb-6">
                 {{-- Cartes stats --}}
-                <div class="grid grid-cols-2 gap-3 mt-4">
+                <div id="guide-cible-stats" class="grid grid-cols-2 gap-3 mt-4">
                     <div class="bg-[color:var(--color-card)] border border-[color:var(--color-line)] rounded-2xl p-4">
                         <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wide font-semibold text-[color:var(--color-ink-soft)] mb-2">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-4 4 4 4-8 4 8"/></svg>
@@ -97,7 +97,7 @@
                 </div>
 
                 {{-- Actions secondaires --}}
-                <div class="mt-5">
+                <div id="guide-cible-actions-secondaires" class="mt-5">
                     <p class="text-[11px] uppercase tracking-wide font-bold text-[color:var(--color-ink-soft)] mb-2">{{ __('caisse.section_rapports_gestion') }}</p>
                     <div class="grid grid-cols-2 gap-2">
                         <a href="{{ route('proprietaire.rapport') }}" class="flex flex-col items-start justify-center gap-1.5 min-h-[76px] px-4 py-3 rounded-2xl bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink)]">
@@ -233,8 +233,10 @@
         :visible-initial="$this->guideAAfficher"
         :etapes="[
             ['cible' => '#guide-cible-solde-total', 'texte' => __('caisse.guide_dashboard_1')],
-            ['cible' => '#guide-cible-actions', 'texte' => __('caisse.guide_dashboard_2')],
-            ['cible' => '#guide-cible-points', 'texte' => __('caisse.guide_dashboard_3')],
+            ['cible' => '#guide-cible-stats', 'texte' => __('caisse.guide_dashboard_2')],
+            ['cible' => '#guide-cible-actions', 'texte' => __('caisse.guide_dashboard_3')],
+            ['cible' => '#guide-cible-actions-secondaires', 'texte' => __('caisse.guide_dashboard_4')],
+            ['cible' => '#guide-cible-points', 'texte' => __('caisse.guide_dashboard_5')],
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />
