@@ -43,20 +43,6 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
-
-            // Quand une nouvelle version du service worker prend le controle
-            // (apres deploiement), les anciens assets peuvent rester en
-            // memoire dans l'onglet deja ouvert (surtout sur iOS Safari) :
-            // on recharge une seule fois pour repartir sur le nouveau code.
-            let rechargementDejaDeclenche = false;
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                if (rechargementDejaDeclenche) {
-                    return;
-                }
-
-                rechargementDejaDeclenche = true;
-                window.location.reload();
-            });
         }
         document.addEventListener('livewire:init', () => {
             Livewire.on('langue-changee', ({ locale }) => {
