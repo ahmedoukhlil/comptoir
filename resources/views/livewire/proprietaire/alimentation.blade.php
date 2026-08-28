@@ -51,12 +51,20 @@
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
                 <div class="flex items-start justify-between">
                     <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white">{{ __('caisse.alimentation_titre') }}</span>
-                    <x-selecteur-langue />
+                    <div class="flex items-center gap-2">
+                        <x-selecteur-langue />
+                        <button
+                            type="button"
+                            x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'alimentation' } }))"
+                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            aria-label="{{ __('caisse.guide_revoir') }}"
+                        >?</button>
+                    </div>
                 </div>
             </div>
 
             <div class="px-5 py-6 md:px-9 md:py-8">
-                <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_point_label') }}</div>
+                <div id="guide-cible-alimentation-point" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_point_label') }}</div>
                 <div class="flex flex-wrap gap-2 mb-6">
                     @foreach ($this->points as $point)
                         <button
@@ -68,7 +76,7 @@
                     @endforeach
                 </div>
 
-                <div class="flex flex-col gap-2.5">
+                <div id="guide-cible-alimentation-montants" class="flex flex-col gap-2.5">
                     @foreach ($this->operateurs as $operateur)
                         <div class="flex items-center gap-3 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-xl px-4 py-3">
                             <div class="w-24 flex-shrink-0 flex items-center gap-1.5 text-sm font-bold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
@@ -105,6 +113,7 @@
                 </div>
 
                 <button
+                    id="guide-cible-alimentation-confirmer"
                     type="button"
                     x-on:click="ouvrirConfirmation()"
                     :disabled="enConfirmation || total <= 0"
@@ -189,4 +198,15 @@
             </div>
         </div>
     </div>
+
+    <x-guide-decouverte
+        groupe="alimentation"
+        :visible-initial="$this->guideAAfficher"
+        :etapes="[
+            ['cible' => '#guide-cible-alimentation-point', 'texte' => __('caisse.guide_alimentation_1')],
+            ['cible' => '#guide-cible-alimentation-montants', 'texte' => __('caisse.guide_alimentation_2')],
+            ['cible' => '#guide-cible-alimentation-confirmer', 'texte' => __('caisse.guide_alimentation_3')],
+        ]"
+        wire-termine="$wire.marquerGuideVu()"
+    />
 </div>

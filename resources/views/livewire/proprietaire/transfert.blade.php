@@ -48,7 +48,15 @@
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
                 <div class="flex items-start justify-between">
                     <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white">{{ __('caisse.transfert_titre') }}</span>
-                    <x-selecteur-langue />
+                    <div class="flex items-center gap-2">
+                        <x-selecteur-langue />
+                        <button
+                            type="button"
+                            x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'transfert' } }))"
+                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            aria-label="{{ __('caisse.guide_revoir') }}"
+                        >?</button>
+                    </div>
                 </div>
             </div>
 
@@ -66,7 +74,7 @@
                 </div>
 
                 {{-- Source --}}
-                <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_source_label') }}</div>
+                <div id="guide-cible-transfert-source" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_source_label') }}</div>
                 <div class="flex flex-wrap gap-2 mb-1.5">
                     <template x-for="operateur in operateurs" :key="'src-' + operateur.id">
                         <button
@@ -83,7 +91,7 @@
                 </div>
 
                 {{-- Destination --}}
-                <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_destination_label') }}</div>
+                <div id="guide-cible-transfert-destination" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_destination_label') }}</div>
                 <div class="flex flex-wrap gap-2 mb-6">
                     <template x-for="operateur in operateurs" :key="'dst-' + operateur.id">
                         <button
@@ -99,7 +107,7 @@
                 <p class="text-[11px] text-[color:var(--color-ink-soft)] -mt-4 mb-6" x-show="sourceId === destinationId" x-cloak>{{ __('caisse.transfert_choisir_destination_differente') }}</p>
 
                 {{-- Montant --}}
-                <div class="mt-2 px-1">
+                <div id="guide-cible-transfert-montant" class="mt-2 px-1">
                     <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.transfert_montant_label') }}</div>
                     <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 max-w-[340px] mx-auto focus-within:border-[color:var(--color-ink)]">
                         <input
@@ -211,4 +219,15 @@
             </div>
         </div>
     </div>
+
+    <x-guide-decouverte
+        groupe="transfert"
+        :visible-initial="$this->guideAAfficher"
+        :etapes="[
+            ['cible' => '#guide-cible-transfert-source', 'texte' => __('caisse.guide_transfert_1')],
+            ['cible' => '#guide-cible-transfert-destination', 'texte' => __('caisse.guide_transfert_2')],
+            ['cible' => '#guide-cible-transfert-montant', 'texte' => __('caisse.guide_transfert_3')],
+        ]"
+        wire-termine="$wire.marquerGuideVu()"
+    />
 </div>

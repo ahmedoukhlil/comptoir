@@ -224,4 +224,23 @@ return [
     'guide_cloture_2' => 'Voici le solde théorique calculé par l\'application pour cet opérateur, d\'après les opérations du jour.',
     'guide_cloture_3' => 'Comptez l\'argent réellement présent dans la caisse pour cet opérateur, et entrez le montant ici.',
     'guide_cloture_4' => 'Passez à l\'opérateur suivant, ou confirmez la clôture une fois tous les opérateurs saisis.',
+
+    'guide_agents_1' => 'Choisissez le point de vente auquel rattacher le nouvel agent.',
+    'guide_agents_2' => 'Entrez son nom et son numéro de téléphone : ils lui serviront à se connecter.',
+    'guide_agents_3' => 'Choisissez son rôle : agent (accès à la caisse) ou propriétaire (accès à tout le tableau de bord).',
+    'guide_agents_4' => 'Retrouvez ici tous vos agents déjà créés, avec leur point de vente et leur rôle.',
+
+    'guide_alimentation_1' => 'Choisissez le point de vente à alimenter.',
+    'guide_alimentation_2' => 'Entrez le montant à ajouter pour chaque opérateur.',
+    'guide_alimentation_3' => 'Vérifiez le total, puis confirmez l\'alimentation.',
+
+    'guide_transfert_1' => 'Choisissez l\'opérateur depuis lequel l\'argent va sortir.',
+    'guide_transfert_2' => 'Choisissez l\'opérateur qui va recevoir l\'argent.',
+    'guide_transfert_3' => 'Entrez le montant à transférer entre les deux opérateurs.',
+
+    'guide_rapport_1' => 'Choisissez la période à consulter : jour, semaine ou mois.',
+    'guide_rapport_2' => 'Exportez le rapport en Excel ou en PDF pour le partager ou l\'archiver.',
+    'guide_rapport_3' => 'Le détail par point de vente montre le capital injecté et les commissions générées.',
+
+    'guide_operateurs_1' => 'Activez ou désactivez un opérateur pour le rendre disponible (ou non) à la saisie sur vos points de vente.',
 ];

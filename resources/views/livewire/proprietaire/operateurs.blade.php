@@ -5,7 +5,16 @@
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
                 <div class="flex items-start justify-between">
                     <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white">{{ __('caisse.operateurs_titre') }}</span>
-                    <x-selecteur-langue />
+                    <div class="flex items-center gap-2">
+                        <x-selecteur-langue />
+                        <button
+                            type="button"
+                            x-data
+                            x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'operateurs' } }))"
+                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            aria-label="{{ __('caisse.guide_revoir') }}"
+                        >?</button>
+                    </div>
                 </div>
             </div>
 
@@ -13,7 +22,7 @@
                 @error('lectureSeule') <p class="text-xs text-[color:var(--color-rust-deep)] mb-3">{{ $message }}</p> @enderror
 
                 <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-3 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operateurs_liste_titre') }}</div>
-                <div class="divide-y divide-dashed divide-[color:var(--color-line)]">
+                <div id="guide-cible-operateurs-liste" class="divide-y divide-dashed divide-[color:var(--color-line)]">
                     @forelse ($this->operateurs as $operateur)
                         @php($actifPourTenant = (bool) $operateur->tenants->first()?->pivot->actif)
                         <div class="flex items-center justify-between py-2.5 {{ ! $actifPourTenant ? 'opacity-50' : '' }}">
@@ -41,4 +50,13 @@
             </div>
         </div>
     </div>
+
+    <x-guide-decouverte
+        groupe="operateurs"
+        :visible-initial="$this->guideAAfficher"
+        :etapes="[
+            ['cible' => '#guide-cible-operateurs-liste', 'texte' => __('caisse.guide_operateurs_1')],
+        ]"
+        wire-termine="$wire.marquerGuideVu()"
+    />
 </div>

@@ -19,6 +19,17 @@ class Rapport extends Component
     public string $periode = 'jour';
 
     #[Computed]
+    public function guideAAfficher(): bool
+    {
+        return Auth::user()->guide_vu_le === null;
+    }
+
+    public function marquerGuideVu(): void
+    {
+        Auth::user()->forceFill(['guide_vu_le' => now()])->save();
+    }
+
+    #[Computed]
     public function tenant()
     {
         return Auth::user()->tenant;
