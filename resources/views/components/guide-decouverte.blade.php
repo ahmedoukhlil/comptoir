@@ -16,7 +16,7 @@
 
     <div
         class="fixed z-[52] w-[280px] bg-[color:var(--color-paper)] rounded-2xl shadow-2xl p-4"
-        x-show="visible"
+        x-show="visible && positionCalculee"
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-95"
         x-transition:enter-end="opacity-100 scale-100"

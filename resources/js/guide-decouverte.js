@@ -9,6 +9,11 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
         groupe,
         index: 0,
         visible: etapes.length > 0 && visibleInitial,
+        // Tant que positionner() n'a pas calcule une position reelle, la
+        // carte reste cachee : sinon elle s'affiche brievement en haut a
+        // gauche (top/left par defaut) et intercepte les touches/le scroll
+        // a cet endroit avant d'atteindre sa position finale.
+        positionCalculee: false,
         position: { top: 0, left: 0, placement: 'bas' },
         cibleActuelle: null,
 
@@ -44,6 +49,7 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
 
         positionner() {
             this.retirerSurbrillance();
+            this.positionCalculee = false;
 
             const cible = document.querySelector(this.etapeActuelle?.cible);
 
@@ -80,6 +86,7 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
                     ),
                     placement: placementBas ? 'bas' : 'haut',
                 };
+                this.positionCalculee = true;
 
                 cible.classList.add('guide-cible-surlignee');
                 this.cibleActuelle = cible;
