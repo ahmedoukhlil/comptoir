@@ -49,7 +49,7 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center justify-between gap-3">
+                <div id="guide-cible-alimentation-bandeau" class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('proprietaire.dashboard')" />
                         <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.alimentation_titre') }}</span>
@@ -200,9 +200,10 @@
         groupe="alimentation"
         :visible-initial="$this->guideAAfficher"
         :etapes="[
-            ['cible' => '#guide-cible-alimentation-point', 'texte' => __('caisse.guide_alimentation_1')],
-            ['cible' => '#guide-cible-alimentation-montants', 'texte' => __('caisse.guide_alimentation_2')],
-            ['cible' => '#guide-cible-alimentation-confirmer', 'texte' => __('caisse.guide_alimentation_3')],
+            ['cible' => '#guide-cible-alimentation-bandeau', 'texte' => __('caisse.guide_alimentation_1')],
+            ['cible' => '#guide-cible-alimentation-point', 'texte' => __('caisse.guide_alimentation_2')],
+            ['cible' => '#guide-cible-alimentation-montants', 'texte' => __('caisse.guide_alimentation_3')],
+            ['cible' => '#guide-cible-alimentation-confirmer', 'texte' => __('caisse.guide_alimentation_4')],
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />

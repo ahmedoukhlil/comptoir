@@ -53,7 +53,7 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center justify-between gap-3">
+                <div id="guide-cible-cloture-bandeau" class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('caisse.saisie')" />
                         <div class="min-w-0">
@@ -278,10 +278,11 @@
                         groupe="cloture"
                         :visible-initial="$this->guideAAfficher"
                         :etapes="[
-                            ['cible' => '#guide-cible-cloture-progression', 'texte' => __('caisse.guide_cloture_1')],
-                            ['cible' => '#guide-cible-cloture-theorique', 'texte' => __('caisse.guide_cloture_2')],
-                            ['cible' => '#guide-cible-cloture-compte', 'texte' => __('caisse.guide_cloture_3')],
-                            ['cible' => '#guide-cible-cloture-navigation', 'texte' => __('caisse.guide_cloture_4')],
+                            ['cible' => '#guide-cible-cloture-bandeau', 'texte' => __('caisse.guide_cloture_1')],
+                            ['cible' => '#guide-cible-cloture-progression', 'texte' => __('caisse.guide_cloture_2')],
+                            ['cible' => '#guide-cible-cloture-theorique', 'texte' => __('caisse.guide_cloture_3')],
+                            ['cible' => '#guide-cible-cloture-compte', 'texte' => __('caisse.guide_cloture_4')],
+                            ['cible' => '#guide-cible-cloture-navigation', 'texte' => __('caisse.guide_cloture_5')],
                         ]"
                         wire-termine="$wire.marquerGuideVu()"
                     />

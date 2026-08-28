@@ -33,6 +33,17 @@ class Historique extends Component
     }
 
     #[Computed]
+    public function guideAAfficher(): bool
+    {
+        return Auth::user()->guide_vu_le === null;
+    }
+
+    public function marquerGuideVu(): void
+    {
+        Auth::user()->forceFill(['guide_vu_le' => now()])->save();
+    }
+
+    #[Computed]
     public function point()
     {
         return Auth::user()->point;

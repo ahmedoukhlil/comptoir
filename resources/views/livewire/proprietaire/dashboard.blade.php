@@ -3,7 +3,7 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             {{-- Barre du haut --}}
-            <div class="flex items-center justify-between px-5 pt-5 pb-3 md:px-9">
+            <div id="guide-cible-dashboard-bandeau" class="flex items-center justify-between px-5 pt-5 pb-3 md:px-9">
                 <div class="flex items-center gap-2.5 min-w-0">
                     <div class="w-9 h-9 rounded-[10px] bg-[color:var(--color-ink)] text-white flex items-center justify-center font-bold text-sm flex-shrink-0">
                         {{ mb_substr($this->tenant->nom, 0, 1) }}
@@ -232,11 +232,12 @@
         groupe="dashboard"
         :visible-initial="$this->guideAAfficher"
         :etapes="[
-            ['cible' => '#guide-cible-solde-total', 'texte' => __('caisse.guide_dashboard_1')],
-            ['cible' => '#guide-cible-stats', 'texte' => __('caisse.guide_dashboard_2')],
-            ['cible' => '#guide-cible-actions', 'texte' => __('caisse.guide_dashboard_3')],
-            ['cible' => '#guide-cible-actions-secondaires', 'texte' => __('caisse.guide_dashboard_4')],
-            ['cible' => '#guide-cible-points', 'texte' => __('caisse.guide_dashboard_5')],
+            ['cible' => '#guide-cible-dashboard-bandeau', 'texte' => __('caisse.guide_dashboard_1')],
+            ['cible' => '#guide-cible-solde-total', 'texte' => __('caisse.guide_dashboard_2')],
+            ['cible' => '#guide-cible-stats', 'texte' => __('caisse.guide_dashboard_3')],
+            ['cible' => '#guide-cible-actions', 'texte' => __('caisse.guide_dashboard_4')],
+            ['cible' => '#guide-cible-actions-secondaires', 'texte' => __('caisse.guide_dashboard_5')],
+            ['cible' => '#guide-cible-points', 'texte' => __('caisse.guide_dashboard_6')],
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />

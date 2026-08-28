@@ -3,7 +3,7 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center justify-between gap-3">
+                <div id="guide-cible-agents-bandeau" class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('proprietaire.dashboard')" />
                         <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.agents_titre') }}</span>
@@ -123,10 +123,11 @@
         groupe="agents"
         :visible-initial="$this->guideAAfficher && ! $motDePasseGenere"
         :etapes="[
-            ['cible' => '#guide-cible-agents-point', 'texte' => __('caisse.guide_agents_1')],
-            ['cible' => '#guide-cible-agents-infos', 'texte' => __('caisse.guide_agents_2')],
-            ['cible' => '#guide-cible-agents-role', 'texte' => __('caisse.guide_agents_3')],
-            ['cible' => '#guide-cible-agents-liste', 'texte' => __('caisse.guide_agents_4')],
+            ['cible' => '#guide-cible-agents-bandeau', 'texte' => __('caisse.guide_agents_1')],
+            ['cible' => '#guide-cible-agents-point', 'texte' => __('caisse.guide_agents_2')],
+            ['cible' => '#guide-cible-agents-infos', 'texte' => __('caisse.guide_agents_3')],
+            ['cible' => '#guide-cible-agents-role', 'texte' => __('caisse.guide_agents_4')],
+            ['cible' => '#guide-cible-agents-liste', 'texte' => __('caisse.guide_agents_5')],
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />

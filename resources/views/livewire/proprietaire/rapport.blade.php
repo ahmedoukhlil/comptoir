@@ -3,7 +3,7 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center justify-between gap-3">
+                <div id="guide-cible-rapport-bandeau" class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('proprietaire.dashboard')" />
                         <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.rapport_titre') }}</span>
@@ -71,9 +71,10 @@
         groupe="rapport"
         :visible-initial="$this->guideAAfficher"
         :etapes="[
-            ['cible' => '#guide-cible-rapport-periode', 'texte' => __('caisse.guide_rapport_1')],
-            ['cible' => '#guide-cible-rapport-exports', 'texte' => __('caisse.guide_rapport_2')],
-            ['cible' => '#guide-cible-rapport-detail', 'texte' => __('caisse.guide_rapport_3')],
+            ['cible' => '#guide-cible-rapport-bandeau', 'texte' => __('caisse.guide_rapport_1')],
+            ['cible' => '#guide-cible-rapport-periode', 'texte' => __('caisse.guide_rapport_2')],
+            ['cible' => '#guide-cible-rapport-exports', 'texte' => __('caisse.guide_rapport_3')],
+            ['cible' => '#guide-cible-rapport-detail', 'texte' => __('caisse.guide_rapport_4')],
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />
