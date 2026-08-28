@@ -75,10 +75,14 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
         clientNni: '',
         montant: '',
 
+        // Un depot fait diminuer le solde mobile money de l'operateur choisi
+        // (l'agent envoie l'equivalent depuis son propre compte) ; un
+        // retrait le fait augmenter (le client transfere l'equivalent vers
+        // le compte de l'agent).
         soldeOperateur(operateurId) {
             const impactLocal = this.operationsLocalesAffichage
                 .filter(op => op.operateur_id === operateurId)
-                .reduce((somme, op) => somme + (op.type === 'depot' ? op.montant : -op.montant), 0);
+                .reduce((somme, op) => somme + (op.type === 'depot' ? -op.montant : op.montant), 0);
 
             return (this.soldesServeur[operateurId] ?? 0) + impactLocal;
         },
@@ -100,13 +104,13 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
             return (this.soldesServeur[this.cashOperateur.id] ?? 0) + impactLocal;
         },
 
+        // Un depot/retrait ne fait que deplacer l'argent entre cash et
+        // mobile money (voir soldeOperateur()/soldeCash()) : le total
+        // combine ne bouge pas avec ces operations, donc pas d'impact local
+        // ici — seules les alimentations le font, et elles n'ont pas de
+        // flux hors-ligne cote agent.
         get soldeAffiche() {
-            const impactLocal = this.operationsLocalesAffichage.reduce(
-                (somme, op) => somme + (op.type === 'depot' ? op.montant : -op.montant),
-                0
-            );
-
-            return this.soldeTotalServeur + impactLocal;
+            return this.soldeTotalServeur;
         },
 
         get formulaireValide() {
@@ -221,20 +225,17 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
 
             const estRetrait = this.type === 'retrait' || this.type === 'retrait_beneficiaire';
 
-            if (estRetrait && montant > this.soldeOperateur(this.operateurId)) {
-                return t.erreurSoldeInsuffisant ?? (arabe ? 'الرصيد غير كافٍ.' : 'Solde insuffisant.');
-            }
-
-            // Un retrait fait diminuer le cash (contrepartie physique remise
-            // au client) ; un depot fait diminuer le solde mobile money de
-            // l'operateur choisi (l'agent envoie l'equivalent). Jamais en
-            // dessous de zero, en miroir de la validation serveur.
-            if (estRetrait && this.cashOperateur && montant > this.soldeCash()) {
-                return t.erreurCashInsuffisant ?? (arabe ? 'النقد المتوفر غير كافٍ لهذا السحب.' : 'Le cash disponible est insuffisant pour ce retrait.');
-            }
-
+            // Un depot fait diminuer le solde mobile money de l'operateur
+            // choisi (l'agent envoie l'equivalent au destinataire depuis son
+            // propre compte) ; un retrait fait diminuer le cash (contrepartie
+            // physique remise au client). Jamais en dessous de zero, en
+            // miroir de la validation serveur.
             if (this.type === 'depot' && montant > this.soldeOperateur(this.operateurId)) {
                 return t.erreurSoldeInsuffisant ?? (arabe ? 'الرصيد غير كافٍ.' : 'Solde insuffisant.');
+            }
+
+            if (estRetrait && this.cashOperateur && montant > this.soldeCash()) {
+                return t.erreurCashInsuffisant ?? (arabe ? 'النقد المتوفر غير كافٍ لهذا السحب.' : 'Le cash disponible est insuffisant pour ce retrait.');
             }
 
             return null;

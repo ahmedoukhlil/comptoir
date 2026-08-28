@@ -46,13 +46,15 @@ class Point extends Model
         return $this->hasMany(Cloture::class);
     }
 
+    /**
+     * Somme de tous les soldes par opérateur (cash + mobile money). Un
+     * dépôt/retrait ne fait que déplacer l'argent entre cash et mobile
+     * money sans en créer ni en détruire, donc ce total ne varie qu'avec
+     * les alimentations et les commissions reversées dans le solde.
+     */
     public function soldeCaisse(): int
     {
-        $alimentations = $this->alimentations()->sum('montant');
-        $depots = $this->operations()->where('type', 'depot')->sum('montant');
-        $retraits = $this->operations()->whereIn('type', ['retrait', 'retrait_beneficiaire'])->sum('montant');
-
-        return (int) ($alimentations + $depots - $retraits);
+        return (int) $this->soldesParOperateur()->sum('solde');
     }
 
     /**
@@ -104,10 +106,9 @@ class Point extends Model
 
         // Un dépôt/retrait mobile money a toujours une contrepartie en cash
         // physique dans le sens inverse : lors d'un dépôt, le client donne
-        // du cash à l'agent qui envoie l'équivalent depuis son compte
-        // mobile money (cash +, mobile money -) ; lors d'un retrait, c'est
-        // l'inverse (cash -, mobile money +). Ces totaux, tous opérateurs
-        // mobile money confondus, s'appliquent au solde de l'opérateur Cash.
+        // du cash à l'agent, qui envoie l'équivalent depuis son propre
+        // compte mobile money vers celui du client (mobile money -, cash +) ;
+        // lors d'un retrait, c'est l'inverse (mobile money +, cash -).
         $totalDepots = (int) $depots->sum();
         $totalRetraits = (int) $retraits->sum();
 
@@ -116,8 +117,8 @@ class Point extends Model
             $totalDepots, $totalRetraits
         ) {
             $solde = (int) ($alimentations[$operateur->id] ?? 0)
-                + (int) ($depots[$operateur->id] ?? 0)
-                - (int) ($retraits[$operateur->id] ?? 0)
+                - (int) ($depots[$operateur->id] ?? 0)
+                + (int) ($retraits[$operateur->id] ?? 0)
                 - (int) ($transfertsSortants[$operateur->id] ?? 0)
                 + (int) ($transfertsEntrants[$operateur->id] ?? 0);
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Cloture;
 
 use App\Livewire\Caisse\Cloture;
+use App\Models\Alimentation;
 use App\Models\Cloture as ClotureModel;
 use App\Models\Operateur;
 use App\Models\Operation;
@@ -44,10 +45,17 @@ class ClotureTest extends TestCase
 
         $this->actingAs($agent);
 
-        // Solde théorique Bankily = 10000, agent compte 9500 (écart de -500)
+        // Un depot fait diminuer le solde Bankily du point (l'agent envoie
+        // l'equivalent au client depuis son propre compte, qui avait ete
+        // alimente au prealable) et augmenter le cash de la meme somme.
+        // Alimentation Bankily = 10000, depot de 10000 -> solde theorique
+        // Bankily = 0, Cash = 10000. L'agent compte 9500 en cash (ecart de
+        // -500 sur le cash, qui porte l'ecart total).
+        Alimentation::create(['tenant_id' => $tenant->id, 'point_id' => $point->id, 'operateur_id' => $bankily->id, 'montant' => 10000, 'date' => today()]);
+
         Livewire::test(Cloture::class)
             ->assertSet('clotureDuJour', null)
-            ->call('cloturer', [$bankily->id => 9500, $cash->id => 0]);
+            ->call('cloturer', [$bankily->id => 0, $cash->id => 9500]);
 
         $cloture = ClotureModel::first();
         $this->assertNotNull($cloture);
