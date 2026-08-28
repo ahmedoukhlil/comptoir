@@ -75,8 +75,8 @@
                     <template x-for="operateur in operateurs" :key="operateur.id">
                         <div class="bg-white/10 rounded-lg px-3 py-1.5">
                             <div class="flex items-center gap-1 h-4">
-                                <img x-show="operateur.logoUrl" :src="operateur.logoUrl" :alt="operateur.nom" class="h-4 max-w-[52px] object-contain">
-                                <div x-show="! operateur.logoUrl" class="text-[10px] font-semibold text-white" x-text="operateur.nom"></div>
+                                <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" :alt="operateur.nom" x-on:error="operateur.logoEnErreur = true" class="h-4 max-w-[52px] object-contain">
+                                <div x-show="! operateur.logoUrl || operateur.logoEnErreur" class="text-[10px] font-semibold text-white" x-text="operateur.nom"></div>
                             </div>
                             <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldeOperateur(operateur.id))"></div>
                         </div>
@@ -146,8 +146,8 @@
                                     class="flex-1 flex items-center justify-center py-3.5 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                     :class="operateurId === operateur.id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-sand)]' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
                                 >
-                                    <img x-show="operateur.logoUrl" :src="operateur.logoUrl" alt="" class="h-6 max-w-full object-contain">
-                                    <span x-show="! operateur.logoUrl" x-text="operateur.nom"></span>
+                                    <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" alt="" x-on:error="operateur.logoEnErreur = true" class="h-6 max-w-full object-contain">
+                                    <span x-show="! operateur.logoUrl || operateur.logoEnErreur" x-text="operateur.nom"></span>
                                 </button>
                             </template>
                         </div>

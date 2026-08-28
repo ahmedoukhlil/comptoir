@@ -51,7 +51,7 @@ function repartirCommission(operateur, montant, typeOperation) {
 export default function comptoirSaisie({ point, operateurs, soldesServeur, soldeTotalServeur }) {
     return {
         point,
-        operateurs,
+        operateurs: operateurs.map(o => ({ ...o, logoEnErreur: false })),
         soldesServeur, // { [operateur_id]: solde }
         soldeTotalServeur,
         enLigne: navigator.onLine,
