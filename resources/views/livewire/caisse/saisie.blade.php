@@ -18,7 +18,7 @@
                     <strong class="block text-sm font-semibold text-[color:var(--color-ink)] truncate">{{ $this->point->nom }}</strong>
                     <span class="block text-[11px] text-[color:var(--color-ink-soft)] mt-0.5">{{ now()->translatedFormat('l d F Y') }}</span>
                 </div>
-                <div class="flex items-start gap-1.5 flex-shrink-0">
+                <div id="guide-cible-barre-boutons" class="flex items-start gap-1.5 flex-shrink-0">
                     <x-selecteur-langue-claire />
                     <a href="{{ route('caisse.historique') }}" class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.historique_titre') }}">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
@@ -220,7 +220,7 @@
                     </div>
 
                     {{-- Colonne historique --}}
-                    <div class="mt-8 md:mt-0 md:border-s md:border-[color:var(--color-line)] md:ps-9">
+                    <div id="guide-cible-registre" class="mt-8 md:mt-0 md:border-s md:border-[color:var(--color-line)] md:ps-9">
                         <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.aujourdhui') }}</div>
                         <div class="flex gap-4 mb-1.5">
                             <span class="flex items-center gap-1.5 text-[11px] font-semibold text-[color:var(--color-ink-soft)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
@@ -375,11 +375,13 @@
                 groupe="saisie"
                 :visible-initial="$this->guideAAfficher"
                 :etapes="[
-                    ['cible' => '#guide-cible-type', 'texte' => __('caisse.guide_saisie_1')],
-                    ['cible' => '#guide-cible-operateur', 'texte' => __('caisse.guide_saisie_2')],
-                    ['cible' => '#guide-cible-telephone', 'texte' => __('caisse.guide_saisie_3')],
-                    ['cible' => '#guide-cible-montant', 'texte' => __('caisse.guide_saisie_4')],
-                    ['cible' => '#guide-cible-confirmer', 'texte' => __('caisse.guide_saisie_5')],
+                    ['cible' => '#guide-cible-barre-boutons', 'texte' => __('caisse.guide_saisie_1')],
+                    ['cible' => '#guide-cible-type', 'texte' => __('caisse.guide_saisie_2')],
+                    ['cible' => '#guide-cible-operateur', 'texte' => __('caisse.guide_saisie_3')],
+                    ['cible' => '#guide-cible-telephone', 'texte' => __('caisse.guide_saisie_4')],
+                    ['cible' => '#guide-cible-montant', 'texte' => __('caisse.guide_saisie_5')],
+                    ['cible' => '#guide-cible-confirmer', 'texte' => __('caisse.guide_saisie_6')],
+                    ['cible' => '#guide-cible-registre', 'texte' => __('caisse.guide_saisie_7')],
                 ]"
                 wire-termine="$wire.marquerGuideVu()"
             />
