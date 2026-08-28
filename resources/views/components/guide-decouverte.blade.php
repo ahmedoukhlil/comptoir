@@ -12,7 +12,7 @@
 >
     {{-- Voile semi-transparent : ne bloque pas les clics, sert juste à
          estomper le reste de l'écran pour focaliser l'attention. --}}
-    <div class="fixed inset-0 z-50 bg-[color:var(--color-ink)]/30" x-show="visible"></div>
+    <div class="fixed inset-0 z-50 bg-[color:var(--color-ink)]/30 pointer-events-none" x-show="visible"></div>
 
     <div
         class="fixed z-[52] w-[280px] bg-[color:var(--color-paper)] rounded-2xl shadow-2xl p-4"
