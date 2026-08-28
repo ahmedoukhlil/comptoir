@@ -51,7 +51,7 @@ class Transfert extends Component
     public function operateursPourJs(): array
     {
         return $this->operateurs
-            ->map(fn (Operateur $o) => ['id' => $o->id, 'nom' => $o->nom, 'estCash' => $o->est_cash])
+            ->map(fn (Operateur $o) => ['id' => $o->id, 'nom' => $o->nom, 'estCash' => $o->est_cash, 'logoUrl' => $o->logoUrl()])
             ->values()
             ->all();
     }

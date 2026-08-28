@@ -1,7 +1,7 @@
 <div
     x-data="{
         pointId: {{ Js::from($this->points->first()?->id) }},
-        operateurs: {{ Js::from($this->operateursPourJs) }},
+        operateurs: {{ Js::from($this->operateursPourJs) }}.map(o => ({ ...o, logoEnErreur: false })),
         soldes: {},
         sourceId: {{ Js::from($this->operateurs->first()?->id) }},
         destinationId: {{ Js::from($this->operateurs->skip(1)->first()?->id) }},
@@ -83,10 +83,12 @@
                         <button
                             type="button"
                             x-on:click="sourceId = operateur.id; if (destinationId === sourceId) destinationId = operateurs.find(o => o.id !== sourceId)?.id ?? null"
-                            x-text="operateur.nom"
-                            class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"
+                            class="flex items-center justify-center px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold"
                             :class="sourceId === operateur.id ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                        ></button>
+                        >
+                            <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" alt="" x-on:error="operateur.logoEnErreur = true" class="h-5 max-w-[80px] object-contain">
+                            <span x-show="! operateur.logoUrl || operateur.logoEnErreur" x-text="operateur.nom"></span>
+                        </button>
                     </template>
                 </div>
                 <div class="text-[11px] text-[color:var(--color-ink-soft)] mb-6">
@@ -100,11 +102,13 @@
                         <button
                             type="button"
                             x-on:click="if (operateur.id !== sourceId) destinationId = operateur.id"
-                            x-text="operateur.nom"
                             :disabled="operateur.id === sourceId"
-                            class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] disabled:opacity-30 disabled:cursor-not-allowed"
+                            class="flex items-center justify-center px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed"
                             :class="destinationId === operateur.id ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                        ></button>
+                        >
+                            <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" alt="" x-on:error="operateur.logoEnErreur = true" class="h-5 max-w-[80px] object-contain">
+                            <span x-show="! operateur.logoUrl || operateur.logoEnErreur" x-text="operateur.nom"></span>
+                        </button>
                     </template>
                 </div>
                 <p class="text-[11px] text-[color:var(--color-ink-soft)] -mt-4 mb-6" x-show="sourceId === destinationId" x-cloak>{{ __('caisse.transfert_choisir_destination_differente') }}</p>
