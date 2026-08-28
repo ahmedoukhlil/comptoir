@@ -40,10 +40,19 @@
             @endif
 
             {{-- Carte solde --}}
-            <div class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-white font-semibold mb-1.5">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                    {{ __('caisse.dashboard_solde_total') }}
+            <div id="guide-cible-solde-total" class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                    <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-white font-semibold">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        {{ __('caisse.dashboard_solde_total') }}
+                    </div>
+                    <button
+                        type="button"
+                        x-data
+                        x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'dashboard' } }))"
+                        class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        aria-label="{{ __('caisse.guide_revoir') }}"
+                    >?</button>
                 </div>
                 <div class="flex items-baseline gap-2.5 flex-wrap" dir="ltr">
                     <span class="font-[family-name:var(--font-mono)] font-bold text-[40px] leading-[1.15] tabular-nums tracking-tight">{{ number_format($this->soldeTotal, 0, ',', ' ') }}</span>
@@ -73,7 +82,7 @@
                 </div>
 
                 {{-- Actions primaires --}}
-                <div class="mt-5">
+                <div id="guide-cible-actions" class="mt-5">
                     <p class="text-[11px] uppercase tracking-wide font-bold text-[color:var(--color-ink-soft)] mb-2">{{ __('caisse.section_operations') }}</p>
                     <div class="flex flex-col gap-2">
                         <a href="{{ route('proprietaire.alimentation') }}" class="flex items-center gap-3 min-h-[52px] px-4 rounded-2xl bg-[color:var(--color-ink)] text-white font-semibold">
@@ -107,7 +116,7 @@
                 </div>
 
                 {{-- Détail par point --}}
-                <div class="flex items-center justify-between mt-6 mb-2">
+                <div id="guide-cible-points" class="flex items-center justify-between mt-6 mb-2">
                     <p class="text-[11px] uppercase tracking-wide font-bold text-[color:var(--color-ink-soft)]">{{ __('caisse.dashboard_par_point') }}</p>
                     <span class="text-xs font-semibold bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink-soft)] rounded-full px-2.5 py-0.5">
                         <span dir="ltr">{{ $this->points->count() }}</span> {{ __('caisse.dashboard_points_badge') }}
@@ -218,4 +227,15 @@
             </div>
         </div>
     @endif
+
+    <x-guide-decouverte
+        groupe="dashboard"
+        :visible-initial="$this->guideAAfficher"
+        :etapes="[
+            ['cible' => '#guide-cible-solde-total', 'texte' => __('caisse.guide_dashboard_1')],
+            ['cible' => '#guide-cible-actions', 'texte' => __('caisse.guide_dashboard_2')],
+            ['cible' => '#guide-cible-points', 'texte' => __('caisse.guide_dashboard_3')],
+        ]"
+        wire-termine="$wire.marquerGuideVu()"
+    />
 </div>

@@ -6,13 +6,17 @@ use App\Livewire\Concerns\GereBaremesParType;
 use App\Models\Operateur;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts.admin')]
 class Create extends Component
 {
     use GereBaremesParType;
+    use WithFileUploads;
 
     public string $nom = '';
+
+    public $logo = null;
 
     public bool $estCash = false;
 
@@ -27,11 +31,15 @@ class Create extends Component
     {
         $this->validate([
             'nom' => ['required', 'string', 'max:255'],
+            'logo' => ['nullable', 'image', 'max:1024'],
             ...$this->reglesBaremes($this->estCash),
         ]);
 
+        $logoChemin = $this->logo?->store('logos-operateurs', 'public');
+
         $operateur = Operateur::create([
             'nom' => $this->nom,
+            'logo_chemin' => $logoChemin,
             'bareme_depot' => $this->baremeDepuisFormulaire('depot', $this->estCash),
             'bareme_retrait_client' => $this->baremeDepuisFormulaire('retrait', $this->estCash),
             'bareme_retrait_beneficiaire' => $this->baremeDepuisFormulaire('retrait_beneficiaire', $this->estCash),

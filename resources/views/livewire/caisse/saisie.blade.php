@@ -50,11 +50,19 @@
 
             {{-- Carte solde --}}
             <div class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-center gap-1.5 text-[11px] font-semibold" :class="enLigne ? 'text-[#86EFAC]' : 'text-[#FDE68A]'">
-                    <span class="w-1.5 h-1.5 rounded-full" :class="enLigne ? 'bg-[#86EFAC]' : 'bg-[#FDE68A]'"></span>
-                    <span x-show="enLigne && enAttente === 0">{{ __('caisse.sync_a_jour') }}</span>
-                    <span x-show="!enLigne" x-cloak>{{ __('caisse.sync_hors_ligne') }}</span>
-                    <span x-show="enLigne && enAttente > 0" x-cloak x-text="texteSyncEnAttente(enAttente)"></span>
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5 text-[11px] font-semibold" :class="enLigne ? 'text-[#86EFAC]' : 'text-[#FDE68A]'">
+                        <span class="w-1.5 h-1.5 rounded-full" :class="enLigne ? 'bg-[#86EFAC]' : 'bg-[#FDE68A]'"></span>
+                        <span x-show="enLigne && enAttente === 0">{{ __('caisse.sync_a_jour') }}</span>
+                        <span x-show="!enLigne" x-cloak>{{ __('caisse.sync_hors_ligne') }}</span>
+                        <span x-show="enLigne && enAttente > 0" x-cloak x-text="texteSyncEnAttente(enAttente)"></span>
+                    </div>
+                    <button
+                        type="button"
+                        x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'saisie' } }))"
+                        class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        aria-label="{{ __('caisse.guide_revoir') }}"
+                    >?</button>
                 </div>
 
                 <div class="text-[11px] uppercase tracking-wide font-semibold text-white mt-3">{{ __('caisse.solde_label') }}</div>
@@ -66,7 +74,10 @@
                 <div class="flex flex-wrap gap-2 mt-4">
                     <template x-for="operateur in operateurs" :key="operateur.id">
                         <div class="bg-white/10 rounded-lg px-3 py-1.5">
-                            <div class="text-[10px] font-semibold text-white" x-text="operateur.nom"></div>
+                            <div class="flex items-center gap-1 h-4">
+                                <img x-show="operateur.logoUrl" :src="operateur.logoUrl" :alt="operateur.nom" class="h-4 max-w-[52px] object-contain">
+                                <div x-show="! operateur.logoUrl" class="text-[10px] font-semibold text-white" x-text="operateur.nom"></div>
+                            </div>
                             <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldeOperateur(operateur.id))"></div>
                         </div>
                     </template>
@@ -87,7 +98,7 @@
                     {{-- Colonne formulaire --}}
                     <div>
                         {{-- Bascule dépôt/retrait --}}
-                        <div class="flex flex-col bg-[color:var(--color-sand-deep)] rounded-2xl p-1.5 gap-1.5" role="radiogroup" aria-label="{{ __('caisse.operateur_label') }}">
+                        <div id="guide-cible-type" class="flex flex-col bg-[color:var(--color-sand-deep)] rounded-2xl p-1.5 gap-1.5" role="radiogroup" aria-label="{{ __('caisse.operateur_label') }}">
                             <button
                                 type="button"
                                 role="radio"
@@ -123,18 +134,21 @@
                         </div>
 
                         {{-- Opérateur --}}
-                        <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mt-6 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operateur_label') }}</div>
+                        <div id="guide-cible-operateur" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mt-6 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operateur_label') }}</div>
                         <div class="flex gap-2" role="radiogroup" aria-label="{{ __('caisse.operateur_label') }}">
                             <template x-for="operateur in operateurs" :key="operateur.id">
                                 <button
                                     type="button"
                                     role="radio"
                                     :aria-checked="(operateurId === operateur.id).toString()"
+                                    :aria-label="operateur.nom"
                                     x-on:click="operateurId = operateur.id"
-                                    class="flex-1 text-center py-3.5 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                                    class="flex-1 flex items-center justify-center py-3.5 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                                     :class="operateurId === operateur.id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-sand)]' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                                    x-text="operateur.nom"
-                                ></button>
+                                >
+                                    <img x-show="operateur.logoUrl" :src="operateur.logoUrl" alt="" class="h-6 max-w-full object-contain">
+                                    <span x-show="! operateur.logoUrl" x-text="operateur.nom"></span>
+                                </button>
                             </template>
                         </div>
 
@@ -173,7 +187,7 @@
                         </div>
 
                         {{-- Montant --}}
-                        <div class="mt-6 px-1">
+                        <div id="guide-cible-montant" class="mt-6 px-1">
                             <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.montant_label') }}</div>
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 focus-within:border-[color:var(--color-ink)]">
                                 <input
@@ -192,6 +206,7 @@
 
                         {{-- Confirmer --}}
                         <button
+                            id="guide-cible-confirmer"
                             type="button"
                             x-on:click="ouvrirConfirmation()"
                             :disabled="enConfirmation || ! formulaireValide"
@@ -355,6 +370,18 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
                 {{ __('caisse.operation_reussie') }}
             </div>
+
+            <x-guide-decouverte
+                groupe="saisie"
+                :visible-initial="$this->guideAAfficher"
+                :etapes="[
+                    ['cible' => '#guide-cible-type', 'texte' => __('caisse.guide_saisie_1')],
+                    ['cible' => '#guide-cible-operateur', 'texte' => __('caisse.guide_saisie_2')],
+                    ['cible' => '#guide-cible-montant', 'texte' => __('caisse.guide_saisie_3')],
+                    ['cible' => '#guide-cible-confirmer', 'texte' => __('caisse.guide_saisie_4')],
+                ]"
+                wire-termine="$wire.marquerGuideVu()"
+            />
         </div>
     </div>
 </div>

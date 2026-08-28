@@ -15,6 +15,18 @@
                     </div>
 
                     <div>
+                        <label for="operateur-logo" class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_logo_label') }}</label>
+                        <div class="flex items-center gap-3">
+                            @if ($logo)
+                                <img src="{{ $logo->temporaryUrl() }}" alt="" class="w-14 h-14 rounded-lg object-contain border border-[color:var(--color-line)] bg-[color:var(--color-sand)]">
+                            @endif
+                            <input id="operateur-logo" type="file" wire:model="logo" accept="image/*" class="flex-1 text-sm text-[color:var(--color-ink-soft)] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[color:var(--color-sand)] file:text-[color:var(--color-ink)]">
+                        </div>
+                        <p class="text-[11px] text-[color:var(--color-ink-soft)] mt-1">{{ __('caisse.operateur_logo_aide') }}</p>
+                        @error('logo') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
                         <span class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.operateur_type_label') }}</span>
                         <div class="flex gap-1.5" role="group" aria-label="{{ __('caisse.operateur_type_label') }}">
                             <button type="button" wire:click="$set('estCash', false)" aria-pressed="{{ $estCash ? 'false' : 'true' }}" class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] {{ ! $estCash ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-sand)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.operateur_type_mobile') }}</button>

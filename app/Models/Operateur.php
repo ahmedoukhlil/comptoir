@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
-    'nom', 'bareme_depot', 'bareme_retrait_client', 'bareme_retrait_beneficiaire',
+    'nom', 'logo_chemin', 'bareme_depot', 'bareme_retrait_client', 'bareme_retrait_beneficiaire',
     'est_cash', 'actif',
     'pourcentage_partage_point_depot', 'pourcentage_partage_point_retrait_client', 'pourcentage_partage_point_retrait_beneficiaire',
     'commission_versee_dans_solde',
@@ -76,6 +76,11 @@ class Operateur extends Model
     public function operations(): HasMany
     {
         return $this->hasMany(Operation::class);
+    }
+
+    public function logoUrl(): ?string
+    {
+        return $this->logo_chemin ? \Storage::disk('public')->url($this->logo_chemin) : null;
     }
 
     /**

@@ -37,6 +37,7 @@ class Saisie extends Component
             ->map(fn (Operateur $o) => [
                 'id' => $o->id,
                 'nom' => $o->nom,
+                'logoUrl' => $o->logoUrl(),
                 'bareme_depot' => $o->bareme_depot,
                 'bareme_retrait_client' => $o->bareme_retrait_client,
                 'bareme_retrait_beneficiaire' => $o->bareme_retrait_beneficiaire,
@@ -75,6 +76,17 @@ class Saisie extends Component
     public function beneficeDuJour(): int
     {
         return (int) $this->operationsDuJour->sum('commission_part_point');
+    }
+
+    #[Computed]
+    public function guideAAfficher(): bool
+    {
+        return Auth::user()->guide_vu_le === null;
+    }
+
+    public function marquerGuideVu(): void
+    {
+        Auth::user()->forceFill(['guide_vu_le' => now()])->save();
     }
 
     public function confirmer(array $champs): array

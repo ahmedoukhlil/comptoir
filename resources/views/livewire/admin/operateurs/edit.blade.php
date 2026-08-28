@@ -8,6 +8,20 @@
 
             <div class="p-6">
                 <form wire:submit="modifier" class="space-y-4">
+                    <div>
+                        <label for="operateur-logo" class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.operateur_logo_label') }}</label>
+                        <div class="flex items-center gap-3">
+                            @if ($logo)
+                                <img src="{{ $logo->temporaryUrl() }}" alt="" class="w-14 h-14 rounded-lg object-contain border border-[color:var(--color-line)] bg-[color:var(--color-sand)]">
+                            @elseif ($this->operateur->logoUrl())
+                                <img src="{{ $this->operateur->logoUrl() }}" alt="" class="w-14 h-14 rounded-lg object-contain border border-[color:var(--color-line)] bg-[color:var(--color-sand)]">
+                            @endif
+                            <input id="operateur-logo" type="file" wire:model="logo" accept="image/*" class="flex-1 text-sm text-[color:var(--color-ink-soft)] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[color:var(--color-sand)] file:text-[color:var(--color-ink)]">
+                        </div>
+                        <p class="text-[11px] text-[color:var(--color-ink-soft)] mt-1">{{ __('caisse.operateur_logo_aide') }}</p>
+                        @error('logo') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
+                    </div>
+
                     @include('livewire.admin.operateurs._onglets-baremes')
 
                     <label class="flex items-start gap-2.5 cursor-pointer">

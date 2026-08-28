@@ -33,6 +33,14 @@
     font-family: var(--font-arabic);
 }
 
+.guide-cible-surlignee {
+    position: relative;
+    z-index: 51;
+    outline: 3px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 12px;
+}
+
 /* iOS/Android zooment automatiquement la page au focus d'un champ dont
    la taille de police est < 16px. On force 16px sur mobile uniquement
    (au-delà de md, la taille visuelle définie par Tailwind reprend le

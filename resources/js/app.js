@@ -1,8 +1,10 @@
 import comptoirSaisie from './comptoir-saisie.js';
+import guideDecouverte from './guide-decouverte.js';
 import { demarrerSynchronisationAutomatique } from './offline-sync.js';
 
 document.addEventListener('alpine:init', () => {
     window.Alpine.data('comptoirSaisie', comptoirSaisie);
+    window.Alpine.data('guideDecouverte', guideDecouverte);
 });
 
 demarrerSynchronisationAutomatique();

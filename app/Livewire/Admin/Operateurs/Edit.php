@@ -4,16 +4,21 @@ namespace App\Livewire\Admin\Operateurs;
 
 use App\Livewire\Concerns\GereBaremesParType;
 use App\Models\Operateur;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts.admin')]
 class Edit extends Component
 {
     use GereBaremesParType;
+    use WithFileUploads;
 
     public int $operateurId;
+
+    public $logo = null;
 
     public bool $commissionVerseeDansSolde = false;
 
@@ -48,9 +53,23 @@ class Edit extends Component
     {
         $operateur = $this->operateur;
 
-        $this->validate($this->reglesBaremes($operateur->est_cash));
+        $this->validate([
+            'logo' => ['nullable', 'image', 'max:1024'],
+            ...$this->reglesBaremes($operateur->est_cash),
+        ]);
+
+        $logoChemin = $operateur->logo_chemin;
+
+        if ($this->logo) {
+            if ($logoChemin) {
+                Storage::disk('public')->delete($logoChemin);
+            }
+
+            $logoChemin = $this->logo->store('logos-operateurs', 'public');
+        }
 
         $operateur->update([
+            'logo_chemin' => $logoChemin,
             'bareme_depot' => $this->baremeDepuisFormulaire('depot', $operateur->est_cash),
             'bareme_retrait_client' => $this->baremeDepuisFormulaire('retrait', $operateur->est_cash),
             'bareme_retrait_beneficiaire' => $this->baremeDepuisFormulaire('retrait_beneficiaire', $operateur->est_cash),
