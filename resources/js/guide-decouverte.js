@@ -60,12 +60,24 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
 
             setTimeout(() => {
                 const rect = cible.getBoundingClientRect();
-                const espaceEnBas = window.innerHeight - rect.bottom;
+                // Sur mobile, une barre fixe peut couvrir le bas de l'écran
+                // (ex. barre résumé sur l'écran de saisie) : on l'exclut de
+                // l'espace disponible pour ne pas placer la carte dessous.
+                const barreBasse = document.querySelector('[data-guide-barre-basse]');
+                const barreBasseFixe = barreBasse && getComputedStyle(barreBasse).position === 'fixed';
+                const limiteBasse = barreBasseFixe
+                    ? barreBasse.getBoundingClientRect().top
+                    : window.innerHeight;
+                const espaceEnBas = limiteBasse - rect.bottom;
                 const placementBas = espaceEnBas > 160;
+                const demiLargeurCarte = Math.min(140, window.innerWidth / 2 - 12);
 
                 this.position = {
                     top: placementBas ? rect.bottom + 12 : rect.top - 12,
-                    left: Math.min(Math.max(rect.left + rect.width / 2, 160), window.innerWidth - 160),
+                    left: Math.min(
+                        Math.max(rect.left + rect.width / 2, demiLargeurCarte + 12),
+                        window.innerWidth - demiLargeurCarte - 12
+                    ),
                     placement: placementBas ? 'bas' : 'haut',
                 };
 

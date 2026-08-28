@@ -276,7 +276,7 @@
             </div>
 
             {{-- Barre résumé --}}
-            <div class="fixed md:static start-3.5 end-3.5 bottom-4 md:mx-9 md:mb-8 bg-[color:var(--color-ink)] rounded-[18px] px-4.5 py-4 flex justify-between items-center shadow-2xl">
+            <div data-guide-barre-basse class="fixed md:static start-3.5 end-3.5 bottom-4 md:mx-9 md:mb-8 bg-[color:var(--color-ink)] rounded-[18px] px-4.5 py-4 flex justify-between items-center shadow-2xl">
                 <div>
                     <div class="text-[10px] tracking-wide font-semibold text-white/90 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.benefice_label') }}</div>
                     <div class="font-[family-name:var(--font-mono)] font-bold text-[17px] text-[#86EFAC] mt-0.5">

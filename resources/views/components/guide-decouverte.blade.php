@@ -20,7 +20,7 @@
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-95"
         x-transition:enter-end="opacity-100 scale-100"
-        :style="`top: ${position.placement === 'bas' ? position.top : position.top - 132}px; left: ${Math.min(Math.max(position.left - 140, 12), 9999)}px; max-width: calc(100vw - 24px);`"
+        :style="`top: ${position.placement === 'bas' ? position.top : position.top - 132}px; left: ${Math.min(Math.max(position.left - Math.min(140, window.innerWidth / 2 - 12), 12), window.innerWidth - Math.min(280, window.innerWidth - 24) - 12)}px; max-width: calc(100vw - 24px);`"
         role="dialog"
         aria-modal="false"
         :aria-label="etapeActuelle?.texte"
