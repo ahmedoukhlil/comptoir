@@ -81,9 +81,7 @@ class Saisie extends Component
     #[Computed]
     public function guideAAfficher(): bool
     {
-        // Le guide ne se lance plus automatiquement : uniquement via le
-        // bouton (?) qui declenche guide:relancer cote JS.
-        return false;
+        return Auth::user()->guide_vu_le === null;
     }
 
     public function marquerGuideVu(): void

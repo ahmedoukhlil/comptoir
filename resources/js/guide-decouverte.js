@@ -48,7 +48,16 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
             });
 
             if (this.visible) {
-                this.$nextTick(() => this.positionner());
+                // Lancement automatique (premier login) : on attend que les
+                // polices soient chargees pour eviter un calcul de position
+                // base sur une mise en page qui va encore bouger (texte en
+                // police de secours plus etroite/large que la police finale).
+                // document.fonts.ready est deja resolue si les polices sont
+                // chargees depuis longtemps, donc pas de delai superflu sur
+                // les lancements suivants ni en navigation interne.
+                const pret = window.document.fonts?.ready ?? Promise.resolve();
+
+                pret.then(() => this.$nextTick(() => this.positionner()));
             }
         },
 
@@ -111,13 +120,43 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
 
             cible.scrollIntoView({ block: 'center', behavior: 'smooth' });
 
-            setTimeout(() => {
+            this.attendreFinDuScroll(cible, () => {
                 this.position = this.calculerCoordonnees(cible.getBoundingClientRect());
                 this.positionCalculee = true;
 
                 cible.classList.add('guide-cible-surlignee');
                 this.cibleActuelle = cible;
-            }, 250);
+            });
+        },
+
+        /**
+         * scrollIntoView({ behavior: 'smooth' }) n'a pas de callback natif.
+         * On attend que la position de la cible se stabilise entre deux
+         * frames consecutives (au lieu d'un delai fixe arbitraire, trop
+         * court sur un premier chargement a froid — polices/mise en page
+         * pas encore stabilisees — et inutilement long sur un appareil
+         * rapide). Plafonne a ~1.5s pour ne jamais rester bloque.
+         */
+        attendreFinDuScroll(cible, callback) {
+            let dernierTop = null;
+            let tentatives = 0;
+            const maxTentatives = 90; // ~1.5s a 60fps
+
+            const verifier = () => {
+                const top = cible.getBoundingClientRect().top;
+                tentatives++;
+
+                if (top === dernierTop || tentatives >= maxTentatives) {
+                    callback();
+
+                    return;
+                }
+
+                dernierTop = top;
+                requestAnimationFrame(verifier);
+            };
+
+            requestAnimationFrame(verifier);
         },
 
         suivant() {
