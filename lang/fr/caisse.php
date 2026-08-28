@@ -231,6 +231,12 @@ return [
     'guide_cloture_4' => 'Comptez l\'argent réellement présent dans la caisse pour cet opérateur, et entrez le montant ici.',
     'guide_cloture_5' => 'Passez à l\'opérateur suivant, ou confirmez la clôture une fois tous les opérateurs saisis.',
 
+    'guide_cloture_deja_faite_1' => 'Le bouton retour vous ramène à la caisse.',
+    'guide_cloture_deja_faite_2' => 'La journée a déjà été clôturée aujourd\'hui pour ce point de vente.',
+    'guide_cloture_deja_faite_3' => 'Le solde théorique (calculé par l\'application) et le solde compté par l\'agent au moment de la clôture.',
+    'guide_cloture_deja_faite_4' => 'L\'écart entre les deux soldes, s\'il y en a un.',
+    'guide_cloture_deja_faite_5' => 'Le détail par opérateur de la clôture.',
+
     'guide_agents_1' => 'Le bouton retour vous ramène au tableau de bord.',
     'guide_agents_2' => 'Choisissez le point de vente auquel rattacher le nouvel agent.',
     'guide_agents_3' => 'Entrez son nom et son numéro de téléphone : ils lui serviront à se connecter.',

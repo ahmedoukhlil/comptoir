@@ -70,13 +70,23 @@
             <div class="px-5 py-6 md:px-9 md:py-8">
                 @if ($this->clotureDuJour)
                     @php $c = $this->clotureDuJour; @endphp
+                    <div class="flex justify-end mb-2">
+                        <button
+                            type="button"
+                            x-data
+                            x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'cloture' } }))"
+                            class="w-6 h-6 rounded-full bg-[color:var(--color-sand-deep)] hover:bg-[color:var(--color-line)] flex items-center justify-center text-[11px] font-bold text-[color:var(--color-ink-soft)] flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                            aria-label="{{ __('caisse.guide_revoir') }}"
+                        >?</button>
+                    </div>
+
                     <div class="text-center py-6">
-                        <div class="flex justify-center mb-3">
+                        <div id="guide-cible-cloture-statut" class="flex justify-center mb-3">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-green-deep)]"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
                         </div>
                         <p class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-[color:var(--color-ink)] mb-1">{{ __('caisse.cloture_deja_faite') }}</p>
 
-                        <div class="mt-6 grid grid-cols-2 gap-3 text-start">
+                        <div id="guide-cible-cloture-soldes" class="mt-6 grid grid-cols-2 gap-3 text-start">
                             <div class="bg-[color:var(--color-paper)] rounded-xl p-4 border border-[color:var(--color-line)]">
                                 <div class="text-[11px] font-semibold text-[color:var(--color-ink-soft)] uppercase">{{ __('caisse.cloture_solde_theorique') }}</div>
                                 <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1 text-start" dir="ltr">{{ number_format($c->solde_theorique, 0, ',', ' ') }}</div>
@@ -87,7 +97,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 rounded-xl p-4 font-semibold text-sm
+                        <div id="guide-cible-cloture-ecart" class="mt-4 rounded-xl p-4 font-semibold text-sm
                             {{ $c->ecart === 0 ? 'bg-[color:var(--color-green)]/10 text-[color:var(--color-green-deep)]' : 'bg-[color:var(--color-rust)]/10 text-[color:var(--color-rust-deep)]' }}">
                             @if ($c->ecart === 0)
                                 {{ __('caisse.cloture_ecart_aucun') }}
@@ -99,7 +109,7 @@
                         </div>
 
                         @if ($c->details->isNotEmpty())
-                            <div class="mt-6 text-start">
+                            <div id="guide-cible-cloture-recapitulatif" class="mt-6 text-start">
                                 <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.cloture_recapitulatif') }}</div>
                                 <div class="divide-y divide-dashed divide-[color:var(--color-line)]">
                                     @foreach ($c->details as $detail)
@@ -273,21 +283,29 @@
                             </div>
                         </div>
                     </template>
-
-                    <x-guide-decouverte
-                        groupe="cloture"
-                        :visible-initial="$this->guideAAfficher"
-                        :etapes="[
-                            ['cible' => '#guide-cible-cloture-bandeau', 'texte' => __('caisse.guide_cloture_1')],
-                            ['cible' => '#guide-cible-cloture-progression', 'texte' => __('caisse.guide_cloture_2')],
-                            ['cible' => '#guide-cible-cloture-theorique', 'texte' => __('caisse.guide_cloture_3')],
-                            ['cible' => '#guide-cible-cloture-compte', 'texte' => __('caisse.guide_cloture_4')],
-                            ['cible' => '#guide-cible-cloture-navigation', 'texte' => __('caisse.guide_cloture_5')],
-                        ]"
-                        wire-termine="$wire.marquerGuideVu()"
-                    />
                 @endif
             </div>
         </div>
     </div>
+
+    <x-guide-decouverte
+        groupe="cloture"
+        :visible-initial="$this->guideAAfficher"
+        :etapes="$this->clotureDuJour
+            ? [
+                ['cible' => '#guide-cible-cloture-bandeau', 'texte' => __('caisse.guide_cloture_deja_faite_1')],
+                ['cible' => '#guide-cible-cloture-statut', 'texte' => __('caisse.guide_cloture_deja_faite_2')],
+                ['cible' => '#guide-cible-cloture-soldes', 'texte' => __('caisse.guide_cloture_deja_faite_3')],
+                ['cible' => '#guide-cible-cloture-ecart', 'texte' => __('caisse.guide_cloture_deja_faite_4')],
+                ['cible' => '#guide-cible-cloture-recapitulatif', 'texte' => __('caisse.guide_cloture_deja_faite_5')],
+            ]
+            : [
+                ['cible' => '#guide-cible-cloture-bandeau', 'texte' => __('caisse.guide_cloture_1')],
+                ['cible' => '#guide-cible-cloture-progression', 'texte' => __('caisse.guide_cloture_2')],
+                ['cible' => '#guide-cible-cloture-theorique', 'texte' => __('caisse.guide_cloture_3')],
+                ['cible' => '#guide-cible-cloture-compte', 'texte' => __('caisse.guide_cloture_4')],
+                ['cible' => '#guide-cible-cloture-navigation', 'texte' => __('caisse.guide_cloture_5')],
+            ]"
+        wire-termine="$wire.marquerGuideVu()"
+    />
 </div>
