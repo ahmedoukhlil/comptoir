@@ -74,16 +74,16 @@
 
                 <div class="flex flex-wrap gap-2 mt-4">
                     <template x-if="cashOperateur">
-                        <div class="bg-white/10 rounded-lg px-3 py-1.5">
+                        <div class="rounded-lg px-3 py-1.5" :class="soldeCash() < 10000 ? 'bg-[#F59E0B]/30 ring-1 ring-[#F59E0B]' : 'bg-white/10'">
                             <div class="flex items-center gap-1 h-4">
                                 <img x-show="cashOperateur.logoUrl && !cashOperateur.logoEnErreur" :src="cashOperateur.logoUrl" :alt="cashOperateur.nom" x-on:error="cashOperateur.logoEnErreur = true" class="h-4 max-w-[52px] object-contain">
                                 <div x-show="! cashOperateur.logoUrl || cashOperateur.logoEnErreur" class="text-[10px] font-semibold text-white" x-text="cashOperateur.nom"></div>
                             </div>
-                            <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldesServeur[cashOperateur.id] ?? 0)"></div>
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldeCash())"></div>
                         </div>
                     </template>
                     <template x-for="operateur in operateurs" :key="operateur.id">
-                        <div class="bg-white/10 rounded-lg px-3 py-1.5">
+                        <div class="rounded-lg px-3 py-1.5" :class="soldeOperateur(operateur.id) < 10000 ? 'bg-[#F59E0B]/30 ring-1 ring-[#F59E0B]' : 'bg-white/10'">
                             <div class="flex items-center gap-1 h-4">
                                 <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" :alt="operateur.nom" x-on:error="operateur.logoEnErreur = true" class="h-4 max-w-[52px] object-contain">
                                 <div x-show="! operateur.logoUrl || operateur.logoEnErreur" class="text-[10px] font-semibold text-white" x-text="operateur.nom"></div>

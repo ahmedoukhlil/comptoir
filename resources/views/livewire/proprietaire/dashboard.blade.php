@@ -154,6 +154,16 @@
                                 @endforeach
                             </div>
 
+                            @if ($ligne->operateurs_solde_bas->isNotEmpty())
+                                <div class="mx-4 mb-3.5 flex items-center gap-1.5 text-[11px] font-semibold text-[#8C6A1F] bg-[#E8B85C]/15 rounded-lg px-2.5 py-1.5 flex-wrap">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+                                    <span>{{ __('caisse.dashboard_alerte_solde_bas') }} :</span>
+                                    @foreach ($ligne->operateurs_solde_bas as $so)
+                                        <span class="font-[family-name:var(--font-mono)] tabular-nums" dir="ltr">{{ $so['operateur']->nom }} ({{ number_format($so['solde'], 0, ',', ' ') }})</span>
+                                    @endforeach
+                                </div>
+                            @endif
+
                             @if ($ligne->a_ecart)
                                 <div class="mx-4 mb-3.5 flex items-center justify-between gap-2 flex-wrap text-[11px] font-semibold text-[color:var(--color-rust-deep)] bg-[color:var(--color-rust)]/10 rounded-lg px-2.5 py-1.5">
                                     <span class="flex items-center gap-1.5">

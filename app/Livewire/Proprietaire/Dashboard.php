@@ -21,6 +21,12 @@ class Dashboard extends Component
      */
     private const HEURE_CLOTURE_ATTENDUE = 20;
 
+    /**
+     * En dessous de ce solde (tous opérateurs, Cash compris), une alerte de
+     * solde bas est affichée pour le point de vente concerné.
+     */
+    private const SEUIL_SOLDE_BAS = 10000;
+
     public ?int $pointAReouvrirId = null;
 
     #[Computed]
@@ -53,11 +59,13 @@ class Dashboard extends Component
             ->get()
             ->map(function ($point) {
                 $cloture = $point->clotures->first();
+                $soldesParOperateur = $point->soldesParOperateur();
 
                 return (object) [
                     'point' => $point,
                     'solde' => $point->soldeCaisse(),
-                    'soldes_par_operateur' => $point->soldesParOperateur(),
+                    'soldes_par_operateur' => $soldesParOperateur,
+                    'operateurs_solde_bas' => $soldesParOperateur->filter(fn ($ligne) => $ligne['solde'] < self::SEUIL_SOLDE_BAS)->values(),
                     'operations_jour' => $point->operations_jour_count,
                     'benefices' => (int) $point->operations()->whereDate('created_at', today())->sum('commission_part_point'),
                     'cloture' => $cloture,

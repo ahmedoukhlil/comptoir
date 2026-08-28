@@ -83,6 +83,23 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
             return (this.soldesServeur[operateurId] ?? 0) + impactLocal;
         },
 
+        // Le cash bouge en contrepartie de toute operation mobile money, dans
+        // le sens inverse (depot : cash +, retrait : cash -), quel que soit
+        // l'operateur mobile money concerne — contrairement a soldeOperateur()
+        // qui ne compte que les operations locales visant precisement cet id.
+        soldeCash() {
+            if (! this.cashOperateur) {
+                return 0;
+            }
+
+            const impactLocal = this.operationsLocalesAffichage.reduce(
+                (somme, op) => somme + (op.type === 'depot' ? op.montant : -op.montant),
+                0
+            );
+
+            return (this.soldesServeur[this.cashOperateur.id] ?? 0) + impactLocal;
+        },
+
         get soldeAffiche() {
             const impactLocal = this.operationsLocalesAffichage.reduce(
                 (somme, op) => somme + (op.type === 'depot' ? op.montant : -op.montant),
@@ -202,7 +219,21 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
                 return t.erreurMontantVide ?? (arabe ? 'أدخل مبلغاً.' : 'Entrez un montant.');
             }
 
-            if ((this.type === 'retrait' || this.type === 'retrait_beneficiaire') && montant > this.soldeOperateur(this.operateurId)) {
+            const estRetrait = this.type === 'retrait' || this.type === 'retrait_beneficiaire';
+
+            if (estRetrait && montant > this.soldeOperateur(this.operateurId)) {
+                return t.erreurSoldeInsuffisant ?? (arabe ? 'الرصيد غير كافٍ.' : 'Solde insuffisant.');
+            }
+
+            // Un retrait fait diminuer le cash (contrepartie physique remise
+            // au client) ; un depot fait diminuer le solde mobile money de
+            // l'operateur choisi (l'agent envoie l'equivalent). Jamais en
+            // dessous de zero, en miroir de la validation serveur.
+            if (estRetrait && this.cashOperateur && montant > this.soldeCash()) {
+                return t.erreurCashInsuffisant ?? (arabe ? 'النقد المتوفر غير كافٍ لهذا السحب.' : 'Le cash disponible est insuffisant pour ce retrait.');
+            }
+
+            if (this.type === 'depot' && montant > this.soldeOperateur(this.operateurId)) {
                 return t.erreurSoldeInsuffisant ?? (arabe ? 'الرصيد غير كافٍ.' : 'Solde insuffisant.');
             }
 

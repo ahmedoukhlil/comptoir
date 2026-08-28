@@ -125,9 +125,30 @@ class Saisie extends Component
             return ['erreur' => __('caisse.erreur_solde_insuffisant')];
         }
 
+        $soldesParOperateur = $this->point->soldesParOperateur();
+
         if (in_array($donnees['type'], ['retrait', 'retrait_beneficiaire'], true)) {
-            $soldeOperateur = $this->point->soldesParOperateur()
-                ->firstWhere('operateur.id', $operateur->id)['solde'] ?? 0;
+            $soldeOperateur = $soldesParOperateur->firstWhere('operateur.id', $operateur->id)['solde'] ?? 0;
+
+            if ($montant > $soldeOperateur) {
+                return ['erreur' => __('caisse.erreur_solde_insuffisant')];
+            }
+
+            // Un retrait fait diminuer le cash (contrepartie physique remise
+            // au client) : jamais en dessous de zero, meme si le solde de
+            // l'operateur mobile money choisi est suffisant.
+            $soldeCash = $soldesParOperateur->firstWhere('operateur.est_cash', true)['solde'] ?? 0;
+
+            if ($montant > $soldeCash) {
+                return ['erreur' => __('caisse.erreur_cash_insuffisant')];
+            }
+        }
+
+        if ($donnees['type'] === 'depot') {
+            // Un depot fait diminuer le solde mobile money de l'operateur
+            // choisi (l'agent envoie l'equivalent au destinataire) : jamais
+            // en dessous de zero.
+            $soldeOperateur = $soldesParOperateur->firstWhere('operateur.id', $operateur->id)['solde'] ?? 0;
 
             if ($montant > $soldeOperateur) {
                 return ['erreur' => __('caisse.erreur_solde_insuffisant')];

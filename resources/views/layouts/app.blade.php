@@ -25,6 +25,7 @@
             erreurTelephoneDigits: @json(__('caisse.erreur_telephone_digits')),
             erreurMontantVide: @json(__('caisse.erreur_montant_vide')),
             erreurSoldeInsuffisant: @json(__('caisse.erreur_solde_insuffisant')),
+            erreurCashInsuffisant: @json(__('caisse.erreur_cash_insuffisant')),
             erreurTypeVide: @json(__('caisse.erreur_type_vide')),
             erreurOperateurVide: @json(__('caisse.erreur_operateur_vide')),
             syncEnAttente: @json(__('caisse.sync_en_attente')),
