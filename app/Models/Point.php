@@ -102,8 +102,18 @@ class Point extends Model
             ->groupBy('operateur_id')
             ->pluck('total', 'operateur_id');
 
+        // Un dépôt/retrait mobile money a toujours une contrepartie en cash
+        // physique dans le sens inverse : lors d'un dépôt, le client donne
+        // du cash à l'agent qui envoie l'équivalent depuis son compte
+        // mobile money (cash +, mobile money -) ; lors d'un retrait, c'est
+        // l'inverse (cash -, mobile money +). Ces totaux, tous opérateurs
+        // mobile money confondus, s'appliquent au solde de l'opérateur Cash.
+        $totalDepots = (int) $depots->sum();
+        $totalRetraits = (int) $retraits->sum();
+
         return $operateurs->map(function (Operateur $operateur) use (
-            $alimentations, $depots, $retraits, $transfertsSortants, $transfertsEntrants, $commissionsVersees
+            $alimentations, $depots, $retraits, $transfertsSortants, $transfertsEntrants, $commissionsVersees,
+            $totalDepots, $totalRetraits
         ) {
             $solde = (int) ($alimentations[$operateur->id] ?? 0)
                 + (int) ($depots[$operateur->id] ?? 0)
@@ -113,6 +123,10 @@ class Point extends Model
 
             if ($operateur->commission_versee_dans_solde) {
                 $solde += (int) ($commissionsVersees[$operateur->id] ?? 0);
+            }
+
+            if ($operateur->est_cash) {
+                $solde += $totalDepots - $totalRetraits;
             }
 
             return ['operateur' => $operateur, 'solde' => $solde];
