@@ -119,8 +119,18 @@
                         </a>
                     </div>
                 @else
+                    <div class="flex justify-end mb-2">
+                        <button
+                            type="button"
+                            x-data
+                            x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'cloture' } }))"
+                            class="w-6 h-6 rounded-full bg-[color:var(--color-sand-deep)] hover:bg-[color:var(--color-line)] flex items-center justify-center text-[11px] font-bold text-[color:var(--color-ink-soft)] flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                            aria-label="{{ __('caisse.guide_revoir') }}"
+                        >?</button>
+                    </div>
+
                     {{-- Progression --}}
-                    <div class="flex items-center justify-center gap-1.5 mb-5">
+                    <div id="guide-cible-cloture-progression" class="flex items-center justify-center gap-1.5 mb-5">
                         <template x-for="(op, i) in operateurs" :key="op.id">
                             <span class="h-1.5 rounded-full transition-all" :class="i === index ? 'w-6 bg-[color:var(--color-ink)]' : (soldesComptes[op.id] !== undefined && soldesComptes[op.id] !== '' ? 'w-1.5 bg-[color:var(--color-green)]' : 'w-1.5 bg-[color:var(--color-line)]')"></span>
                         </template>
@@ -132,12 +142,12 @@
 
                     <p class="text-center text-sm text-[color:var(--color-ink-soft)] max-w-[320px] mx-auto mb-6">{{ __('caisse.cloture_aide') }}</p>
 
-                    <div class="text-center mb-6">
+                    <div id="guide-cible-cloture-theorique" class="text-center mb-6">
                         <div class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-ink-soft)]">{{ __('caisse.cloture_solde_theorique') }}</div>
                         <div class="font-[family-name:var(--font-mono)] font-bold text-3xl text-[color:var(--color-ink)] mt-1" dir="ltr" x-text="formaterMontant(operateurActuel.soldeTheorique)"></div>
                     </div>
 
-                    <div class="mt-6 px-1">
+                    <div id="guide-cible-cloture-compte" class="mt-6 px-1">
                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.cloture_solde_compte') }}</div>
                         <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 max-w-[340px] mx-auto focus-within:border-[color:var(--color-ink)]">
                             <input
@@ -173,7 +183,7 @@
                     </div>
 
                     {{-- Navigation entre opérateurs / clôture --}}
-                    <div class="flex gap-2.5 mt-4 max-w-[340px] mx-auto">
+                    <div id="guide-cible-cloture-navigation" class="flex gap-2.5 mt-4 max-w-[340px] mx-auto">
                         <button
                             type="button"
                             x-show="index > 0"
@@ -266,6 +276,18 @@
                             </div>
                         </div>
                     </template>
+
+                    <x-guide-decouverte
+                        groupe="cloture"
+                        :visible-initial="$this->guideAAfficher"
+                        :etapes="[
+                            ['cible' => '#guide-cible-cloture-progression', 'texte' => __('caisse.guide_cloture_1')],
+                            ['cible' => '#guide-cible-cloture-theorique', 'texte' => __('caisse.guide_cloture_2')],
+                            ['cible' => '#guide-cible-cloture-compte', 'texte' => __('caisse.guide_cloture_3')],
+                            ['cible' => '#guide-cible-cloture-navigation', 'texte' => __('caisse.guide_cloture_4')],
+                        ]"
+                        wire-termine="$wire.marquerGuideVu()"
+                    />
                 @endif
             </div>
         </div>

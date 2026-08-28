@@ -28,6 +28,17 @@ class Cloture extends Component
     }
 
     #[Computed]
+    public function guideAAfficher(): bool
+    {
+        return Auth::user()->guide_vu_le === null;
+    }
+
+    public function marquerGuideVu(): void
+    {
+        Auth::user()->forceFill(['guide_vu_le' => now()])->save();
+    }
+
+    #[Computed]
     public function clotureDuJour(): ?ClotureModel
     {
         return $this->point->clotures()->with('details.operateur')->whereDate('date', today())->first();
