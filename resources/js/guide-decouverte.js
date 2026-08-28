@@ -26,15 +26,16 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
         },
 
         init() {
-            // Debounce : sur iOS Safari, scrollIntoView() fait apparaitre/
-            // disparaitre la barre d'adresse, ce qui declenche resize, qui
-            // relancerait positionner() -> nouveau scrollIntoView() -> boucle
-            // infinie sans jamais stabiliser la position (carte jamais
-            // affichee, defilement bloque tant que ca tourne).
+            // Le resize (barre d'adresse iOS qui apparait/disparait au
+            // scroll, rotation d'ecran) ne doit que recalculer les
+            // coordonnees de la carte deja affichee — jamais re-scroller
+            // ni toucher au highlight, sinon un scroll manuel de
+            // l'utilisateur declenche resize -> nouveau scrollIntoView()
+            // qui le ramene de force vers la cible du guide.
             let minuteurResize = null;
             window.addEventListener('resize', () => {
                 clearTimeout(minuteurResize);
-                minuteurResize = setTimeout(() => this.positionner(), 300);
+                minuteurResize = setTimeout(() => this.recalculerPosition(), 300);
             });
             window.addEventListener('guide:relancer', (e) => {
                 if (e.detail?.groupe !== this.groupe) {
@@ -56,6 +57,43 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
             this.cibleActuelle = null;
         },
 
+        /**
+         * Recalcule uniquement les coordonnees de la carte pour la cible
+         * courante, sans scroller ni re-toucher au highlight. Appele au
+         * resize pour suivre un changement de mise en page.
+         */
+        recalculerPosition() {
+            if (! this.visible || ! this.cibleActuelle) {
+                return;
+            }
+
+            const rect = this.cibleActuelle.getBoundingClientRect();
+            this.position = this.calculerCoordonnees(rect);
+        },
+
+        calculerCoordonnees(rect) {
+            // Sur mobile, une barre fixe peut couvrir le bas de l'écran
+            // (ex. barre résumé sur l'écran de saisie) : on l'exclut de
+            // l'espace disponible pour ne pas placer la carte dessous.
+            const barreBasse = document.querySelector('[data-guide-barre-basse]');
+            const barreBasseFixe = barreBasse && getComputedStyle(barreBasse).position === 'fixed';
+            const limiteBasse = barreBasseFixe
+                ? barreBasse.getBoundingClientRect().top
+                : window.innerHeight;
+            const espaceEnBas = limiteBasse - rect.bottom;
+            const placementBas = espaceEnBas > 160;
+            const demiLargeurCarte = Math.min(140, window.innerWidth / 2 - 12);
+
+            return {
+                top: placementBas ? rect.bottom + 12 : rect.top - 12,
+                left: Math.min(
+                    Math.max(rect.left + rect.width / 2, demiLargeurCarte + 12),
+                    window.innerWidth - demiLargeurCarte - 12
+                ),
+                placement: placementBas ? 'bas' : 'haut',
+            };
+        },
+
         positionner() {
             this.retirerSurbrillance();
             this.positionCalculee = false;
@@ -71,39 +109,10 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
                 return;
             }
 
-            // On ne scrolle que si la cible n'est pas deja raisonnablement
-            // visible : resister a re-scroller inutilement evite de
-            // redeclencher resize (barre d'adresse iOS) en boucle avec le
-            // debounce ci-dessus.
-            const rectAvant = cible.getBoundingClientRect();
-            const dejaVisible = rectAvant.top >= 0 && rectAvant.bottom <= window.innerHeight;
-
-            if (! dejaVisible) {
-                cible.scrollIntoView({ block: 'center', behavior: 'smooth' });
-            }
+            cible.scrollIntoView({ block: 'center', behavior: 'smooth' });
 
             setTimeout(() => {
-                const rect = cible.getBoundingClientRect();
-                // Sur mobile, une barre fixe peut couvrir le bas de l'écran
-                // (ex. barre résumé sur l'écran de saisie) : on l'exclut de
-                // l'espace disponible pour ne pas placer la carte dessous.
-                const barreBasse = document.querySelector('[data-guide-barre-basse]');
-                const barreBasseFixe = barreBasse && getComputedStyle(barreBasse).position === 'fixed';
-                const limiteBasse = barreBasseFixe
-                    ? barreBasse.getBoundingClientRect().top
-                    : window.innerHeight;
-                const espaceEnBas = limiteBasse - rect.bottom;
-                const placementBas = espaceEnBas > 160;
-                const demiLargeurCarte = Math.min(140, window.innerWidth / 2 - 12);
-
-                this.position = {
-                    top: placementBas ? rect.bottom + 12 : rect.top - 12,
-                    left: Math.min(
-                        Math.max(rect.left + rect.width / 2, demiLargeurCarte + 12),
-                        window.innerWidth - demiLargeurCarte - 12
-                    ),
-                    placement: placementBas ? 'bas' : 'haut',
-                };
+                this.position = this.calculerCoordonnees(cible.getBoundingClientRect());
                 this.positionCalculee = true;
 
                 cible.classList.add('guide-cible-surlignee');
