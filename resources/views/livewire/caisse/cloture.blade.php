@@ -89,11 +89,11 @@
                         <div id="guide-cible-cloture-soldes" class="mt-6 grid grid-cols-2 gap-3 text-start">
                             <div class="bg-[color:var(--color-paper)] rounded-xl p-4 border border-[color:var(--color-line)]">
                                 <div class="text-[11px] font-semibold text-[color:var(--color-ink-soft)] uppercase">{{ __('caisse.cloture_solde_theorique') }}</div>
-                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1 text-start" dir="ltr">{{ number_format($c->solde_theorique, 0, ',', ' ') }}</div>
+                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1 text-start" dir="ltr">{{ number_format($c->solde_theorique, 0, ',', ' ') }} <span class="text-xs">{{ __('caisse.devise') }}</span></div>
                             </div>
                             <div class="bg-[color:var(--color-paper)] rounded-xl p-4 border border-[color:var(--color-line)]">
                                 <div class="text-[11px] font-semibold text-[color:var(--color-ink-soft)] uppercase">{{ __('caisse.cloture_solde_compte') }}</div>
-                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1 text-start" dir="ltr">{{ number_format($c->solde_compte, 0, ',', ' ') }}</div>
+                                <div class="font-[family-name:var(--font-mono)] font-bold text-lg text-[color:var(--color-ink)] mt-1 text-start" dir="ltr">{{ number_format($c->solde_compte, 0, ',', ' ') }} <span class="text-xs">{{ __('caisse.devise') }}</span></div>
                             </div>
                         </div>
 

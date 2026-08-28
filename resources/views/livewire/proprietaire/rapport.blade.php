@@ -39,16 +39,16 @@
                 <div class="grid grid-cols-2 gap-3 mb-6">
                     <div class="bg-[color:var(--color-paper)] rounded-xl p-4 border border-[color:var(--color-line)]">
                         <div class="text-[11px] font-semibold text-[color:var(--color-ink-soft)] uppercase">{{ __('caisse.rapport_capital_injecte') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-xl text-[color:var(--color-ink)] mt-1">{{ number_format($this->totalCapital, 0, ',', ' ') }}</div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-xl text-[color:var(--color-ink)] mt-1">{{ number_format($this->totalCapital, 0, ',', ' ') }} <span class="text-xs font-semibold">{{ __('caisse.devise') }}</span></div>
                     </div>
                     <div class="bg-[color:var(--color-green)]/10 rounded-xl p-4">
                         <div class="text-[11px] font-semibold text-[color:var(--color-green-deep)] uppercase">{{ __('caisse.rapport_commissions') }}</div>
-                        <div class="font-[family-name:var(--font-mono)] font-bold text-xl text-[color:var(--color-green-deep)] mt-1" dir="ltr">+ {{ number_format($this->totalCommissions, 0, ',', ' ') }}</div>
+                        <div class="font-[family-name:var(--font-mono)] font-bold text-xl text-[color:var(--color-green-deep)] mt-1" dir="ltr">+ {{ number_format($this->totalCommissions, 0, ',', ' ') }} <span class="text-xs font-semibold">{{ __('caisse.devise') }}</span></div>
                     </div>
                 </div>
 
                 <div class="text-[11px] text-[color:var(--color-ink-soft)] mb-6">
-                    {{ __('caisse.rapport_commissions_banque') }} : <span dir="ltr">{{ number_format($this->totalCommissionsBanque, 0, ',', ' ') }}</span>
+                    {{ __('caisse.rapport_commissions_banque') }} : <span dir="ltr">{{ number_format($this->totalCommissionsBanque, 0, ',', ' ') }} {{ __('caisse.devise') }}</span>
                 </div>
 
                 {{-- Détail par point --}}
@@ -57,8 +57,8 @@
                         <div class="flex items-center justify-between py-3">
                             <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm text-[color:var(--color-ink)]">{{ $ligne->point->nom }}</div>
                             <div class="flex items-center gap-4 text-sm">
-                                <span class="text-[color:var(--color-ink-soft)]">{{ __('caisse.rapport_capital_injecte') }} : <b class="text-[color:var(--color-ink)]">{{ number_format($ligne->capital, 0, ',', ' ') }}</b></span>
-                                <span class="text-[color:var(--color-green-deep)] font-semibold">+ {{ number_format($ligne->commissions, 0, ',', ' ') }}</span>
+                                <span class="text-[color:var(--color-ink-soft)]">{{ __('caisse.rapport_capital_injecte') }} : <b class="text-[color:var(--color-ink)]">{{ number_format($ligne->capital, 0, ',', ' ') }} {{ __('caisse.devise') }}</b></span>
+                                <span class="text-[color:var(--color-green-deep)] font-semibold">+ {{ number_format($ligne->commissions, 0, ',', ' ') }} {{ __('caisse.devise') }}</span>
                             </div>
                         </div>
                     @endforeach

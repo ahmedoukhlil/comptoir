@@ -141,7 +141,7 @@
                                     </div>
                                 </div>
                                 <div class="font-[family-name:var(--font-mono)] font-semibold text-sm text-[color:var(--color-ink)] tabular-nums text-end flex-shrink-0" dir="ltr">
-                                    {{ number_format($ligne->solde, 0, ',', ' ') }}
+                                    {{ number_format($ligne->solde, 0, ',', ' ') }} <span class="text-[10px]">{{ __('caisse.devise') }}</span>
                                 </div>
                             </div>
 

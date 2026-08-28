@@ -248,7 +248,7 @@
                                         </div>
                                     </div>
                                     <div class="font-[family-name:var(--font-mono)] font-bold text-[15px]" dir="ltr" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'">
-                                        <span x-text="(operation.type === 'depot' ? '+' : '−') + ' ' + formaterMontant(operation.montant)"></span>
+                                        <span x-text="(operation.type === 'depot' ? '+' : '−') + ' ' + formaterMontant(operation.montant) + ' ' + @js(__('caisse.devise'))"></span>
                                     </div>
                                 </div>
                             </template>
@@ -264,7 +264,7 @@
                                         </div>
                                     </div>
                                     <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
-                                        {{ $operation->type === 'depot' ? '+' : '−' }} {{ number_format($operation->montant, 0, ',', ' ') }}
+                                        {{ $operation->type === 'depot' ? '+' : '−' }} {{ number_format($operation->montant, 0, ',', ' ') }} {{ __('caisse.devise') }}
                                     </div>
                                 </div>
                             @empty
