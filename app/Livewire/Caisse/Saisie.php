@@ -52,9 +52,15 @@ class Saisie extends Component
     #[Computed]
     public function soldesParOperateur()
     {
-        $soldes = $this->point->soldesParOperateur();
+        return $this->point->soldesParOperateur();
+    }
 
-        return $soldes->filter(fn ($ligne) => ! $ligne['operateur']->est_cash)->values();
+    #[Computed]
+    public function soldeCash(): ?array
+    {
+        $ligne = $this->soldesParOperateur->firstWhere('operateur.est_cash', true);
+
+        return $ligne ? ['operateur' => $ligne['operateur'], 'solde' => $ligne['solde']] : null;
     }
 
     #[Computed]

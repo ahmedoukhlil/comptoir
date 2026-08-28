@@ -2,6 +2,7 @@
     x-data="comptoirSaisie({
         point: {{ Js::from(['id' => $this->point->id]) }},
         operateurs: {{ Js::from($this->operateursPourJs) }},
+        cashOperateur: {{ Js::from($this->soldeCash ? ['id' => $this->soldeCash['operateur']->id, 'nom' => $this->soldeCash['operateur']->nom, 'logoUrl' => $this->soldeCash['operateur']->logoUrl()] : null) }},
         soldesServeur: {{ Js::from($this->soldesParOperateur->pluck('solde', 'operateur.id')) }},
         soldeTotalServeur: {{ Js::from($this->solde) }},
     })"
@@ -72,6 +73,15 @@
                 </div>
 
                 <div class="flex flex-wrap gap-2 mt-4">
+                    <template x-if="cashOperateur">
+                        <div class="bg-white/10 rounded-lg px-3 py-1.5">
+                            <div class="flex items-center gap-1 h-4">
+                                <img x-show="cashOperateur.logoUrl && !cashOperateur.logoEnErreur" :src="cashOperateur.logoUrl" :alt="cashOperateur.nom" x-on:error="cashOperateur.logoEnErreur = true" class="h-4 max-w-[52px] object-contain">
+                                <div x-show="! cashOperateur.logoUrl || cashOperateur.logoEnErreur" class="text-[10px] font-semibold text-white" x-text="cashOperateur.nom"></div>
+                            </div>
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldesServeur[cashOperateur.id] ?? 0)"></div>
+                        </div>
+                    </template>
                     <template x-for="operateur in operateurs" :key="operateur.id">
                         <div class="bg-white/10 rounded-lg px-3 py-1.5">
                             <div class="flex items-center gap-1 h-4">
