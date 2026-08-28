@@ -49,7 +49,7 @@
             </form>
 
             {{-- Carte solde --}}
-            <div class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
+            <div id="guide-cible-solde" class="mx-5 md:mx-9 rounded-[20px] p-5 text-white" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
                 <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-1.5 text-[11px] font-semibold" :class="enLigne ? 'text-[#86EFAC]' : 'text-[#FDE68A]'">
                         <span class="w-1.5 h-1.5 rounded-full" :class="enLigne ? 'bg-[#86EFAC]' : 'bg-[#FDE68A]'"></span>
@@ -376,12 +376,13 @@
                 :visible-initial="$this->guideAAfficher"
                 :etapes="[
                     ['cible' => '#guide-cible-barre-boutons', 'texte' => __('caisse.guide_saisie_1')],
-                    ['cible' => '#guide-cible-type', 'texte' => __('caisse.guide_saisie_2')],
-                    ['cible' => '#guide-cible-operateur', 'texte' => __('caisse.guide_saisie_3')],
-                    ['cible' => '#guide-cible-telephone', 'texte' => __('caisse.guide_saisie_4')],
-                    ['cible' => '#guide-cible-montant', 'texte' => __('caisse.guide_saisie_5')],
-                    ['cible' => '#guide-cible-confirmer', 'texte' => __('caisse.guide_saisie_6')],
-                    ['cible' => '#guide-cible-registre', 'texte' => __('caisse.guide_saisie_7')],
+                    ['cible' => '#guide-cible-solde', 'texte' => __('caisse.guide_saisie_2')],
+                    ['cible' => '#guide-cible-type', 'texte' => __('caisse.guide_saisie_3')],
+                    ['cible' => '#guide-cible-operateur', 'texte' => __('caisse.guide_saisie_4')],
+                    ['cible' => '#guide-cible-telephone', 'texte' => __('caisse.guide_saisie_5')],
+                    ['cible' => '#guide-cible-montant', 'texte' => __('caisse.guide_saisie_6')],
+                    ['cible' => '#guide-cible-confirmer', 'texte' => __('caisse.guide_saisie_7')],
+                    ['cible' => '#guide-cible-registre', 'texte' => __('caisse.guide_saisie_8')],
                 ]"
                 wire-termine="$wire.marquerGuideVu()"
             />
