@@ -53,12 +53,15 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white">{{ __('caisse.cloture_titre') }}</span>
-                        <b class="block text-sm font-semibold mt-0.5 text-white">{{ $this->point->nom }}</b>
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <x-bouton-retour :href="route('caisse.saisie')" />
+                        <div class="min-w-0">
+                            <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.cloture_titre') }}</span>
+                            <b class="block text-sm font-semibold mt-0.5 text-white truncate">{{ $this->point->nom }}</b>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3 flex-shrink-0">
                         <x-selecteur-langue />
                     </div>
                 </div>
@@ -208,12 +211,6 @@
                         >{{ __('caisse.cloture_confirmer') }}</button>
                     </div>
                     <p x-show="erreur" x-cloak x-text="erreur" role="alert" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
-
-                    <div class="text-center mt-8">
-                        <a href="{{ route('caisse.saisie') }}" class="text-sm font-semibold text-[color:var(--color-ink-soft)] underline">
-                            {{ __('caisse.historique_retour') }}
-                        </a>
-                    </div>
 
                     {{-- Modale de confirmation --}}
                     <template x-teleport="body">

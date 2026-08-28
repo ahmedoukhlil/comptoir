@@ -49,9 +49,12 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div class="flex items-start justify-between">
-                    <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white">{{ __('caisse.alimentation_titre') }}</span>
-                    <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <x-bouton-retour :href="route('proprietaire.dashboard')" />
+                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.alimentation_titre') }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
                         <x-selecteur-langue />
                         <button
                             type="button"
@@ -140,12 +143,6 @@
                         </div>
                     </div>
                 @endif
-
-                <div class="text-center mt-8">
-                    <a href="{{ route('proprietaire.dashboard') }}" class="text-sm font-semibold text-[color:var(--color-ink-soft)] underline">
-                        {{ __('caisse.retour_dashboard') }}
-                    </a>
-                </div>
             </div>
 
             {{-- Modale de confirmation --}}
