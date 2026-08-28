@@ -26,7 +26,9 @@ class Dashboard extends Component
     #[Computed]
     public function guideAAfficher(): bool
     {
-        return Auth::user()->guide_vu_le === null;
+        // Le guide ne se lance plus automatiquement : uniquement via le
+        // bouton (?) qui declenche guide:relancer cote JS.
+        return false;
     }
 
     public function marquerGuideVu(): void
