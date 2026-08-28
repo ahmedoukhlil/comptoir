@@ -26,7 +26,16 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
         },
 
         init() {
-            window.addEventListener('resize', () => this.positionner());
+            // Debounce : sur iOS Safari, scrollIntoView() fait apparaitre/
+            // disparaitre la barre d'adresse, ce qui declenche resize, qui
+            // relancerait positionner() -> nouveau scrollIntoView() -> boucle
+            // infinie sans jamais stabiliser la position (carte jamais
+            // affichee, defilement bloque tant que ca tourne).
+            let minuteurResize = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(minuteurResize);
+                minuteurResize = setTimeout(() => this.positionner(), 300);
+            });
             window.addEventListener('guide:relancer', (e) => {
                 if (e.detail?.groupe !== this.groupe) {
                     return;
@@ -62,7 +71,16 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
                 return;
             }
 
-            cible.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            // On ne scrolle que si la cible n'est pas deja raisonnablement
+            // visible : resister a re-scroller inutilement evite de
+            // redeclencher resize (barre d'adresse iOS) en boucle avec le
+            // debounce ci-dessus.
+            const rectAvant = cible.getBoundingClientRect();
+            const dejaVisible = rectAvant.top >= 0 && rectAvant.bottom <= window.innerHeight;
+
+            if (! dejaVisible) {
+                cible.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            }
 
             setTimeout(() => {
                 const rect = cible.getBoundingClientRect();

@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'comptoir-v5';
+const CACHE_VERSION = 'comptoir-v6';
 const CACHE_SHELL = `${CACHE_VERSION}-shell`;
 const CACHE_RUNTIME = `${CACHE_VERSION}-runtime`;
 
