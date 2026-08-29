@@ -53,12 +53,12 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             <div class="px-5 pt-6 pb-4 md:px-9 md:py-6" style="background: linear-gradient(155deg, var(--color-ink) 0%, var(--color-secondary) 100%);">
-                <div id="guide-cible-cloture-bandeau" class="flex items-center justify-between gap-3">
+                <div id="guide-cible-cloture-bandeau" class="flex items-start justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('caisse.saisie')" />
                         <div class="min-w-0">
                             <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.cloture_titre') }}</span>
-                            <b class="block text-sm font-semibold mt-0.5 text-white truncate">{{ $this->point->nom }}</b>
+                            <b class="block text-sm font-semibold mt-0.5 text-white">{{ $this->point->nom }}</b>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 flex-shrink-0">

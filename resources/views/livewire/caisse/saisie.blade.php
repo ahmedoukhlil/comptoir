@@ -13,10 +13,10 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             {{-- Barre du haut --}}
-            <div class="flex items-center justify-between px-5 pt-5 pb-2 md:px-9">
+            <div class="flex items-start justify-between px-5 pt-5 pb-2 md:px-9">
                 <div class="min-w-0">
                     <span class="block text-[11px] text-[color:var(--color-ink-soft)]">{{ __('caisse.point') }}</span>
-                    <strong class="block text-sm font-semibold text-[color:var(--color-ink)] truncate">{{ $this->point->nom }}</strong>
+                    <strong class="block text-sm font-semibold text-[color:var(--color-ink)]">{{ $this->point->nom }}</strong>
                     <span class="block text-[11px] text-[color:var(--color-ink-soft)] mt-0.5">{{ now()->translatedFormat('l d F Y') }}</span>
                 </div>
                 <div id="guide-cible-barre-boutons" class="flex items-start gap-1.5 flex-shrink-0">

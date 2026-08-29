@@ -81,6 +81,13 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
         },
 
         calculerCoordonnees(rect) {
+            // document.documentElement.clientWidth (contrairement a
+            // window.innerWidth sur certains navigateurs) exclut la largeur
+            // de la barre de defilement verticale : sur l'ecran de saisie,
+            // souvent plus haut que la fenetre, s'appuyer sur innerWidth
+            // faisait deborder la carte au-dela du bord reellement visible.
+            const largeurDisponible = document.documentElement.clientWidth;
+
             // Sur mobile, une barre fixe peut couvrir le bas de l'écran
             // (ex. barre résumé sur l'écran de saisie) : on l'exclut de
             // l'espace disponible pour ne pas placer la carte dessous.
@@ -91,13 +98,21 @@ export default function guideDecouverte({ etapes, onTermine, groupe = 'defaut', 
                 : window.innerHeight;
             const espaceEnBas = limiteBasse - rect.bottom;
             const placementBas = espaceEnBas > 160;
-            const demiLargeurCarte = Math.min(140, window.innerWidth / 2 - 12);
+
+            // Largeur reelle de la carte (voir w-[280px] dans le composant
+            // Blade), reduite sur les tres petits ecrans. Le calcul se fait
+            // ici une seule fois : `left` est directement le bord gauche
+            // final de la carte, pas un point central a retraiter cote Blade
+            // (l'ancienne duplication du calcul dans le style inline pouvait
+            // diverger d'un pixel et laisser deborder le bouton "Suivant").
+            const largeurCarte = Math.min(280, largeurDisponible - 24);
+            const centreCible = rect.left + rect.width / 2;
 
             return {
                 top: placementBas ? rect.bottom + 12 : rect.top - 12,
                 left: Math.min(
-                    Math.max(rect.left + rect.width / 2, demiLargeurCarte + 12),
-                    window.innerWidth - demiLargeurCarte - 12
+                    Math.max(centreCible - largeurCarte / 2, 12),
+                    largeurDisponible - largeurCarte - 12
                 ),
                 placement: placementBas ? 'bas' : 'haut',
             };
