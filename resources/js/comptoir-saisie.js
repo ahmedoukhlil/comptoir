@@ -194,6 +194,12 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
             return libelles[type] ?? type;
         },
 
+        libelleMouvementCash(type) {
+            const t = window.ComptoirTraductions ?? {};
+
+            return type === 'depot' ? t.cashRecuClient : t.cashRemisClient;
+        },
+
         texteSyncEnAttente(n) {
             const arabe = document.documentElement.lang === 'ar';
             const texte = window.ComptoirTraductions?.syncEnAttente ?? (arabe ? 'بانتظار الإرسال' : "En attente d'envoi");

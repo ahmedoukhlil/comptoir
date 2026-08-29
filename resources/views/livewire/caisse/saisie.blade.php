@@ -224,24 +224,30 @@
 
                     {{-- Colonne historique --}}
                     <div id="guide-cible-registre" class="mt-8 md:mt-0 md:border-s md:border-[color:var(--color-line)] md:ps-9">
-                        <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.aujourdhui') }}</div>
-                        <div class="flex gap-4 mb-1.5">
-                            <span class="flex items-center gap-1.5 text-[11px] font-semibold text-[color:var(--color-ink-soft)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
-                                <span class="w-2 h-2 rounded-full bg-[color:var(--color-green)]"></span> {{ __('caisse.entree') }}
-                            </span>
-                            <span class="flex items-center gap-1.5 text-[11px] font-semibold text-[color:var(--color-ink-soft)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
-                                <span class="w-2 h-2 rounded-full bg-[color:var(--color-rust)]"></span> {{ __('caisse.sortie') }}
-                            </span>
+                        <div class="mb-3 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
+                            <h2 class="text-sm font-bold text-[color:var(--color-ink)]">{{ __('caisse.registre_titre') }}</h2>
+                            <p class="mt-1 text-xs leading-relaxed text-[color:var(--color-ink-soft)]">{{ __('caisse.registre_aide') }}</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]" aria-label="{{ __('caisse.registre_titre') }}">
+                            <div class="flex items-center gap-2 rounded-xl border border-[#B8D4C4] bg-[#EDF7F1] px-3 py-2 text-xs font-bold leading-snug text-[color:var(--color-green-deep)]">
+                                <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white" aria-hidden="true">↓</span>
+                                <span>{{ __('caisse.cash_recu_client') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 rounded-xl border border-[#E0C0B5] bg-[#FBF0EC] px-3 py-2 text-xs font-bold leading-snug text-[color:var(--color-rust-deep)]">
+                                <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white" aria-hidden="true">↑</span>
+                                <span>{{ __('caisse.cash_remis_client') }}</span>
+                            </div>
                         </div>
 
                         <div class="pb-2 md:max-h-[520px] md:overflow-y-auto">
                             <template x-for="operation in operationsLocalesAffichage" :key="operation.uuid_client">
-                                <div class="flex items-center gap-3 py-3 border-b border-dashed border-[color:var(--color-line)] opacity-70">
-                                    <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" :class="operation.type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]'"></div>
-                                    <div class="flex-1">
+                                <div class="flex items-start gap-3 py-3 border-b border-dashed border-[color:var(--color-line)] opacity-70">
+                                    <div class="mt-1.5 w-2.5 h-2.5 rounded-full flex-shrink-0" aria-hidden="true" :class="operation.type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]'"></div>
+                                    <div class="min-w-0 flex-1">
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
                                             <span x-text="libelleType(operation.type) + ' · ' + operation.operateur_nom"></span>
                                         </div>
+                                        <div class="mt-1 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-xs font-semibold" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'" x-text="libelleMouvementCash(operation.type)"></div>
                                         <div class="text-xs leading-relaxed text-[color:var(--color-ink-soft)] mt-0.5 flex items-center gap-1" dir="ltr">
                                             <span x-text="operation.heure"></span> · <span x-text="operation.client_telephone"></span>
                                             <span class="inline-flex items-center gap-0.5 text-[#B8853C]">
@@ -250,23 +256,26 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="font-[family-name:var(--font-mono)] font-bold text-[15px]" dir="ltr" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'">
+                                    <div class="flex-shrink-0 font-[family-name:var(--font-mono)] font-bold text-[15px]" dir="ltr" :class="operation.type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]'">
                                         <span x-text="(operation.type === 'depot' ? '+' : '−') + ' ' + formaterMontant(operation.montant) + ' ' + @js(__('caisse.devise'))"></span>
                                     </div>
                                 </div>
                             </template>
                             @forelse ($this->operationsDuJour as $operation)
-                                <div class="flex items-center gap-3 py-3 border-b border-dashed border-[color:var(--color-line)]">
-                                    <div class="w-2.5 h-2.5 rounded-full flex-shrink-0 {{ $operation->type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]' }}"></div>
-                                    <div class="flex-1">
+                                <div class="flex items-start gap-3 py-3 border-b border-dashed border-[color:var(--color-line)]">
+                                    <div class="mt-1.5 w-2.5 h-2.5 rounded-full flex-shrink-0 {{ $operation->type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]' }}" aria-hidden="true"></div>
+                                    <div class="min-w-0 flex-1">
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
                                             {{ $operation->libelleType() }} · {{ $operation->operateur->nom }}
+                                        </div>
+                                        <div class="mt-1 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-xs font-semibold {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}">
+                                            {{ $operation->type === 'depot' ? __('caisse.cash_recu_client') : __('caisse.cash_remis_client') }}
                                         </div>
                                         <div class="text-xs leading-relaxed text-[color:var(--color-ink-soft)] mt-0.5" dir="ltr">
                                             {{ $operation->created_at->format('H:i') }} · {{ $operation->client_telephone }}
                                         </div>
                                     </div>
-                                    <div class="font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
+                                    <div class="flex-shrink-0 font-[family-name:var(--font-mono)] font-bold text-[15px] {{ $operation->type === 'depot' ? 'text-[color:var(--color-green-deep)]' : 'text-[color:var(--color-rust-deep)]' }}" dir="ltr">
                                         {{ $operation->type === 'depot' ? '+' : '−' }} {{ number_format($operation->montant, 0, ',', ' ') }} {{ __('caisse.devise') }}
                                     </div>
                                 </div>

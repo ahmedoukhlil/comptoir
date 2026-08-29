@@ -36,6 +36,8 @@
             libelleDepot: @json(__('caisse.depot')),
             libelleRetrait: @json(__('caisse.retrait')),
             libelleRetraitBeneficiaire: @json(__('caisse.retrait_beneficiaire')),
+            cashRecuClient: @json(__('caisse.cash_recu_client')),
+            cashRemisClient: @json(__('caisse.cash_remis_client')),
         };
 
         if (Object.values(window.ComptoirTraductions).some((v) => ! v)) {
@@ -46,9 +48,10 @@
             navigator.serviceWorker.register('/sw.js');
         }
         document.addEventListener('livewire:init', () => {
-            Livewire.on('langue-changee', ({ locale }) => {
+            Livewire.on('langue-changee', ({ locale, traductions }) => {
                 document.documentElement.setAttribute('lang', locale);
                 document.documentElement.setAttribute('dir', locale === 'ar' ? 'rtl' : 'ltr');
+                Object.assign(window.ComptoirTraductions, traductions ?? {});
             });
         });
     </script>
