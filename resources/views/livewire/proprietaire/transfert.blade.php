@@ -1,4 +1,4 @@
-<div
+<main
     x-data="{
         pointId: {{ Js::from($this->points->first()?->id) }},
         operateurs: {{ Js::from($this->operateursPourJs) }}.map(o => ({ ...o, logoEnErreur: false })),
@@ -49,14 +49,14 @@
                 <div id="guide-cible-transfert-bandeau" class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('proprietaire.dashboard')" />
-                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.transfert_titre') }}</span>
+                        <h1 class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.transfert_titre') }}</h1>
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">
                         <x-selecteur-langue />
                         <button
                             type="button"
                             x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'transfert' } }))"
-                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            class="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             aria-label="{{ __('caisse.guide_revoir') }}"
                         >?</button>
                     </div>
@@ -64,60 +64,56 @@
             </div>
 
             <div class="px-5 py-6 md:px-9 md:py-8">
-                <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_point_label') }}</div>
-                <div class="flex flex-wrap gap-2 mb-6">
+                <fieldset class="mb-6">
+                    <legend class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_point_label') }}</legend>
+                    <div class="flex flex-wrap gap-2">
                     @foreach ($this->points as $point)
-                        <button
-                            type="button"
-                            x-on:click="pointId = {{ $point->id }}; chargerSoldes()"
-                            class="text-sm font-bold px-4 py-3 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"
-                            :class="pointId === {{ $point->id }} ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                        >{{ $point->nom }}</button>
+                        <label class="cursor-pointer text-sm font-bold px-4 py-3 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="pointId === {{ $point->id }} ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'">
+                            <input type="radio" name="point-transfert" value="{{ $point->id }}" x-model.number="pointId" x-on:change="chargerSoldes()" class="sr-only">
+                            {{ $point->nom }}
+                        </label>
                     @endforeach
-                </div>
+                    </div>
+                </fieldset>
 
                 {{-- Source --}}
-                <div id="guide-cible-transfert-source" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_source_label') }}</div>
-                <div class="flex flex-wrap gap-2 mb-1.5">
+                <fieldset>
+                    <legend id="guide-cible-transfert-source" class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_source_label') }}</legend>
+                    <div class="flex flex-wrap gap-2 mb-1.5">
                     <template x-for="operateur in operateurs" :key="'src-' + operateur.id">
-                        <button
-                            type="button"
-                            x-on:click="sourceId = operateur.id; if (destinationId === sourceId) destinationId = operateurs.find(o => o.id !== sourceId)?.id ?? null"
-                            class="flex items-center justify-center px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold"
-                            :class="sourceId === operateur.id ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                        >
+                        <label class="cursor-pointer flex min-h-11 items-center justify-center px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="sourceId === operateur.id ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'">
+                            <input type="radio" name="transfert-source" :value="operateur.id" x-model.number="sourceId" x-on:change="if (destinationId === sourceId) destinationId = operateurs.find(o => o.id !== sourceId)?.id ?? null" class="sr-only">
                             <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" alt="" x-on:error="operateur.logoEnErreur = true" class="h-5 max-w-[80px] object-contain">
                             <span x-show="! operateur.logoUrl || operateur.logoEnErreur" x-text="operateur.nom"></span>
-                        </button>
+                        </label>
                     </template>
-                </div>
+                    </div>
+                </fieldset>
                 <div class="text-[11px] text-[color:var(--color-ink-soft)] mb-6">
                     {{ __('caisse.transfert_solde_disponible') }} : <span class="font-[family-name:var(--font-mono)] font-bold" x-text="formaterMontant(soldes[sourceId] ?? 0)"></span>
                 </div>
 
                 {{-- Destination --}}
-                <div id="guide-cible-transfert-destination" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_destination_label') }}</div>
-                <div class="flex flex-wrap gap-2 mb-6">
+                <fieldset>
+                    <legend id="guide-cible-transfert-destination" class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.transfert_destination_label') }}</legend>
+                    <div class="flex flex-wrap gap-2 mb-6">
                     <template x-for="operateur in operateurs" :key="'dst-' + operateur.id">
-                        <button
-                            type="button"
-                            x-on:click="if (operateur.id !== sourceId) destinationId = operateur.id"
-                            :disabled="operateur.id === sourceId"
-                            class="flex items-center justify-center px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed"
-                            :class="destinationId === operateur.id ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                        >
+                        <label class="flex min-h-11 items-center justify-center px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="operateur.id === sourceId ? 'opacity-30 cursor-not-allowed border-[color:var(--color-line)]' : (destinationId === operateur.id ? 'cursor-pointer border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'cursor-pointer border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]')">
+                            <input type="radio" name="transfert-destination" :value="operateur.id" x-model.number="destinationId" :disabled="operateur.id === sourceId" class="sr-only">
                             <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" alt="" x-on:error="operateur.logoEnErreur = true" class="h-5 max-w-[80px] object-contain">
                             <span x-show="! operateur.logoUrl || operateur.logoEnErreur" x-text="operateur.nom"></span>
-                        </button>
+                        </label>
                     </template>
-                </div>
+                    </div>
+                </fieldset>
                 <p class="text-[11px] text-[color:var(--color-ink-soft)] -mt-4 mb-6" x-show="sourceId === destinationId" x-cloak>{{ __('caisse.transfert_choisir_destination_differente') }}</p>
 
                 {{-- Montant --}}
                 <div id="guide-cible-transfert-montant" class="mt-2 px-1">
-                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.transfert_montant_label') }}</div>
+                    <label for="transfert-montant" class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.transfert_montant_label') }}</label>
                     <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 max-w-[340px] mx-auto focus-within:border-[color:var(--color-ink)]">
                         <input
+                            id="transfert-montant"
                             type="text"
                             inputmode="numeric"
                             x-model="montant"
@@ -131,7 +127,9 @@
                 </div>
 
                 <div class="mt-4">
+                    <label for="transfert-note" class="sr-only">{{ __('caisse.alimentation_note_label') }}</label>
                     <input
+                        id="transfert-note"
                         type="text"
                         x-model="note"
                         placeholder="{{ __('caisse.alimentation_note_placeholder') }}"
@@ -232,4 +230,4 @@
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />
-</div>
+</main>

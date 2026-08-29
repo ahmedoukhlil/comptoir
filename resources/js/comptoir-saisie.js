@@ -48,13 +48,14 @@ function repartirCommission(operateur, montant, typeOperation) {
     return { frais, partPoint, partBanque: frais - partPoint };
 }
 
-export default function comptoirSaisie({ point, operateurs, cashOperateur, soldesServeur, soldeTotalServeur }) {
+export default function comptoirSaisie({ point, operateurs, cashOperateur, soldesServeur, soldeTotalServeur, devise }) {
     return {
         point,
         operateurs: operateurs.map(o => ({ ...o, logoEnErreur: false })),
         cashOperateur: cashOperateur ? { ...cashOperateur, logoEnErreur: false } : null,
         soldesServeur, // { [operateur_id]: solde }
         soldeTotalServeur,
+        devise,
         enLigne: navigator.onLine,
         enAttente: 0,
         operationsLocalesAffichage: [],
@@ -127,6 +128,20 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
             const operateur = this.operateurs.find(o => o.id === this.operateurId);
 
             return operateur ? repartirCommission(operateur, montant, this.type).partPoint : 0;
+        },
+
+        selectionnerTypeRelatif(delta) {
+            const types = ['depot', 'retrait', 'retrait_beneficiaire'];
+            const index = Math.max(0, types.indexOf(this.type));
+            this.type = types[(index + delta + types.length) % types.length];
+            this.$nextTick(() => document.querySelector(`input[name="type-operation"][value="${this.type}"]`)?.focus());
+        },
+
+        selectionnerOperateurRelatif(delta) {
+            const ids = this.operateurs.map(o => o.id);
+            const index = Math.max(0, ids.indexOf(this.operateurId));
+            this.operateurId = ids[(index + delta + ids.length) % ids.length];
+            this.$nextTick(() => document.querySelector(`input[name="operateur"][value="${this.operateurId}"]`)?.focus());
         },
 
         init() {
@@ -253,10 +268,12 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
             }
 
             this.confirmationOuverte = true;
+            this.$nextTick(() => this.$refs.confirmationDialog?.focus());
         },
 
         fermerConfirmation() {
             this.confirmationOuverte = false;
+            this.$nextTick(() => this.$refs.boutonConfirmer?.focus());
         },
 
         async confirmer() {
@@ -297,6 +314,7 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
 
                     this.reinitialiserFormulaire();
                     this.afficherToastSucces();
+                    this.$nextTick(() => this.$refs.typeDepot?.focus());
 
                     return;
                 }
@@ -325,6 +343,7 @@ export default function comptoirSaisie({ point, operateurs, cashOperateur, solde
                 this.enAttente = await compterEnAttente();
                 this.reinitialiserFormulaire();
                 this.afficherToastSucces();
+                this.$nextTick(() => this.$refs.typeDepot?.focus());
             } finally {
                 this.enConfirmation = false;
                 this.confirmationOuverte = false;

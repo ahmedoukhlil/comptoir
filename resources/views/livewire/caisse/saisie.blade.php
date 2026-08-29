@@ -1,10 +1,11 @@
-<div
+<main
     x-data="comptoirSaisie({
         point: {{ Js::from(['id' => $this->point->id]) }},
         operateurs: {{ Js::from($this->operateursPourJs) }},
         cashOperateur: {{ Js::from($this->soldeCash ? ['id' => $this->soldeCash['operateur']->id, 'nom' => $this->soldeCash['operateur']->nom, 'logoUrl' => $this->soldeCash['operateur']->logoUrl()] : null) }},
         soldesServeur: {{ Js::from($this->soldesParOperateur->pluck('solde', 'operateur.id')) }},
         soldeTotalServeur: {{ Js::from($this->solde) }},
+        devise: {{ Js::from(__('caisse.devise')) }},
     })"
     x-init="init()"
     class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
@@ -13,27 +14,28 @@
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
             {{-- Barre du haut --}}
-            <div class="flex items-start justify-between px-5 pt-5 pb-2 md:px-9">
+            <div class="flex flex-col gap-3 px-5 pt-5 pb-3 sm:flex-row sm:items-start sm:justify-between md:px-9">
                 <div class="min-w-0">
+                    <h1 class="sr-only">{{ __('caisse.type_operation_label') }}</h1>
                     <span class="block text-[11px] text-[color:var(--color-ink-soft)]">{{ __('caisse.point') }}</span>
                     <strong class="block text-sm font-semibold text-[color:var(--color-ink)]">{{ $this->point->nom }}</strong>
                     <span class="block text-[11px] text-[color:var(--color-ink-soft)] mt-0.5">{{ now()->translatedFormat('l d F Y') }}</span>
                 </div>
-                <div id="guide-cible-barre-boutons" class="flex items-start gap-1.5 flex-shrink-0">
+                <nav id="guide-cible-barre-boutons" class="flex items-start justify-end gap-1.5 flex-shrink-0" aria-label="{{ __('caisse.guide_saisie_1') }}">
                     <x-selecteur-langue-claire />
                     <a href="{{ route('caisse.historique') }}" class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.historique_titre') }}">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
-                        <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_historique') }}</span>
+                        <span class="text-[10px] font-semibold leading-none">{{ __('caisse.barre_historique') }}</span>
                     </a>
                     @if (auth()->user()->estProprietaire())
                         <a href="{{ route('proprietaire.agents') }}" class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.dashboard_gerer_agents') }}">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                            <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_agents') }}</span>
+                            <span class="text-[10px] font-semibold leading-none">{{ __('caisse.barre_agents') }}</span>
                         </a>
                     @endif
                     <a href="{{ route('compte.changer-mot-de-passe') }}" class="w-11 h-[52px] rounded-xl border-[1.5px] border-[color:var(--color-line)] bg-[color:var(--color-card)] flex flex-col items-center justify-center gap-0.5 text-[color:var(--color-ink)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition" aria-label="{{ __('caisse.mon_mot_de_passe') }}">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-                        <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_mot_de_passe') }}</span>
+                        <span class="text-[10px] font-semibold leading-none">{{ __('caisse.barre_mot_de_passe') }}</span>
                     </a>
                     <button
                         onclick="document.getElementById('logout-form').submit()"
@@ -41,9 +43,9 @@
                         aria-label="{{ __('caisse.deconnexion') }}"
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                        <span class="text-[8.5px] font-semibold leading-none">{{ __('caisse.barre_deconnexion') }}</span>
+                        <span class="text-[10px] font-semibold leading-none">{{ __('caisse.barre_deconnexion') }}</span>
                     </button>
-                </div>
+                </nav>
             </div>
             <form id="logout-form" method="POST" action="{{ route('deconnexion') }}" class="hidden">
                 @csrf
@@ -61,7 +63,7 @@
                     <button
                         type="button"
                         x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'saisie' } }))"
-                        class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        class="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-sm font-bold flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                         aria-label="{{ __('caisse.guide_revoir') }}"
                     >?</button>
                 </div>
@@ -79,7 +81,7 @@
                                 <img x-show="cashOperateur.logoUrl && !cashOperateur.logoEnErreur" :src="cashOperateur.logoUrl" :alt="cashOperateur.nom" x-on:error="cashOperateur.logoEnErreur = true" class="h-4 max-w-[52px] object-contain">
                                 <div x-show="! cashOperateur.logoUrl || cashOperateur.logoEnErreur" class="text-[10px] font-semibold text-white" x-text="cashOperateur.nom"></div>
                             </div>
-                            <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldeCash())"></div>
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums"><span x-text="formaterMontant(soldeCash())"></span> <span class="text-[10px] font-semibold">{{ __('caisse.devise') }}</span></div>
                         </div>
                     </template>
                     <template x-for="operateur in operateurs" :key="operateur.id">
@@ -88,7 +90,7 @@
                                 <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" :alt="operateur.nom" x-on:error="operateur.logoEnErreur = true" class="h-4 max-w-[52px] object-contain">
                                 <div x-show="! operateur.logoUrl || operateur.logoEnErreur" class="text-[10px] font-semibold text-white" x-text="operateur.nom"></div>
                             </div>
-                            <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums" x-text="formaterMontant(soldeOperateur(operateur.id))"></div>
+                            <div class="font-[family-name:var(--font-mono)] font-bold text-sm tabular-nums"><span x-text="formaterMontant(soldeOperateur(operateur.id))"></span> <span class="text-[10px] font-semibold">{{ __('caisse.devise') }}</span></div>
                         </div>
                     </template>
                 </div>
@@ -102,75 +104,59 @@
                 </a>
             </div>
 
-            <div class="px-5 pt-6 pb-32 md:px-9 md:py-8 md:pb-8">
+            <div class="px-5 pt-6 pb-8 md:px-9 md:py-8">
                 <div class="md:grid md:grid-cols-[1.05fr_0.95fr] md:gap-10 md:items-start">
 
                     {{-- Colonne formulaire --}}
                     <div>
-                        {{-- Bascule dépôt/retrait --}}
-                        <div id="guide-cible-type" class="flex flex-col bg-[color:var(--color-sand-deep)] rounded-2xl p-1.5 gap-1.5" role="radiogroup" aria-label="{{ __('caisse.operateur_label') }}">
-                            <button
-                                type="button"
-                                role="radio"
-                                :aria-checked="(type === 'depot').toString()"
-                                x-on:click="type = 'depot'"
-                                class="w-full py-4 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base flex items-center justify-center gap-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                :class="type === 'depot' ? 'border-transparent bg-[color:var(--color-green)] text-white shadow-lg shadow-green-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                            >
-                                <span class="text-lg">↓</span> {{ __('caisse.depot') }}
-                            </button>
-                            <div class="flex gap-1.5">
-                                <button
-                                    type="button"
-                                    role="radio"
-                                    :aria-checked="(type === 'retrait').toString()"
-                                    x-on:click="type = 'retrait'"
-                                    class="flex-1 py-3.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                    :class="type === 'retrait' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                                >
-                                    <span class="text-base">↑</span> {{ __('caisse.retrait') }}
-                                </button>
-                                <button
-                                    type="button"
-                                    role="radio"
-                                    :aria-checked="(type === 'retrait_beneficiaire').toString()"
-                                    x-on:click="type = 'retrait_beneficiaire'"
-                                    class="flex-1 py-3.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-sm flex items-center justify-center gap-1.5 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                    :class="type === 'retrait_beneficiaire' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                                >
-                                    <span class="text-base">↑</span> {{ __('caisse.retrait_beneficiaire') }}
-                                </button>
+                        {{-- Type d'opération : contrôles radio natifs pour le clavier et les lecteurs d'écran. --}}
+                        <fieldset id="guide-cible-type" class="bg-[color:var(--color-sand-deep)] rounded-2xl p-2">
+                            <legend class="px-1 pb-2 text-sm font-bold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.type_operation_label') }}</legend>
+                            <div class="grid gap-2">
+                                <label class="block cursor-pointer rounded-xl border-[1.5px] p-3.5 transition focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="type === 'depot' ? 'border-transparent bg-[color:var(--color-green)] text-white shadow-lg shadow-green-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink)]'">
+                                    <input x-ref="typeDepot" type="radio" name="type-operation" value="depot" x-model="type" x-on:keydown.arrow-right.prevent="selectionnerTypeRelatif(1)" x-on:keydown.arrow-down.prevent="selectionnerTypeRelatif(1)" x-on:keydown.arrow-left.prevent="selectionnerTypeRelatif(-1)" x-on:keydown.arrow-up.prevent="selectionnerTypeRelatif(-1)" class="sr-only">
+                                    <span class="flex items-center gap-2 text-base font-bold"><span aria-hidden="true">↓</span> {{ __('caisse.depot') }}</span>
+                                    <span class="mt-1 block text-sm leading-snug" :class="type === 'depot' ? 'text-white/90' : 'text-[color:var(--color-ink-soft)]'">{{ __('caisse.depot_aide') }}</span>
+                                </label>
+                                <label class="block cursor-pointer rounded-xl border-[1.5px] p-3.5 transition focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="type === 'retrait' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink)]'">
+                                    <input type="radio" name="type-operation" value="retrait" x-model="type" x-on:keydown.arrow-right.prevent="selectionnerTypeRelatif(1)" x-on:keydown.arrow-down.prevent="selectionnerTypeRelatif(1)" x-on:keydown.arrow-left.prevent="selectionnerTypeRelatif(-1)" x-on:keydown.arrow-up.prevent="selectionnerTypeRelatif(-1)" class="sr-only">
+                                    <span class="flex items-center gap-2 text-base font-bold"><span aria-hidden="true">↑</span> {{ __('caisse.retrait') }}</span>
+                                    <span class="mt-1 block text-sm leading-snug" :class="type === 'retrait' ? 'text-white/90' : 'text-[color:var(--color-ink-soft)]'">{{ __('caisse.retrait_aide') }}</span>
+                                </label>
+                                <label class="block cursor-pointer rounded-xl border-[1.5px] p-3.5 transition focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="type === 'retrait_beneficiaire' ? 'border-transparent bg-[color:var(--color-rust)] text-white shadow-lg shadow-rust-900/20' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink)]'">
+                                    <input type="radio" name="type-operation" value="retrait_beneficiaire" x-model="type" x-on:keydown.arrow-right.prevent="selectionnerTypeRelatif(1)" x-on:keydown.arrow-down.prevent="selectionnerTypeRelatif(1)" x-on:keydown.arrow-left.prevent="selectionnerTypeRelatif(-1)" x-on:keydown.arrow-up.prevent="selectionnerTypeRelatif(-1)" class="sr-only">
+                                    <span class="flex items-center gap-2 text-base font-bold"><span aria-hidden="true">↑</span> {{ __('caisse.retrait_beneficiaire') }}</span>
+                                    <span class="mt-1 block text-sm leading-snug" :class="type === 'retrait_beneficiaire' ? 'text-white/90' : 'text-[color:var(--color-ink-soft)]'">{{ __('caisse.retrait_beneficiaire_aide') }}</span>
+                                </label>
                             </div>
-                        </div>
+                        </fieldset>
 
                         {{-- Opérateur --}}
-                        <div id="guide-cible-operateur" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mt-6 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operateur_label') }}</div>
-                        <div class="flex gap-2" role="radiogroup" aria-label="{{ __('caisse.operateur_label') }}">
+                        <fieldset class="mt-6">
+                            <legend id="guide-cible-operateur" class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.operateur_label') }}</legend>
+                            <div class="flex gap-2">
                             <template x-for="operateur in operateurs" :key="operateur.id">
-                                <button
-                                    type="button"
-                                    role="radio"
-                                    :aria-checked="(operateurId === operateur.id).toString()"
-                                    :aria-label="operateur.nom"
-                                    x-on:click="operateurId = operateur.id"
-                                    class="flex-1 flex items-center justify-center py-3.5 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
-                                    :class="operateurId === operateur.id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-sand)]' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                                >
+                                <label class="flex-1 flex min-h-12 cursor-pointer items-center justify-center py-3 px-1.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold transition focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="operateurId === operateur.id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-[color:var(--color-sand)]' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'">
+                                    <input type="radio" name="operateur" :value="operateur.id" x-model.number="operateurId" x-on:keydown.arrow-right.prevent="selectionnerOperateurRelatif(1)" x-on:keydown.arrow-down.prevent="selectionnerOperateurRelatif(1)" x-on:keydown.arrow-left.prevent="selectionnerOperateurRelatif(-1)" x-on:keydown.arrow-up.prevent="selectionnerOperateurRelatif(-1)" class="sr-only">
                                     <img x-show="operateur.logoUrl && !operateur.logoEnErreur" :src="operateur.logoUrl" alt="" x-on:error="operateur.logoEnErreur = true" class="h-6 max-w-full object-contain">
                                     <span x-show="! operateur.logoUrl || operateur.logoEnErreur" x-text="operateur.nom"></span>
-                                </button>
+                                </label>
                             </template>
-                        </div>
+                            </div>
+                        </fieldset>
 
                         {{-- Téléphone client --}}
-                        <div id="guide-cible-telephone" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mt-6 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.telephone_label') }}</div>
+                        <label id="guide-cible-telephone" for="client-telephone" class="block text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] mt-6 mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.telephone_label') }}</label>
                         <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                             <input
+                                id="client-telephone"
                                 type="tel"
                                 x-model="telephone"
                                 inputmode="numeric"
                                 maxlength="8"
+                                autocomplete="tel"
+                                aria-describedby="erreur-saisie"
                                 placeholder="{{ __('caisse.telephone_placeholder') }}"
                                 dir="ltr"
                                 class="flex-1 border-none bg-transparent outline-none font-[family-name:var(--font-mono)] text-lg font-bold text-[color:var(--color-ink)] tracking-wide text-start"
@@ -181,28 +167,34 @@
                         <button
                             type="button"
                             x-on:click="optionnelOuvert = ! optionnelOuvert"
+                            :aria-expanded="optionnelOuvert.toString()"
+                            aria-controls="informations-client-optionnelles"
                             class="w-full text-center text-xs font-semibold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] py-2.5 mt-2 rounded-xl border-[1.5px] border-dashed border-[color:var(--color-line)] hover:border-[color:var(--color-ink)] hover:bg-[color:var(--color-sand-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)] transition"
                         >
                             {{ __('caisse.ajouter_optionnel') }}
                         </button>
-                        <div x-show="optionnelOuvert" x-cloak class="flex flex-col gap-2 mt-1.5">
+                        <div id="informations-client-optionnelles" x-show="optionnelOuvert" x-cloak class="flex flex-col gap-2 mt-1.5">
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-xl px-3.5 py-2.5">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                <input type="text" x-model="clientNom" placeholder="{{ __('caisse.nom_placeholder') }}" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)]">
+                                <label for="client-nom" class="sr-only">{{ __('caisse.nom_placeholder') }}</label>
+                                <input id="client-nom" type="text" x-model="clientNom" autocomplete="name" placeholder="{{ __('caisse.nom_placeholder') }}" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)]">
                             </div>
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-dashed border-[color:var(--color-line)] rounded-xl px-3.5 py-2.5">
                                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="6" y1="15" x2="10" y2="15"/><circle cx="7" cy="10" r="1.5"/><line x1="12" y1="9" x2="18" y2="9"/><line x1="12" y1="12" x2="18" y2="12"/></svg>
-                                <input type="text" x-model="clientNni" inputmode="numeric" placeholder="{{ __('caisse.nni_placeholder') }}" dir="ltr" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] text-start">
+                                <label for="client-nni" class="sr-only">{{ __('caisse.nni_placeholder') }}</label>
+                                <input id="client-nni" type="text" x-model="clientNni" inputmode="numeric" placeholder="{{ __('caisse.nni_placeholder') }}" dir="ltr" class="flex-1 border-none bg-transparent outline-none text-sm font-semibold text-[color:var(--color-ink)] text-start">
                             </div>
                         </div>
 
                         {{-- Montant --}}
                         <div id="guide-cible-montant" class="mt-6 px-1">
-                            <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.montant_label') }}</div>
+                            <label for="operation-montant" class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.montant_label') }}</label>
                             <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 focus-within:border-[color:var(--color-ink)]">
                                 <input
+                                    id="operation-montant"
                                     type="text"
                                     inputmode="numeric"
+                                    aria-describedby="commission-actuelle erreur-saisie"
                                     x-model="montant"
                                     x-on:input="montant = $event.target.value.replace(/\D/g, '').slice(0, 9)"
                                     placeholder="0"
@@ -211,12 +203,13 @@
                                 >
                                 <span class="text-sm font-semibold text-[color:var(--color-ink-soft)] flex-shrink-0">{{ __('caisse.devise') }}</span>
                             </div>
-                            <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[12.5px] font-semibold text-[color:var(--color-green-deep)] min-h-[16px] mt-1.5 text-center" x-show="commissionActuelle > 0" x-text="'{{ __('caisse.commission_label') }} ' + formaterMontant(commissionActuelle) + ' {{ __('caisse.devise') }}'"></div>
+                            <div id="commission-actuelle" class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-semibold text-[color:var(--color-green-deep)] min-h-[16px] mt-1.5 text-center" x-show="commissionActuelle > 0" x-text="'{{ __('caisse.commission_label') }} ' + formaterMontant(commissionActuelle) + ' ' + devise"></div>
                         </div>
 
                         {{-- Confirmer --}}
                         <button
                             id="guide-cible-confirmer"
+                            x-ref="boutonConfirmer"
                             type="button"
                             x-on:click="ouvrirConfirmation()"
                             :disabled="enConfirmation || ! formulaireValide"
@@ -226,7 +219,7 @@
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
                             {{ __('caisse.confirmer') }}
                         </button>
-                        <p x-show="erreurLocale" x-cloak x-text="erreurLocale" role="alert" class="text-xs text-[color:var(--color-rust-deep)] mt-1.5 text-center"></p>
+                        <p id="erreur-saisie" x-show="erreurLocale || ! formulaireValide" x-text="erreurLocale || validerChamps()" aria-live="polite" class="text-sm font-semibold text-[color:var(--color-rust-deep)] mt-2 text-center"></p>
                     </div>
 
                     {{-- Colonne historique --}}
@@ -241,7 +234,7 @@
                             </span>
                         </div>
 
-                        <div class="pb-28 md:pb-2 md:max-h-[520px] md:overflow-y-auto">
+                        <div class="pb-2 md:max-h-[520px] md:overflow-y-auto">
                             <template x-for="operation in operationsLocalesAffichage" :key="operation.uuid_client">
                                 <div class="flex items-center gap-3 py-3 border-b border-dashed border-[color:var(--color-line)] opacity-70">
                                     <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" :class="operation.type === 'depot' ? 'bg-[color:var(--color-green)]' : 'bg-[color:var(--color-rust)]'"></div>
@@ -249,7 +242,7 @@
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
                                             <span x-text="libelleType(operation.type) + ' · ' + operation.operateur_nom"></span>
                                         </div>
-                                        <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 flex items-center gap-1" dir="ltr">
+                                        <div class="text-xs leading-relaxed text-[color:var(--color-ink-soft)] mt-0.5 flex items-center gap-1" dir="ltr">
                                             <span x-text="operation.heure"></span> · <span x-text="operation.client_telephone"></span>
                                             <span class="inline-flex items-center gap-0.5 text-[#B8853C]">
                                                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
@@ -269,7 +262,7 @@
                                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
                                             {{ $operation->libelleType() }} · {{ $operation->operateur->nom }}
                                         </div>
-                                        <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5" dir="ltr">
+                                        <div class="text-xs leading-relaxed text-[color:var(--color-ink-soft)] mt-0.5" dir="ltr">
                                             {{ $operation->created_at->format('H:i') }} · {{ $operation->client_telephone }}
                                         </div>
                                     </div>
@@ -286,7 +279,7 @@
             </div>
 
             {{-- Barre résumé --}}
-            <div data-guide-barre-basse class="fixed md:static start-3.5 end-3.5 bottom-4 md:mx-9 md:mb-8 bg-[color:var(--color-ink)] rounded-[18px] px-4.5 py-4 flex justify-between items-center shadow-2xl">
+            <div data-guide-barre-basse class="mx-5 mb-6 md:mx-9 md:mb-8 bg-[color:var(--color-ink)] rounded-[18px] px-5 py-4 flex justify-between items-center shadow-lg">
                 <div>
                     <div class="text-[10px] tracking-wide font-semibold text-white/90 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.benefice_label') }}</div>
                     <div class="font-[family-name:var(--font-mono)] font-bold text-[17px] text-[#86EFAC] mt-0.5">
@@ -311,19 +304,24 @@
                 <div class="absolute inset-0 bg-[color:var(--color-ink)]/60 backdrop-blur-sm" x-on:click="fermerConfirmation()"></div>
 
                 <div
+                    x-ref="confirmationDialog"
                     x-show="confirmationOuverte"
+                    x-trap.noscroll="confirmationOuverte"
                     x-transition:enter="transition ease-out duration-150"
                     x-transition:enter-start="opacity-0 scale-95"
                     x-transition:enter-end="opacity-100 scale-100"
                     role="dialog"
                     aria-modal="true"
+                    aria-labelledby="operation-confirmation-titre"
+                    aria-describedby="operation-confirmation-description"
+                    tabindex="-1"
                     class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
                 >
                     <div class="p-6">
-                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                        <h2 id="operation-confirmation-titre" class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
                             {{ __('caisse.confirmation_titre') }}
-                        </div>
-                        <p class="text-sm text-[color:var(--color-ink-soft)] mb-4">
+                        </h2>
+                        <p id="operation-confirmation-description" class="text-sm text-[color:var(--color-ink-soft)] mb-4">
                             {{ __('caisse.confirmation_texte') }}
                         </p>
 
@@ -375,7 +373,7 @@
                 x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
                 role="status"
-                class="fixed bottom-24 md:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 z-40 flex items-center gap-2 bg-[color:var(--color-green-deep)] text-white text-sm font-semibold rounded-full px-5 py-3 shadow-xl"
+                class="fixed bottom-6 md:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 z-40 flex items-center gap-2 bg-[color:var(--color-green-deep)] text-white text-sm font-semibold rounded-full px-5 py-3 shadow-xl"
             >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
                 {{ __('caisse.operation_reussie') }}
@@ -398,4 +396,4 @@
             />
         </div>
     </div>
-</div>
+</main>

@@ -1,15 +1,17 @@
-<div class="min-h-screen flex items-center justify-center px-4 relative" style="background: linear-gradient(180deg, #0A2242 0%, var(--color-ink) 100%);">
+<main class="min-h-screen flex items-center justify-center px-4 relative" style="background: linear-gradient(180deg, #0A2242 0%, var(--color-ink) 100%);">
     <x-selecteur-langue class="absolute top-6 end-6" />
 
     <div class="w-full max-w-sm bg-[color:var(--color-sand)] rounded-3xl shadow-2xl p-8">
         <div class="text-center mb-6">
             <img src="/Logo_comptoirVF.png" alt="{{ __('caisse.app_nom') }}" class="w-48 h-48 mx-auto">
+            <h1 class="sr-only">{{ __('auth.se_connecter') }} — {{ __('caisse.app_nom') }}</h1>
         </div>
 
         <form wire:submit="seConnecter" class="space-y-4">
             <div>
-                <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('auth.telephone_label') }}</label>
+                <label for="connexion-telephone" class="block text-sm font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('auth.telephone_label') }}</label>
                 <input
+                    id="connexion-telephone"
                     type="tel"
                     wire:model="telephone"
                     inputmode="numeric"
@@ -22,8 +24,9 @@
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('auth.mot_de_passe_label') }}</label>
+                <label for="connexion-mot-de-passe" class="block text-sm font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('auth.mot_de_passe_label') }}</label>
                 <input
+                    id="connexion-mot-de-passe"
                     type="password"
                     wire:model="password"
                     autocomplete="current-password"
@@ -46,4 +49,4 @@
             </button>
         </form>
     </div>
-</div>
+</main>

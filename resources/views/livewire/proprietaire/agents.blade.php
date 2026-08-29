@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+<main class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
     <div class="mx-auto max-w-[600px] md:py-10 md:px-6">
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
@@ -6,7 +6,7 @@
                 <div id="guide-cible-agents-bandeau" class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('proprietaire.dashboard')" />
-                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.agents_titre') }}</span>
+                        <h1 class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.agents_titre') }}</h1>
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">
                         <x-selecteur-langue />
@@ -14,7 +14,7 @@
                             type="button"
                             x-data
                             x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'agents' } }))"
-                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            class="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             aria-label="{{ __('caisse.guide_revoir') }}"
                         >?</button>
                     </div>
@@ -50,44 +50,42 @@
                     </div>
                 @else
                     <form wire:submit="creer" class="space-y-4">
-                        <div id="guide-cible-agents-point">
-                            <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.alimentation_point_label') }}</label>
+                        <fieldset id="guide-cible-agents-point">
+                            <legend class="block text-sm font-semibold text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.alimentation_point_label') }}</legend>
                             <div class="flex flex-wrap gap-1.5">
                                 @foreach ($this->points as $point)
-                                    <button
-                                        type="button"
-                                        wire:click="$set('pointId', {{ $point->id }})"
-                                        class="text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] {{ $pointId === $point->id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}"
-                                    >{{ $point->nom }}</button>
+                                    <label class="cursor-pointer text-sm font-bold px-3.5 py-2.5 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)] {{ $pointId === $point->id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]' }}">
+                                        <input class="sr-only" type="radio" name="point-agent" wire:click="$set('pointId', {{ $point->id }})" @checked($pointId === $point->id)>
+                                        {{ $point->nom }}
+                                    </label>
                                 @endforeach
                             </div>
                             @error('pointId') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1.5">{{ $message }}</p> @enderror
-                        </div>
+                        </fieldset>
 
                         <div id="guide-cible-agents-infos">
-                            <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.agent_nom_label') }}</label>
-                            <input type="text" wire:model="nom" class="w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-paper)] px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-ink)]">
+                            <label for="agent-nom" class="block text-sm font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.agent_nom_label') }}</label>
+                            <input id="agent-nom" type="text" wire:model="nom" autocomplete="name" class="w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-paper)] px-3.5 py-2.5 text-base outline-none focus:border-[color:var(--color-ink)]">
                             @error('nom') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.agent_telephone_label') }}</label>
-                            <input type="tel" inputmode="numeric" dir="ltr" wire:model="telephone" class="w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-paper)] px-3.5 py-2.5 text-sm font-[family-name:var(--font-mono)] outline-none focus:border-[color:var(--color-ink)]">
+                            <label for="agent-telephone" class="block text-sm font-semibold text-[color:var(--color-ink-soft)] mb-1">{{ __('caisse.agent_telephone_label') }}</label>
+                            <input id="agent-telephone" type="tel" inputmode="numeric" autocomplete="tel" dir="ltr" wire:model="telephone" class="w-full rounded-lg border border-[color:var(--color-line)] bg-[color:var(--color-paper)] px-3.5 py-2.5 text-base font-[family-name:var(--font-mono)] outline-none focus:border-[color:var(--color-ink)]">
                             @error('telephone') <p class="text-xs text-[color:var(--color-rust-deep)] mt-1">{{ $message }}</p> @enderror
                         </div>
 
-                        <div id="guide-cible-agents-role">
-                            <label class="block text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.agent_role_label') }}</label>
+                        <fieldset id="guide-cible-agents-role">
+                            <legend class="block text-sm font-semibold text-[color:var(--color-ink-soft)] mb-1.5">{{ __('caisse.agent_role_label') }}</legend>
                             <div class="flex gap-1.5">
                                 @foreach (['agent', 'proprietaire'] as $r)
-                                    <button
-                                        type="button"
-                                        wire:click="$set('role', '{{ $r }}')"
-                                        class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] {{ $role === $r ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}"
-                                    >{{ __('caisse.role_'.$r) }}</button>
+                                    <label class="cursor-pointer text-sm font-semibold px-3 py-2.5 rounded-lg border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)] {{ $role === $r ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">
+                                        <input class="sr-only" type="radio" name="role-agent" wire:click="$set('role', '{{ $r }}')" @checked($role === $r)>
+                                        {{ __('caisse.role_'.$r) }}
+                                    </label>
                                 @endforeach
                             </div>
-                        </div>
+                        </fieldset>
 
                         @error('lectureSeule') <p class="text-xs text-[color:var(--color-rust-deep)]">{{ $message }}</p> @enderror
 
@@ -131,4 +129,4 @@
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />
-</div>
+</main>

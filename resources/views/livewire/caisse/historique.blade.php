@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+<main class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
     <div class="mx-auto max-w-[980px] md:py-10 md:px-6">
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
@@ -7,7 +7,7 @@
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('caisse.saisie')" />
                         <div class="min-w-0">
-                            <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.historique_titre') }}</span>
+                            <h1 class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.historique_titre') }}</h1>
                             <b class="block text-sm font-semibold mt-0.5 text-white">{{ $this->point->nom }}</b>
                         </div>
                     </div>
@@ -17,7 +17,7 @@
                             type="button"
                             x-data
                             x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'historique' } }))"
-                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            class="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             aria-label="{{ __('caisse.guide_revoir') }}"
                         >?</button>
                     </div>
@@ -27,40 +27,42 @@
             <div class="px-5 py-6 md:px-9 md:py-8">
                 {{-- Filtres --}}
                 <div id="guide-cible-historique-filtres" class="mb-4">
-                    <div class="text-[11px] font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-1.5">{{ __('caisse.historique_operateur') }}</div>
-                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ __('caisse.historique_operateur') }}">
-                        <button
-                            type="button"
-                            role="radio"
-                            aria-checked="{{ ! $operateurId ? 'true' : 'false' }}"
-                            wire:click="$set('operateurId', null)"
-                            class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ ! $operateurId ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}"
-                        >{{ __('caisse.historique_tous') }}</button>
+                    <fieldset>
+                        <legend class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-1.5">{{ __('caisse.historique_operateur') }}</legend>
+                        <div class="flex flex-wrap gap-2">
+                        <label class="cursor-pointer text-sm font-semibold px-3 py-2.5 rounded-lg border-[1.5px] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)] {{ ! $operateurId ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">
+                            <input class="sr-only" type="radio" name="filtre-operateur" wire:click="$set('operateurId', null)" @checked(! $operateurId)>
+                            {{ __('caisse.historique_tous') }}
+                        </label>
                         @foreach ($this->operateurs as $operateur)
-                            <button
-                                type="button"
-                                role="radio"
-                                aria-checked="{{ $operateurId === $operateur->id ? 'true' : 'false' }}"
-                                wire:click="$set('operateurId', {{ $operateur->id }})"
-                                class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $operateurId === $operateur->id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}"
-                            >{{ $operateur->nom }}</button>
+                            <label class="cursor-pointer text-sm font-semibold px-3 py-2.5 rounded-lg border-[1.5px] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)] {{ $operateurId === $operateur->id ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">
+                                <input class="sr-only" type="radio" name="filtre-operateur" wire:click="$set('operateurId', {{ $operateur->id }})" @checked($operateurId === $operateur->id)>
+                                {{ $operateur->nom }}
+                            </label>
                         @endforeach
-                    </div>
+                        </div>
+                    </fieldset>
                 </div>
 
                 <div class="mb-4">
-                    <div class="text-[11px] font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-1.5">{{ __('caisse.historique_type') }}</div>
-                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ __('caisse.historique_type') }}">
-                        <button type="button" role="radio" aria-checked="{{ $type === '' ? 'true' : 'false' }}" wire:click="$set('type', '')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === '' ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.historique_tous') }}</button>
-                        <button type="button" role="radio" aria-checked="{{ $type === 'depot' ? 'true' : 'false' }}" wire:click="$set('type', 'depot')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'depot' ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.depot') }}</button>
-                        <button type="button" role="radio" aria-checked="{{ $type === 'retrait' ? 'true' : 'false' }}" wire:click="$set('type', 'retrait')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait') }}</button>
-                        <button type="button" role="radio" aria-checked="{{ $type === 'retrait_beneficiaire' ? 'true' : 'false' }}" wire:click="$set('type', 'retrait_beneficiaire')" class="text-xs font-semibold px-3 py-2 rounded-lg border-[1.5px] {{ $type === 'retrait_beneficiaire' ? 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white' : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">{{ __('caisse.retrait_beneficiaire') }}</button>
-                    </div>
+                    <fieldset>
+                        <legend class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] uppercase mb-1.5">{{ __('caisse.historique_type') }}</legend>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach (['' => __('caisse.historique_tous'), 'depot' => __('caisse.depot'), 'retrait' => __('caisse.retrait'), 'retrait_beneficiaire' => __('caisse.retrait_beneficiaire')] as $valeurType => $libelleType)
+                                <label class="cursor-pointer text-sm font-semibold px-3 py-2.5 rounded-lg border-[1.5px] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)] {{ $type === $valeurType ? ($valeurType === 'depot' ? 'border-[color:var(--color-green)] bg-[color:var(--color-green)] text-white' : ($valeurType === '' ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-rust)] bg-[color:var(--color-rust)] text-white')) : 'border-[color:var(--color-line)] text-[color:var(--color-ink-soft)]' }}">
+                                    <input class="sr-only" type="radio" name="filtre-type" wire:click="$set('type', '{{ $valeurType }}')" @checked($type === $valeurType)>
+                                    {{ $libelleType }}
+                                </label>
+                            @endforeach
+                        </div>
+                    </fieldset>
                 </div>
 
+                <label for="historique-recherche" class="sr-only">{{ __('caisse.historique_recherche') }}</label>
                 <div id="guide-cible-historique-recherche" class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-xl px-4 py-2.5 mb-4 max-w-sm">
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[color:var(--color-ink-soft)] flex-shrink-0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     <input
+                        id="historique-recherche"
                         type="tel"
                         wire:model.live.debounce.400ms="recherche"
                         inputmode="numeric"
@@ -103,7 +105,7 @@
                                 <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-bold text-[color:var(--color-ink)]">
                                     {{ $operation->libelleType() }} · {{ $operation->operateur->nom }}
                                 </div>
-                                <div class="text-[11px] text-[color:var(--color-ink-soft)] mt-0.5 text-start" dir="ltr">
+                                <div class="text-xs leading-relaxed text-[color:var(--color-ink-soft)] mt-0.5 text-start" dir="ltr">
                                     {{ $operation->created_at->format('d/m/Y H:i') }} · {{ $operation->numero_piece }} · {{ $operation->client_telephone }}
                                 </div>
                             </div>
@@ -134,4 +136,4 @@
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />
-</div>
+</main>

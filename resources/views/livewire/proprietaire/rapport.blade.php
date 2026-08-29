@@ -14,7 +14,7 @@
                             type="button"
                             x-data
                             x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'rapport' } }))"
-                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            class="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             aria-label="{{ __('caisse.guide_revoir') }}"
                         >?</button>
                     </div>

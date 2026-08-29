@@ -1,6 +1,6 @@
-<div
+<main
     x-data="{
-        operateurs: {{ Js::from($this->soldesTheoriquesParOperateur->map(fn ($l) => ['id' => $l['operateur']->id, 'nom' => $l['operateur']->nom, 'soldeTheorique' => $l['solde']])) }},
+        operateurs: {{ Js::from($this->soldesTheoriquesParOperateur->map(fn ($l) => ['id' => $l['operateur']->id, 'nom' => $l['operateur']->nom, 'estCash' => $l['operateur']->est_cash, 'soldeTheorique' => $l['solde']])) }},
         index: 0,
         soldesComptes: {},
         enConfirmation: false,
@@ -57,7 +57,7 @@
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('caisse.saisie')" />
                         <div class="min-w-0">
-                            <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.cloture_titre') }}</span>
+                            <h1 class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.cloture_titre') }}</h1>
                             <b class="block text-sm font-semibold mt-0.5 text-white">{{ $this->point->nom }}</b>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                             type="button"
                             x-data
                             x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'cloture' } }))"
-                            class="w-6 h-6 rounded-full bg-[color:var(--color-sand-deep)] hover:bg-[color:var(--color-line)] flex items-center justify-center text-[11px] font-bold text-[color:var(--color-ink-soft)] flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                            class="w-11 h-11 rounded-full bg-[color:var(--color-sand-deep)] hover:bg-[color:var(--color-line)] flex items-center justify-center text-sm font-bold text-[color:var(--color-ink-soft)] flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                             aria-label="{{ __('caisse.guide_revoir') }}"
                         >?</button>
                     </div>
@@ -137,7 +137,7 @@
                             type="button"
                             x-data
                             x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'cloture' } }))"
-                            class="w-6 h-6 rounded-full bg-[color:var(--color-sand-deep)] hover:bg-[color:var(--color-line)] flex items-center justify-center text-[11px] font-bold text-[color:var(--color-ink-soft)] flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
+                            class="w-11 h-11 rounded-full bg-[color:var(--color-sand-deep)] hover:bg-[color:var(--color-line)] flex items-center justify-center text-sm font-bold text-[color:var(--color-ink-soft)] flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]"
                             aria-label="{{ __('caisse.guide_revoir') }}"
                         >?</button>
                     </div>
@@ -148,12 +148,23 @@
                             <span class="h-1.5 rounded-full transition-all" :class="i === index ? 'w-6 bg-[color:var(--color-ink)]' : (soldesComptes[op.id] !== undefined && soldesComptes[op.id] !== '' ? 'w-1.5 bg-[color:var(--color-green)]' : 'w-1.5 bg-[color:var(--color-line)]')"></span>
                         </template>
                     </div>
-                    <div class="text-center text-xs font-semibold text-[color:var(--color-ink-soft)] mb-1" x-text="@js(__('caisse.cloture_etape', ['actuel' => ':actuel', 'total' => ':total'])).replace(':actuel', index + 1).replace(':total', operateurs.length)"></div>
+                    <div class="text-center text-sm font-semibold text-[color:var(--color-ink-soft)] mb-1" aria-live="polite">
+                        <span x-text="index + 1"></span>
+                        <span>{{ __('caisse.cloture_separateur_etape') }}</span>
+                        <span x-text="operateurs.length"></span>
+                    </div>
                     <div class="text-center mb-6">
                         <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-lg text-[color:var(--color-ink)]" x-text="operateurActuel.nom"></div>
                     </div>
 
-                    <p class="text-center text-sm text-[color:var(--color-ink-soft)] max-w-[320px] mx-auto mb-6">{{ __('caisse.cloture_aide') }}</p>
+                    <div id="cloture-aide" class="text-center text-base leading-relaxed text-[color:var(--color-ink-soft)] max-w-[360px] mx-auto mb-6">
+                        <p x-show="operateurActuel.estCash">{{ __('caisse.cloture_aide_cash') }}</p>
+                        <p x-show="! operateurActuel.estCash">
+                            {{ __('caisse.cloture_aide_wallet_avant') }}
+                            <strong class="text-[color:var(--color-ink)]" x-text="operateurActuel.nom"></strong>
+                            {{ __('caisse.cloture_aide_wallet_apres') }}
+                        </p>
+                    </div>
 
                     <div id="guide-cible-cloture-theorique" class="text-center mb-6">
                         <div class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-ink-soft)]">{{ __('caisse.cloture_solde_theorique') }}</div>
@@ -161,11 +172,16 @@
                     </div>
 
                     <div id="guide-cible-cloture-compte" class="mt-6 px-1">
-                        <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[13px] font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">{{ __('caisse.cloture_solde_compte') }}</div>
+                        <label for="cloture-solde-compte" class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-sm font-semibold text-[color:var(--color-ink-soft)] tracking-wide text-center">
+                            <span x-show="operateurActuel.estCash">{{ __('caisse.cloture_champ_cash') }}</span>
+                            <span x-show="! operateurActuel.estCash">{{ __('caisse.cloture_champ_wallet_avant') }} <span x-text="operateurActuel.nom"></span></span>
+                        </label>
                         <div class="flex items-center gap-2.5 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-2xl px-4 py-3.5 mt-1.5 max-w-[340px] mx-auto focus-within:border-[color:var(--color-ink)]">
                             <input
+                                id="cloture-solde-compte"
                                 type="text"
                                 inputmode="numeric"
+                                aria-describedby="cloture-aide cloture-ecart"
                                 :value="soldeCompteActuel"
                                 x-on:input="soldesComptes[operateurActuel.id] = $event.target.value.replace(/\D/g, '').slice(0, 9)"
                                 placeholder="0"
@@ -175,6 +191,7 @@
                             <span class="text-sm font-semibold text-[color:var(--color-ink-soft)] flex-shrink-0">{{ __('caisse.devise') }}</span>
                         </div>
                         <div
+                            id="cloture-ecart"
                             x-show="soldeCompteActuel !== '' && ! ecartActuelImportant"
                             x-cloak
                             class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] text-[12.5px] font-semibold min-h-[16px] mt-1.5"
@@ -184,6 +201,7 @@
                     </div>
 
                     <div
+                        id="cloture-ecart-important"
                         x-show="soldeCompteActuel !== '' && ecartActuelImportant"
                         x-cloak
                         class="flex items-start gap-2.5 mt-4 max-w-[340px] mx-auto bg-[color:var(--color-rust)]/10 border-[1.5px] border-[color:var(--color-rust)]/30 rounded-xl px-3.5 py-3"
@@ -234,18 +252,22 @@
 
                             <div
                                 x-show="confirmationOuverte"
+                                x-trap.noscroll="confirmationOuverte"
                                 x-transition:enter="transition ease-out duration-150"
                                 x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
                                 role="dialog"
                                 aria-modal="true"
+                                aria-labelledby="cloture-confirmation-titre"
+                                aria-describedby="cloture-confirmation-description"
+                                tabindex="-1"
                                 class="relative bg-[color:var(--color-paper)] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}"
                             >
                                 <div class="p-6">
-                                    <div class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
+                                    <h2 id="cloture-confirmation-titre" class="font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-[color:var(--color-ink)] mb-1.5">
                                         {{ __('caisse.cloture_confirmer_titre') }}
-                                    </div>
-                                    <p class="text-sm text-[color:var(--color-ink-soft)] mb-4">
+                                    </h2>
+                                    <p id="cloture-confirmation-description" class="text-sm text-[color:var(--color-ink-soft)] mb-4">
                                         {{ __('caisse.cloture_confirmer_texte') }}
                                     </p>
 
@@ -308,4 +330,4 @@
             ]"
         wire-termine="$wire.marquerGuideVu()"
     />
-</div>
+</main>

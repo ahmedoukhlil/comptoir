@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
+<main class="min-h-screen bg-[color:var(--color-sand)] {{ app()->getLocale() === 'ar' ? 'font-[family-name:var(--font-arabic)]' : '' }}">
     <div class="mx-auto max-w-[980px] md:py-10 md:px-6">
         <div class="md:bg-[color:var(--color-card)] md:rounded-[20px] md:border md:border-[color:var(--color-line)] overflow-hidden">
 
@@ -9,7 +9,7 @@
                         {{ mb_substr($this->tenant->nom, 0, 1) }}
                     </div>
                     <div class="min-w-0">
-                        <strong class="block text-sm font-semibold text-[color:var(--color-ink)] truncate">{{ $this->tenant->nom }}</strong>
+                        <h1 class="block text-sm font-semibold text-[color:var(--color-ink)] truncate">{{ $this->tenant->nom }}</h1>
                         <span class="text-[11px] text-[color:var(--color-ink-soft)]">{{ __('caisse.dashboard_titre') }}</span>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                         type="button"
                         x-data
                         x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'dashboard' } }))"
-                        class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        class="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-sm font-bold flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                         aria-label="{{ __('caisse.guide_revoir') }}"
                     >?</button>
                 </div>
@@ -150,6 +150,7 @@
                                     <span class="inline-flex items-center gap-1 text-[10px] font-semibold bg-[color:var(--color-sand-deep)] text-[color:var(--color-ink-soft)] rounded-md px-2 py-1">
                                         <span class="inline-flex items-center gap-1"><x-icone-type-operateur :est-cash="$so['operateur']->est_cash" width="11" height="11" class="flex-shrink-0" /> {{ $so['operateur']->nom }} :</span>
                                         <span class="font-[family-name:var(--font-mono)] tabular-nums" dir="ltr">{{ number_format($so['solde'], 0, ',', ' ') }}</span>
+                                        <span>{{ __('caisse.devise') }}</span>
                                     </span>
                                 @endforeach
                             </div>
@@ -251,4 +252,4 @@
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />
-</div>
+</main>

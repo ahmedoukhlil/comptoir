@@ -1,4 +1,4 @@
-<div
+<main
     x-data="{
         pointId: {{ Js::from($this->points->first()?->id) }},
         operateurs: {{ Js::from($this->operateursPourJs) }},
@@ -52,14 +52,14 @@
                 <div id="guide-cible-alimentation-bandeau" class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <x-bouton-retour :href="route('proprietaire.dashboard')" />
-                        <span class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.alimentation_titre') }}</span>
+                        <h1 class="block font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] font-bold text-base text-white truncate">{{ __('caisse.alimentation_titre') }}</h1>
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">
                         <x-selecteur-langue />
                         <button
                             type="button"
                             x-on:click="window.dispatchEvent(new CustomEvent('guide:relancer', { detail: { groupe: 'alimentation' } }))"
-                            class="w-6 h-6 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                            class="w-11 h-11 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                             aria-label="{{ __('caisse.guide_revoir') }}"
                         >?</button>
                     </div>
@@ -67,22 +67,22 @@
             </div>
 
             <div class="px-5 py-6 md:px-9 md:py-8">
-                <div id="guide-cible-alimentation-point" class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_point_label') }}</div>
-                <div class="flex flex-wrap gap-2 mb-6">
+                <fieldset class="mb-6">
+                    <legend id="guide-cible-alimentation-point" class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2.5 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_point_label') }}</legend>
+                    <div class="flex flex-wrap gap-2">
                     @foreach ($this->points as $point)
-                        <button
-                            type="button"
-                            x-on:click="pointId = {{ $point->id }}"
-                            class="text-sm font-bold px-4 py-3 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]"
-                            :class="pointId === {{ $point->id }} ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'"
-                        >{{ $point->nom }}</button>
+                        <label class="cursor-pointer text-sm font-bold px-4 py-3 rounded-xl border-[1.5px] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[color:var(--color-ink)]" :class="pointId === {{ $point->id }} ? 'border-[color:var(--color-ink)] bg-[color:var(--color-ink)] text-white' : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)] text-[color:var(--color-ink-soft)]'">
+                            <input type="radio" name="point-alimentation" value="{{ $point->id }}" x-model.number="pointId" class="sr-only">
+                            {{ $point->nom }}
+                        </label>
                     @endforeach
-                </div>
+                    </div>
+                </fieldset>
 
                 <div id="guide-cible-alimentation-montants" class="flex flex-col gap-2.5">
                     @foreach ($this->operateurs as $operateur)
                         <div class="flex items-center gap-3 bg-[color:var(--color-paper)] border-[1.5px] border-[color:var(--color-line)] rounded-xl px-4 py-3">
-                            <div class="w-24 flex-shrink-0 flex items-center gap-1.5 text-sm font-bold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
+                            <label for="alimentation-montant-{{ $operateur->id }}" class="w-24 flex-shrink-0 flex items-center gap-1.5 text-sm font-bold text-[color:var(--color-ink)] font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">
                                 @if ($operateur->logoUrl())
                                     <img
                                         src="{{ $operateur->logoUrl() }}"
@@ -98,8 +98,9 @@
                                     <x-icone-type-operateur :est-cash="$operateur->est_cash" width="15" height="15" class="flex-shrink-0 text-[color:var(--color-ink-soft)]" />
                                     {{ $operateur->nom }}
                                 @endif
-                            </div>
+                            </label>
                             <input
+                                id="alimentation-montant-{{ $operateur->id }}"
                                 type="number"
                                 inputmode="numeric"
                                 min="0"
@@ -119,8 +120,9 @@
                 </div>
 
                 <div class="mt-4">
-                    <div class="text-xs font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_note_label') }}</div>
+                    <label for="alimentation-note" class="block text-sm font-semibold tracking-wide text-[color:var(--color-ink-soft)] mb-2 font-[family-name:var(--font-heading)] rtl:font-[family-name:var(--font-arabic)]">{{ __('caisse.alimentation_note_label') }}</label>
                     <input
+                        id="alimentation-note"
                         type="text"
                         x-model="note"
                         placeholder="{{ __('caisse.alimentation_note_placeholder') }}"
@@ -220,4 +222,4 @@
         ]"
         wire-termine="$wire.marquerGuideVu()"
     />
-</div>
+</main>

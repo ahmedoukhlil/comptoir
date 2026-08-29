@@ -20,7 +20,7 @@
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-95"
         x-transition:enter-end="opacity-100 scale-100"
-        :style="`top: ${position.placement === 'bas' ? position.top : position.top - 132}px; left: ${position.left}px; max-width: calc(100vw - 24px);`"
+        :style="`top: ${position.placement === 'bas' ? position.top : position.top - 156}px; left: ${position.left}px; max-width: calc(100vw - 24px);`"
         role="dialog"
         aria-modal="false"
         :aria-label="etapeActuelle?.texte"
@@ -34,8 +34,8 @@
                 </template>
             </div>
             <div class="flex items-center gap-3">
-                <button type="button" x-on:click="fermer()" class="text-xs font-semibold text-[color:var(--color-ink-soft)]">{{ __('caisse.guide_passer') }}</button>
-                <button type="button" x-on:click="suivant()" class="text-xs font-bold text-white bg-[color:var(--color-ink)] rounded-lg px-3 py-1.5">
+                <button type="button" x-on:click="fermer()" class="min-h-11 px-2 text-sm font-semibold text-[color:var(--color-ink-soft)] rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]">{{ __('caisse.guide_passer') }}</button>
+                <button type="button" x-on:click="suivant()" class="min-h-11 text-sm font-bold text-white bg-[color:var(--color-ink)] rounded-lg px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-ink)]">
                     <span x-text="derniereEtape ? @js(__('caisse.guide_terminer')) : @js(__('caisse.guide_suivant'))"></span>
                 </button>
             </div>
